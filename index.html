@@ -13,7 +13,7 @@
     .card { background: white; max-width: 500px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     h2 { color: #0F5132; margin-top: 0; text-align: center; }
     .counter-box { background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid #c8e6c9; }
-    .account-box { background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; font-size: 14px; margin-top: 8px; border: 1px solid #ffeeba; display: none; }
+    .account-box { background: #e3f2fd; color: #0d47a1; padding: 14px; border-radius: 8px; font-size: 15px; margin-top: 10px; border: 1px solid #bbdefb; display: none; line-height: 1.6; }
     label { font-weight: 600; margin-top: 14px; display: block; color: #333; }
     input, select, button { width: 100%; padding: 12px; margin-top: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
     .iti { width: 100%; margin-top: 6px; }
@@ -33,42 +33,44 @@
     </div>
     
     <form id="orderForm">
-      <label>Maqaa Guutuu:</label>
+      <label>1. Maqaa Guutuu:</label>
       <input type="text" id="name" required placeholder="Fkn: Lemmaa Asefa">
 
-      <label>Lakk. Bilbilaa (International):</label>
+      <label>2. Lakk. Bilbilaa (International):</label>
       <input type="tel" id="phone" required>
 
-      <label>Email Address:</label>
+      <label>3. Email Address:</label>
       <input type="email" id="email" required placeholder="example@gmail.com">
 
-      <label>Baay'ina Carraa Bituu Feetu (Max 10):</label>
+      <label>4. Baay'ina Carraa Bituu Feetu (Max 10):</label>
       <input type="number" id="qty" min="1" max="10" value="1" required onchange="handleQtyChange()">
 
       <label>Gatii Waliigalaa (ETB):</label>
       <input type="text" id="totalPrice" readonly value="1000 ETB">
 
-      <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Select</span>):</label>
+      <label>5. Lakk. Carraa Filadhu (<span id="selectPrompt">1 Select</span>):</label>
       <select id="ticketSelect" required onchange="handleTicketDropdown()">
         <option value="">-- Carraa Duwwaa Filadhu --</option>
       </select>
       <div id="selectedTicketsDisplay" class="selected-box"></div>
 
-      <label>Mala Kaffaltii:</label>
+      <label>6. Mala Kaffaltii:</label>
       <select id="paymentMethod" required onchange="handlePaymentChange()">
         <option value="">-- Mala Kaffaltii Filadhu --</option>
         <option value="Telebirr">Telebirr</option>
-        <option value="CBE">CBE (Commercial Bank of Ethiopia)</option>
+        <option value="CBE">CBE (Baankii Daddala)</option>
+        <option value="BOA">Bank of Abyssinia (BOA)</option>
+        <option value="Awash">Awash Bank</option>
       </select>
       <div id="accountDetails" class="account-box"></div>
 
-      <label>Mallaqa Kaffalame (ETB):</label>
+      <label>7. Mallaqa Kaffalame (ETB):</label>
       <input type="number" id="paidAmount" required placeholder="Fkn: 1000">
 
-      <label>Transaction ID (Lakk. Kaffaltii):</label>
+      <label>8. Transaction ID (Lakk. Kaffaltii):</label>
       <input type="text" id="txnId" required placeholder="Fkn: TX12345678">
 
-      <label>Screenshot Kaffaltii (Fakkii Ragaa):</label>
+      <label>9. Screenshot Kaffaltii (Fakkii Ragaa):</label>
       <input type="file" id="screenshot" accept="image/*" required>
 
       <button type="submit" id="submitBtn">GALMEESSI</button>
@@ -81,7 +83,13 @@
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
     let TICKET_PRICE = 1000;
-    let ACCOUNTS_DATA = {};
+    
+    let ACCOUNTS_DATA = {
+      Telebirr: { number: "0909506573", name: "Lemma Asefa" },
+      CBE: { number: "1000342728743", name: "Lemma Asefa" },
+      BOA: { number: "212322628", name: "Lemma Asefa" },
+      Awash: { number: "013351316799600", name: "Lemma Asefa" }
+    };
     let selectedTickets = [];
 
     const phoneInputField = document.querySelector("#phone");
@@ -100,7 +108,7 @@
         if (data.ok) {
           document.getElementById('remainingCount').innerText = data.free.length;
           TICKET_PRICE = data.price || 1000;
-          ACCOUNTS_DATA = data.accounts || {};
+          if (data.accounts) ACCOUNTS_DATA = data.accounts;
           handleQtyChange();
           
           const select = document.getElementById('ticketSelect');
@@ -133,7 +141,7 @@
       if (method && ACCOUNTS_DATA[method]) {
         const acc = ACCOUNTS_DATA[method];
         box.style.display = "block";
-        box.innerHTML = `<b>Maqaa Receiver:</b> ${acc.name}<br><b>Lakk. Account:</b> ${acc.number}`;
+        box.innerHTML = `📌 <b>Odeeffannoo Kaffaltii ${method}:</b><br>👤 <b>Maqaa Receiver:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size: 16px; font-weight: bold;">${acc.number}</span>`;
       } else {
         box.style.display = "none";
         box.innerHTML = "";
@@ -158,32 +166,37 @@
     document.getElementById('orderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      // Sequential Check: Name must be filled first
-      const nameVal = document.getElementById('name').value.trim();
-      if (!nameVal) {
-        alert("Maaloo maqaa keessan dura guutaa!");
-        document.getElementById('name').focus();
+      const name = document.getElementById('name').value.trim();
+      if (!name) { alert("1. Maaloo maqaa guutuu keessan galchaa!"); document.getElementById('name').focus(); return; }
+
+      if (!phoneInput.isValidNumber()) { alert("2. Maaloo lakkofsa bilbilaa sirrii galchaa!"); document.getElementById('phone').focus(); return; }
+
+      const email = document.getElementById('email').value.trim();
+      if (!email) { alert("3. Maaloo imeelii sirrii galchaa!"); document.getElementById('email').focus(); return; }
+
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      if (selectedTickets.length !== qty) {
+        alert("5. Maaloo lakkofsa carraa " + qty + " filadhaa!");
+        document.getElementById('ticketSelect').focus();
         return;
       }
 
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      
-      if (selectedTickets.length !== qty) {
-        alert("Maaloo carraa " + qty + " guutuu filadhaa!");
-        return;
-      }
+      const method = document.getElementById('paymentMethod').value;
+      if (!method) { alert("6. Maaloo mala kaffaltii filadhaa!"); return; }
 
       const paidAmt = parseFloat(document.getElementById('paidAmount').value);
       const expectedTotal = qty * TICKET_PRICE;
       if (paidAmt !== expectedTotal) {
-        alert("Mallaqni galchitan (" + paidAmt + " ETB) gatii carraa filatameetiin (" + expectedTotal + " ETB) waliin wal hin simu!");
+        alert("7. Mallaqni galchitan (" + paidAmt + " ETB) gatii carraa filatameetiin (" + expectedTotal + " ETB) waliin wal hin simu!");
+        document.getElementById('paidAmount').focus();
         return;
       }
 
-      if (!phoneInput.isValidNumber()) {
-        alert("Maaloo lakkofsa bilbilaa sirrii galchaa!");
-        return;
-      }
+      const txn = document.getElementById('txnId').value.trim();
+      if (!txn) { alert("8. Maaloo Transaction ID kaffaltii galchaa!"); document.getElementById('txnId').focus(); return; }
+
+      const fileInput = document.getElementById('screenshot').files[0];
+      if (!fileInput) { alert("9. Maaloo screenshot kaffaltii upload godhaa!"); return; }
 
       const submitBtn = document.getElementById('submitBtn');
       const statusMsg = document.getElementById('statusMsg');
@@ -192,19 +205,17 @@
       statusMsg.style.color = "#333";
       statusMsg.innerText = "Galmeessaa jira, maaloo eegaa...";
 
-      const fileInput = document.getElementById('screenshot').files[0];
       const reader = new FileReader();
-
       reader.onload = async function() {
         const payload = {
-          name: nameVal,
+          name: name,
           phone: phoneInput.getNumber(),
-          email: document.getElementById('email').value,
+          email: email,
           qty: qty,
           tickets: selectedTickets.map(Number),
-          method: document.getElementById('paymentMethod').value,
+          method: method,
           paidAmount: paidAmt,
-          txn: document.getElementById('txnId').value,
+          txn: txn,
           image: reader.result
         };
 
