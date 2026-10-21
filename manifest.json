@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Draw Wheel - Carraa Biiftuu</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: radial-gradient(circle at center, #0a3d24 0%, #03140b 100%);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #d4af37;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 10px 0 5px;
+      font-size: 26px;
+      text-align: center;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    }
+    .sub-title { color: #a0b8ac; font-size: 14px; margin-bottom: 20px; text-align: center; }
+
+    .wheel-stage {
+      position: relative;
+      width: 360px;
+      height: 360px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas {
+      border-radius: 50%;
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
+      border: 6px solid #d4af37;
+    }
+
+    /* Golden Pointer */
+    .pointer {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 32px solid #ffd700;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
+      z-index: 10;
+    }
+
+    .center-hub {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #ffd700, #aa771c);
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 18px;
+      z-index: 5;
+    }
+
+    .btn-spin {
+      background: linear-gradient(135deg, #ffd700, #d4af37, #0a3d24);
+      color: #fff;
+      border: none;
+      padding: 16px 45px;
+      font-size: 18px;
+      font-weight: 900;
+      border-radius: 40px;
+      cursor: pointer;
+      margin-top: 30px;
+      box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+    .btn-spin:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.8); }
+    .btn-spin:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
+
+    /* Winner Popup */
+    .winner-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+    }
+    .winner-card {
+      background: linear-gradient(135deg, #0e2e1c, #05140c);
+      border: 3px solid #ffd700;
+      padding: 35px 25px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 0 50px rgba(212, 175, 55, 0.8);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .winner-card h2 { color: #ffd700; font-size: 28px; margin: 0; }
+    .winning-number {
+      font-size: 55px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px #ffd700;
+      margin: 15px 0;
+    }
+
+    .back-link { margin-top: 25px; color: #d4af37; text-decoration: none; font-weight: bold; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h1>🎡 Carraa Biiftuu - Live Draw</h1>
+  <div class="sub-title">Sirna Carraa Baasuu Qulqulluu fi Kallattii (Provably Fair Draw)</div>
+
+  <div class="wheel-stage">
+    <div class="pointer"></div>
+    <canvas id="wheelCanvas" width="340" height="340"></canvas>
+    <div class="center-hub">★</div>
+  </div>
+
+  <button id="spinBtn" class="btn-spin" onclick="spinWheel()">NAANNESSI (SPIN)</button>
+  <a href="index.html" class="back-link">← Gara Fuula Duraatti Deebi'i</a>
+
+  <!-- Winner Reveal Modal -->
+  <div class="winner-overlay" id="winnerModal">
+    <div class="winner-card">
+      <h2>BAGA GAMMADDAN! 🎉</h2>
+      <p style="color: #a0b8ac; font-size: 15px; margin-top: 8px;">Lakkoofsi Carraa Mo'ate:</p>
+      <div class="winning-number" id="winnerTicketTxt">#---</div>
+      <p style="color: #d4af37; font-weight: bold;">Milkaa'ina Guddaa! Badhaasni keessan qophaa'eera!</p>
+      <button class="btn-spin" style="margin-top: 15px; padding: 10px 25px; font-size: 14px;" onclick="closeModal()">Cufi</button>
+    </div>
+  </div>
+
+  <script>
+    // Audio Context (Sagalee Ticking Uumuuf - Zero Audio Files Needed)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTickSound() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const segments = ["#12", "#77", "#105", "#240", "#389", "#512", "#670", "#788", "#890", "#999", "#45", "#302"];
+    const colors = ["#0a3d24", "#d4af37", "#0d4d2e", "#c5a028", "#125a37", "#b89222", "#08331e", "#e6c24d", "#0e4428", "#aa771c", "#166940", "#ffd700"];
+    
+    let currentAngle = 0;
+    let isSpinning = false;
+
+    function drawWheel() {
+      const numSegments = segments.length;
+      const arcSize = (2 * Math.PI) / numSegments;
+      const radius = canvas.width / 2;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate(currentAngle);
+
+      for (let i = 0; i < numSegments; i++) {
+        const angle = i * arcSize;
+        ctx.beginPath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, angle, angle + arcSize);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.3)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Text
+        ctx.save();
+        ctx.rotate(angle + arcSize / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = (i % 2 === 0) ? "#ffd700" : "#ffffff";
+        ctx.font = "bold 15px 'Segoe UI', sans-serif";
+        ctx.fillText(segments[i], radius - 20, 5);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    drawWheel();
+
+    function spinWheel() {
+      if (isSpinning) return;
+      isSpinning = true;
+      document.getElementById('spinBtn').disabled = true;
+
+      // Random spin dynamics
+      const spinAngle = (Math.random() * 360 + 2160) * (Math.PI / 180);
+      const duration = 6000;
+      const start = performance.now();
+      let lastTickAngle = 0;
+
+      function animate(time) {
+        const elapsed = time - start;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing deceleration (ease-out-cubic)
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        currentAngle = easeOut * spinAngle;
+
+        // Play tick sound every segment pass
+        if (Math.abs(currentAngle - lastTickAngle) > 0.45) {
+          playTickSound();
+          lastTickAngle = currentAngle;
+        }
+
+        drawWheel();
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          isSpinning = false;
+          document.getElementById('spinBtn').disabled = false;
+          announceWinner();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function announceWinner() {
+      const numSegments = segments.length;
+      const arcSize = (2 * Math.PI) / numSegments;
+      // Pointer is at the top (3 * PI / 2)
+      const normalizedAngle = (1.5 * Math.PI - (currentAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const winningIndex = Math.floor(normalizedAngle / arcSize);
+      const winnerNumber = segments[winningIndex];
+
+      document.getElementById('winnerTicketTxt').innerText = winnerNumber;
+      document.getElementById('winnerModal').style.display = "flex";
+
+      // Massive Confetti Shower!
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+    }
+
+    function closeModal() {
+      document.getElementById('winnerModal').style.display = "none";
+    }
+  </script>
+</body>
+</html>
