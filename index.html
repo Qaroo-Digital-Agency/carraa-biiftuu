@@ -123,16 +123,18 @@
         const res = await fetch(WEB_APP_URL);
         const data = await res.json();
         
-        if (data.ok && Array.isArray(data.free) && data.free.length > 0) {
+        if (data.ok && Array.isArray(data.free)) {
           freeTickets = data.free;
           TICKET_PRICE = data.price || 1000;
           if (data.accounts) ACCOUNTS_DATA = data.accounts;
           renderTicketsDropdown(freeTickets);
         } else {
-          populateDefaultTickets();
+          throw new Error("no data");
         }
       } catch(e) {
-        populateDefaultTickets();
+        document.getElementById('statusMsg').style.color = "red";
+        document.getElementById('statusMsg').innerText = "Rakkoon connection jira. Fuula haaromsaa.";
+        document.getElementById('submitBtn').disabled = true;
       }
       handleQtyChange();
     }
@@ -175,6 +177,28 @@
       document.getElementById('selectedTicketsDisplay').innerText = "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ");
     }
 
+    function toDataUrl(file){
+      return new Promise(function(res, rej){  
+        if(file.type === "application/pdf"){
+          var r = new FileReader();
+          r.onload = function(){ res(r.result); };
+          r.onerror = rej;
+          r.readAsDataURL(file);
+          return;
+        }  
+        var im = new Image();
+        im.onload = function(){
+          var s = Math.min(1, 1000 / Math.max(im.width, im.height)), c = document.createElement("canvas");  
+          c.width = im.width * s;
+          c.height = im.height * s;
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+          res(c.toDataURL("image/jpeg", 0.7));
+        };  
+        im.onerror = rej;
+        im.src = URL.createObjectURL(file);
+      });
+    }
+
     async function submitOrder() {
       const name = document.getElementById('name').value.trim();
       if (!name) { alert("1. Maaloo maqaa guutuu keessan galchaa!"); document.getElementById('name').focus(); return; }
@@ -215,8 +239,7 @@
       statusMsg.style.color = "#0F5132";
       statusMsg.innerText = "Galmeessaa jira, maaloo xiqqoo eegaa...";
 
-      const reader = new FileReader();
-      reader.onload = async function() {
+      toDataUrl(fileInput).then(async function(imageData) {
         const payload = {
           name: name,
           phone: phoneInput.getNumber(),
@@ -226,7 +249,7 @@
           method: method,
           paidAmount: paidAmt,
           txn: txn,
-          image: reader.result
+          image: imageData
         };
 
         try {
@@ -258,9 +281,11 @@
           statusMsg.innerText = "Dogoggorri network uumameera. Maaloo irra deebi'ii yaalaa!";
           submitBtn.disabled = false;
         }
-      };
-
-      reader.readAsDataURL(fileInput);
+      }).catch(function(){
+        statusMsg.style.color = "red";
+        statusMsg.innerText = "Faayilii dubbisuu hin dandeenye.";
+        submitBtn.disabled = false;
+      });
     }
 
     loadTickets();
