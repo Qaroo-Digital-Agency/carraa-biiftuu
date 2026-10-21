@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carraa Biiftuu - Form Ajajaa</title>
   
-  <!-- International Phone Input CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
   
   <style>
@@ -14,6 +13,7 @@
     .card { background: white; max-width: 500px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     h2 { color: #0F5132; margin-top: 0; text-align: center; }
     .counter-box { background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid #c8e6c9; }
+    .account-box { background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; font-size: 14px; margin-top: 8px; border: 1px solid #ffeeba; display: none; }
     label { font-weight: 600; margin-top: 14px; display: block; color: #333; }
     input, select, button { width: 100%; padding: 12px; margin-top: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
     .iti { width: 100%; margin-top: 6px; }
@@ -29,7 +29,7 @@
   <div class="card" id="appCard">
     <h2>Carraa Biiftuu</h2>
     <div class="counter-box">
-      Carraan Hafe: <span id="remainingCount">Fe'aa jira...</span> / 1000
+      Carraan Hafe: <span id="remainingCount">Fe'aa jira...</span> / 1000 (1 Ticket = 1000 ETB)
     </div>
     
     <form id="orderForm">
@@ -46,7 +46,7 @@
       <input type="number" id="qty" min="1" max="10" value="1" required onchange="handleQtyChange()">
 
       <label>Gatii Waliigalaa (ETB):</label>
-      <input type="text" id="totalPrice" readonly value="100 ETB">
+      <input type="text" id="totalPrice" readonly value="1000 ETB">
 
       <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Select</span>):</label>
       <select id="ticketSelect" required onchange="handleTicketDropdown()">
@@ -55,13 +55,15 @@
       <div id="selectedTicketsDisplay" class="selected-box"></div>
 
       <label>Mala Kaffaltii:</label>
-      <select id="paymentMethod" required>
+      <select id="paymentMethod" required onchange="handlePaymentChange()">
         <option value="">-- Mala Kaffaltii Filadhu --</option>
         <option value="Telebirr">Telebirr</option>
-        <option value="CBE">CBE (Baankii Daggala)</option>
-        <option value="Awash">Awash Bank</option>
-        <option value="BOA">Bank of Abyssinia</option>
+        <option value="CBE">CBE (Commercial Bank of Ethiopia)</option>
       </select>
+      <div id="accountDetails" class="account-box"></div>
+
+      <label>Mallaqa Kaffalame (ETB):</label>
+      <input type="number" id="paidAmount" required placeholder="Fkn: 1000">
 
       <label>Transaction ID (Lakk. Kaffaltii):</label>
       <input type="text" id="txnId" required placeholder="Fkn: TX12345678">
@@ -74,12 +76,12 @@
     <div id="statusMsg" class="status"></div>
   </div>
 
-  <!-- International Phone Input JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
-    let TICKET_PRICE = 100;
+    let TICKET_PRICE = 1000;
+    let ACCOUNTS_DATA = {};
     let selectedTickets = [];
 
     const phoneInputField = document.querySelector("#phone");
@@ -87,7 +89,7 @@
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
       initialCountry: "et",
       separateDialCode: true,
-      preferredCountries: ["et", "us", "gb", "ke", "ae"]
+      preferredCountries: ["et"]
     });
 
     async function loadTickets() {
@@ -97,7 +99,8 @@
         
         if (data.ok) {
           document.getElementById('remainingCount').innerText = data.free.length;
-          TICKET_PRICE = data.price || 100;
+          TICKET_PRICE = data.price || 1000;
+          ACCOUNTS_DATA = data.accounts || {};
           handleQtyChange();
           
           const select = document.getElementById('ticketSelect');
@@ -116,10 +119,25 @@
 
     function handleQtyChange() {
       const qty = parseInt(document.getElementById('qty').value) || 1;
-      document.getElementById('totalPrice').value = (qty * TICKET_PRICE) + " ETB";
+      const total = qty * TICKET_PRICE;
+      document.getElementById('totalPrice').value = total + " ETB";
+      document.getElementById('paidAmount').value = total;
       document.getElementById('selectPrompt').innerText = qty + " Select";
       selectedTickets = [];
       document.getElementById('selectedTicketsDisplay').innerText = "";
+    }
+
+    function handlePaymentChange() {
+      const method = document.getElementById('paymentMethod').value;
+      const box = document.getElementById('accountDetails');
+      if (method && ACCOUNTS_DATA[method]) {
+        const acc = ACCOUNTS_DATA[method];
+        box.style.display = "block";
+        box.innerHTML = `<b>Maqaa Receiver:</b> ${acc.name}<br><b>Lakk. Account:</b> ${acc.number}`;
+      } else {
+        box.style.display = "none";
+        box.innerHTML = "";
+      }
     }
 
     function handleTicketDropdown() {
@@ -139,14 +157,29 @@
 
     document.getElementById('orderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const qty = parseInt(document.getElementById('qty').value) || 1;
       
-      if (selectedTickets.length !== qty) {
-        alert("Maaloo carraa " + qty + " filadhaa!");
+      // Sequential Check: Name must be filled first
+      const nameVal = document.getElementById('name').value.trim();
+      if (!nameVal) {
+        alert("Maaloo maqaa keessan dura guutaa!");
+        document.getElementById('name').focus();
         return;
       }
 
-      const fullPhoneNumber = phoneInput.getNumber();
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      
+      if (selectedTickets.length !== qty) {
+        alert("Maaloo carraa " + qty + " guutuu filadhaa!");
+        return;
+      }
+
+      const paidAmt = parseFloat(document.getElementById('paidAmount').value);
+      const expectedTotal = qty * TICKET_PRICE;
+      if (paidAmt !== expectedTotal) {
+        alert("Mallaqni galchitan (" + paidAmt + " ETB) gatii carraa filatameetiin (" + expectedTotal + " ETB) waliin wal hin simu!");
+        return;
+      }
+
       if (!phoneInput.isValidNumber()) {
         alert("Maaloo lakkofsa bilbilaa sirrii galchaa!");
         return;
@@ -164,12 +197,13 @@
 
       reader.onload = async function() {
         const payload = {
-          name: document.getElementById('name').value,
-          phone: fullPhoneNumber,
+          name: nameVal,
+          phone: phoneInput.getNumber(),
           email: document.getElementById('email').value,
           qty: qty,
           tickets: selectedTickets.map(Number),
           method: document.getElementById('paymentMethod').value,
+          paidAmount: paidAmt,
           txn: document.getElementById('txnId').value,
           image: reader.result
         };
