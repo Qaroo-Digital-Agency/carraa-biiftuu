@@ -3,63 +3,404 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carraa Biiftuu - Form Ajajaa</title>
+  <title>Carraa Biiftuu - Galmee Carraa</title>
   
+  <!-- International Telephone Input CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
-  <!-- Cloudflare Turnstile API -->
+  <!-- Cloudflare Turnstile -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
-    .card { background: white; max-width: 520px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    h2 { color: #0F5132; margin-top: 0; text-align: center; }
-    .counter-box { background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid #c8e6c9; }
-    .account-box { background: #e3f2fd; color: #0d47a1; padding: 14px; border-radius: 8px; font-size: 15px; margin-top: 10px; border: 1px solid #bbdefb; display: none; line-height: 1.6; }
-    label { font-weight: 600; margin-top: 14px; display: block; color: #333; }
-    input, select, button { width: 100%; padding: 12px; margin-top: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
+    :root {
+      --bg-gradient: radial-gradient(circle at top left, #0e4428, #051a10 80%);
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --card-border: rgba(212, 175, 55, 0.45);
+      --text-main: #1c2826;
+      --text-muted: #556b62;
+      --gold-primary: #d4af37;
+      --gold-hover: #b89726;
+      --emerald-dark: #0a3d24;
+      --emerald-light: #15663d;
+      --input-bg: #f8faf9;
+      --input-border: #d0dcd5;
+      --box-accent: #f0f7f3;
+      --box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: radial-gradient(circle at top left, #051f12, #020a06 85%);
+      --card-bg: rgba(14, 28, 20, 0.92);
+      --card-border: rgba(212, 175, 55, 0.55);
+      --text-main: #edf5f0;
+      --text-muted: #a0b8ac;
+      --gold-primary: #e6c24d;
+      --gold-hover: #ffd700;
+      --emerald-dark: #228b52;
+      --emerald-light: #2eb86d;
+      --input-bg: #0b1a12;
+      --input-border: #234331;
+      --box-accent: #0f241a;
+      --box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    * { box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+    
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      padding: 30px 15px 50px;
+      margin: 0;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      width: 100%;
+      max-width: 550px;
+      padding: 32px 28px;
+      border-radius: 20px;
+      box-shadow: var(--box-shadow);
+      border: 1.5px solid var(--card-border);
+      position: relative;
+    }
+
+    /* Top Bar: Greetings and Theme Toggle */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .greeting-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-primary);
+      letter-spacing: 0.3px;
+    }
+    .theme-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 5px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .theme-toggle-btn:hover { background: rgba(212, 175, 55, 0.15); }
+
+    /* Logo Area */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .brand-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #aa771c 100%);
+      color: #0b1c13;
+      font-weight: 900;
+      font-size: 21px;
+      padding: 10px 24px;
+      border-radius: 40px;
+      box-shadow: 0 4px 18px rgba(212, 175, 55, 0.45);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* Pulsing Counter Box */
+    .counter-banner {
+      background: var(--box-accent);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .counter-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #2ed573;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px #2ed573;
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .price-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 22px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px dashed var(--card-border);
+      padding-bottom: 6px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 14px;
+      display: block;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--input-border);
+      font-size: 15px;
+      background: var(--input-bg);
+      color: var(--text-main);
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+    }
     .iti { width: 100%; margin-top: 6px; }
-    input[readonly] { background: #f9f9f9; font-weight: bold; color: #0F5132; }
-    button { background: #0F5132; color: white; border: none; font-size: 16px; font-weight: bold; margin-top: 22px; cursor: pointer; transition: 0.3s; border-radius: 6px; }
-    button:hover { background: #0b3d26; }
-    button:disabled { background: #ccc; cursor: not-allowed; }
-    .status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; line-height: 1.5; }
-    .selected-box { margin-top: 6px; font-size: 13px; color: #0F5132; font-weight: bold; }
-    .captcha-container { margin-top: 16px; display: flex; justify-content: center; }
-    .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    input[readonly] {
+      background: var(--box-accent);
+      font-weight: 800;
+      color: var(--gold-primary);
+      font-size: 16px;
+    }
+
+    /* Account Details Box */
+    .account-card {
+      background: var(--box-accent);
+      border: 1.5px dashed var(--gold-primary);
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      margin-top: 10px;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .selected-tickets-box {
+      margin-top: 8px;
+      font-size: 13.5px;
+      color: var(--gold-primary);
+      font-weight: bold;
+    }
+
+    .captcha-wrap {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Submit Button */
+    .btn-submit-order {
+      width: 100%;
+      background: linear-gradient(135deg, #ffd700 0%, #d4af37 40%, #0a3d24 100%);
+      color: #ffffff;
+      border: none;
+      font-size: 16.5px;
+      font-weight: 900;
+      padding: 14px;
+      margin-top: 24px;
+      cursor: pointer;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .btn-submit-order:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+    }
+    .btn-submit-order:disabled {
+      background: #777;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-msg {
+      margin-top: 16px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Quick Links */
+    .nav-links-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 22px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(212, 175, 55, 0.25);
+      font-size: 13px;
+    }
+    .nav-links-area a {
+      color: var(--gold-primary);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .nav-links-area a:hover { text-decoration: underline; }
+
+    /* Social Share & QR Area */
+    .social-share-area {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      text-align: center;
+    }
+    .share-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .share-btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .share-btn {
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-decoration: none;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .share-tg { background: #229ED9; }
+    .share-wa { background: #25D366; }
+    .share-fb { background: #1877F2; }
+    .share-x  { background: #000000; }
+
+    .qr-container {
+      margin-top: 16px;
+      text-align: center;
+    }
+    .qr-container img {
+      border: 2px solid var(--gold-primary);
+      border-radius: 10px;
+      padding: 3px;
+      background: #fff;
+    }
+    .qr-caption {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
+
   <div class="card" id="appCard">
-    <h2>Carraa Biiftuu</h2>
-    <div class="counter-box">
-      Carraan Hafe: <span id="remainingCount">Fe'aa jira...</span> / 1000 (1 Ticket = 1000 ETB)
+    
+    <!-- Top Bar: Greeting & Theme Switcher -->
+    <div class="top-bar">
+      <div class="greeting-text">
+        <span id="greetingLbl">Akkam</span> • <span id="ethiopianDateLbl">...</span>
+      </div>
+      <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">
+        🌙 Dark
+      </button>
+    </div>
+
+    <!-- Brand Header -->
+    <div class="brand-header">
+      <div class="brand-badge">Carraa Biiftuu 🌟</div>
+      <div class="brand-subtitle">Sirna Qulqulluu fi Amansiisaa Carraa Bituu</div>
+    </div>
+
+    <!-- Live Counter Banner -->
+    <div class="counter-banner">
+      <div class="counter-title">
+        <span class="live-dot"></span>
+        Carraan Hafe: <span id="remainingCount" style="font-size: 17px;">Fe'aa jira...</span> / 1000
+      </div>
+      <div class="price-sub">(Gatiin Carraa Tokkoo = 1,000 ETB)</div>
     </div>
     
+    <!-- Booking Form -->
     <form id="orderForm" onsubmit="event.preventDefault(); submitOrder();">
-      <label>1. Maqaa Guutuu:</label>
+      
+      <!-- Section 1 -->
+      <div class="section-title">👤 1. Odeeffannoo Dhuunfaa</div>
+      
+      <label>Maqaa Guutuu:</label>
       <input type="text" id="name" required placeholder="Fkn: Lemmaa Asefa">
 
-      <label>2. Lakk. Bilbilaa (International):</label>
+      <label>Lakk. Bilbilaa (International):</label>
       <input type="tel" id="phone" required>
 
-      <label>3. Email Address:</label>
+      <label>Email Address:</label>
       <input type="email" id="email" required placeholder="example@gmail.com">
 
-      <label>4. Baay'ina Carraa Bituu Feetu (Max 10):</label>
+      <!-- Section 2 -->
+      <div class="section-title">🎟️ 2. Filannoo Carraa & Gatii</div>
+
+      <label>Baay'ina Carraa Bituu Feetu (Max 10):</label>
       <input type="number" id="qty" min="1" max="10" value="1" required onchange="handleQtyChange()">
 
       <label>Gatii Waliigalaa (ETB):</label>
-      <input type="text" id="totalPrice" readonly value="1000 ETB">
+      <input type="text" id="totalPrice" readonly value="1,000 ETB">
 
-      <label>5. Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
+      <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
       <select id="ticketSelect" onchange="handleTicketDropdown()">
         <option value="">-- Carraa Duwwaa Filadhu --</option>
       </select>
-      <div id="selectedTicketsDisplay" class="selected-box"></div>
+      <div id="selectedTicketsDisplay" class="selected-tickets-box"></div>
 
-      <label>6. Mala Kaffaltii:</label>
+      <!-- Section 3 -->
+      <div class="section-title">💳 3. Kaffaltii & Mirkaneessa</div>
+
+      <label>Mala Kaffaltii:</label>
       <select id="paymentMethod" required onchange="handlePaymentChange()">
         <option value="">-- Mala Kaffaltii Filadhu --</option>
         <option value="Telebirr">Telebirr</option>
@@ -67,27 +408,52 @@
         <option value="BOA">Bank of Abyssinia (BOA)</option>
         <option value="Awash">Awash Bank</option>
       </select>
-      <div id="accountDetails" class="account-box"></div>
+      <div id="accountDetails" class="account-card"></div>
 
-      <label>7. Mallaqa Kaffalame (ETB):</label>
+      <label>Mallaqa Kaffalame (ETB):</label>
       <input type="number" id="paidAmount" required placeholder="Fkn: 1000">
 
-      <label>8. Transaction ID (Lakk. Kaffaltii):</label>
+      <label>Transaction ID (Lakk. Kaffaltii):</label>
       <input type="text" id="txnId" required placeholder="Fkn: TX12345678">
 
-      <label>9. Ragaa Kaffaltii (Screenshot - JPG, PNG ykn PDF):</label>
+      <label>Ragaa Kaffaltii (Screenshot - JPG, PNG ykn PDF):</label>
       <input type="file" id="screenshot" accept="image/*,.pdf" required>
 
-      <!-- Cloudflare Turnstile Box (Always Pass / Managed test key duraan qindaa'eera) -->
-      <div class="captcha-container">
+      <!-- Cloudflare Turnstile -->
+      <div class="captcha-wrap">
         <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-callback="onTurnstileSuccess"></div>
       </div>
 
-      <button type="submit" id="submitBtn">GALMEESSI</button>
+      <button type="submit" id="submitBtn" class="btn-submit-order">GALMEESSI</button>
     </form>
-    <div id="statusMsg" class="status"></div>
+    
+    <div id="statusMsg" class="status-msg"></div>
+
+    <!-- Navigation Quick Links -->
+    <div class="nav-links-area">
+      <a href="check.html">🔍 Haala Ajaja Kee Sakatta'i (Check Status)</a>
+      <a href="admin.html" style="font-size: 11px; color: var(--text-muted); opacity: 0.7;">🔐 Admin</a>
+    </div>
+
+    <!-- Social Share & QR -->
+    <div class="social-share-area">
+      <div class="share-title">Hiriyoota Keessaniif Qoodaa (Share):</div>
+      <div class="share-btn-group">
+        <a id="shareTg" href="#" target="_blank" class="share-btn share-tg">Telegram</a>
+        <a id="shareWa" href="#" target="_blank" class="share-btn share-wa">WhatsApp</a>
+        <a id="shareFb" href="#" target="_blank" class="share-btn share-fb">Facebook</a>
+        <a id="shareX"  href="#" target="_blank" class="share-btn share-x">𝕏 Post</a>
+      </div>
+
+      <div class="qr-container">
+        <img id="qrImg" src="" alt="QR Code Link" width="95" height="95">
+        <div class="qr-caption">Scan godhuun bilbilaan banaa</div>
+      </div>
+    </div>
+
   </div>
 
+  <!-- International Phone Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
@@ -104,10 +470,76 @@
     let selectedTickets = [];
     let turnstileToken = "";
 
-    function onTurnstileSuccess(token) {
-      turnstileToken = token;
+    function onTurnstileSuccess(token) { turnstileToken = token; }
+
+    // 1. Dynamic Greeting & Accurate Ethiopian Date
+    function initCultureAndDate() {
+      const now = new Date();
+      const hour = now.getHours();
+      let greeting = "Akkam ooltan";
+      if (hour >= 5 && hour < 12) greeting = "Akkam bultan 🌅";
+      else if (hour >= 12 && hour < 18) greeting = "Akkam ooltan ☀️";
+      else greeting = "Galgala gaarii 🌙";
+      document.getElementById('greetingLbl').innerText = greeting;
+
+      // Ethiopian Date Calculation Algorithm
+      const gYear = now.getFullYear();
+      const isLeapGregorian = (gYear % 4 === 0 && gYear % 100 !== 0) || (gYear % 400 === 0);
+      const startOfYear = new Date(gYear, 0, 0);
+      const diff = now - startOfYear;
+      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const ethNewYearDay = isLeapGregorian ? 255 : 254; // Sept 11/12
+
+      const oromoMonths = [
+        "Fuulbana", "Onkololeessa", "Sadaasa", "Muddee", "Amajjii", "Guraandhala",
+        "Bitootessa", "Ebla", "Caamsaa", "Waxabajjii", "Adooleessa", "Hagayya", "Qaammee"
+      ];
+
+      let ethYear, ethMonth, ethDay;
+      if (dayOfYear >= ethNewYearDay) {
+        ethYear = gYear - 7;
+        const days = dayOfYear - ethNewYearDay;
+        ethMonth = Math.floor(days / 30);
+        ethDay = (days % 30) + 1;
+      } else {
+        ethYear = gYear - 8;
+        const days = (365 + (isLeapGregorian ? 1 : 0) - ethNewYearDay) + dayOfYear;
+        ethMonth = Math.floor(days / 30);
+        ethDay = (days % 30) + 1;
+      }
+      if (ethMonth >= 13) ethMonth = 12;
+      document.getElementById('ethiopianDateLbl').innerText = `${oromoMonths[ethMonth]} ${ethDay}, ${ethYear}`;
+
+      // Social Share Links & QR
+      const currentUrl = encodeURIComponent(window.location.href);
+      const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
+      document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
+      document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
+      document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+      document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${shareMsg}&url=${currentUrl}`;
+      document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${currentUrl}`;
     }
 
+    // 2. Theme Toggle (Dark & Light)
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        root.removeAttribute('data-theme');
+        document.getElementById('themeBtn').innerText = "🌙 Dark";
+        localStorage.setItem("carraa_theme", "light");
+      } else {
+        root.setAttribute('data-theme', 'dark');
+        document.getElementById('themeBtn').innerText = "☀️ Light";
+        localStorage.setItem("carraa_theme", "dark");
+      }
+    }
+    if (localStorage.getItem("carraa_theme") === "dark") {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeBtn').innerText = "☀️ Light";
+    }
+
+    // 3. International Phone Initializer
     const phoneInputField = document.querySelector("#phone");
     const phoneInput = window.intlTelInput(phoneInputField, {
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -132,18 +564,14 @@
       try {
         const res = await fetch(WEB_APP_URL);
         const data = await res.json();
-        
         if (data.ok && Array.isArray(data.free)) {
           freeTickets = data.free;
           TICKET_PRICE = data.price || 1000;
           if (data.accounts) ACCOUNTS_DATA = data.accounts;
           renderTicketsDropdown(freeTickets);
-        } else {
-          throw new Error("No data received");
         }
       } catch(e) {
-        document.getElementById('statusMsg').style.color = "red";
-        document.getElementById('statusMsg').innerText = "Carraawwan duwwaa fiduun hin danda'amne. Maaloo fuula haaromsaa.";
+        document.getElementById('statusMsg').innerText = "Carraawwan fiduun hin danda'amne.";
       }
       handleQtyChange();
     }
@@ -151,7 +579,7 @@
     function handleQtyChange() {
       const qty = parseInt(document.getElementById('qty').value) || 1;
       const total = qty * TICKET_PRICE;
-      document.getElementById('totalPrice').value = total + " ETB";
+      document.getElementById('totalPrice').value = total.toLocaleString() + " ETB";
       document.getElementById('paidAmount').value = total;
       document.getElementById('selectPrompt').innerText = qty + " Filadhaa";
       selectedTickets = [];
@@ -203,111 +631,4 @@
           c.width = im.width * s;
           c.height = im.height * s;
           c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
-          res(c.toDataURL("image/jpeg", 0.7));
-        };  
-        im.onerror = rej;
-        im.src = URL.createObjectURL(file);
-      });
-    }
-
-    async function submitOrder() {
-      const name = document.getElementById('name').value.trim();
-      if (!name) { alert("1. Maaloo maqaa guutuu galchaa!"); return; }
-
-      if (!phoneInput.isValidNumber()) { 
-        alert("2. Maaloo lakkoofsa bilbilaa sirrii galchaa!"); 
-        return; 
-      }
-
-      const email = document.getElementById('email').value.trim();
-      if (!email) { alert("3. Maaloo imeelii sirrii galchaa!"); return; }
-
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (selectedTickets.length !== qty) {
-        alert("5. Maaloo lakkoofsa carraa " + qty + " filadhaa! (Amma kan filattan: " + selectedTickets.length + ")");
-        document.getElementById('ticketSelect').focus();
-        return;
-      }
-
-      const method = document.getElementById('paymentMethod').value;
-      if (!method) { alert("6. Maaloo mala kaffaltii filadhaa!"); return; }
-
-      const paidAmt = parseFloat(document.getElementById('paidAmount').value);
-      const expectedTotal = qty * TICKET_PRICE;
-      if (paidAmt !== expectedTotal) {
-        alert("7. Mallaqni galchitan (" + paidAmt + " ETB) gatii carraa filatameetiin (" + expectedTotal + " ETB) wal hin simu!");
-        return;
-      }
-
-      const txn = document.getElementById('txnId').value.trim();
-      if (!txn) { alert("8. Maaloo Transaction ID kaffaltii galchaa!"); return; }
-
-      const fileInput = document.getElementById('screenshot').files[0];
-      if (!fileInput) { alert("9. Maaloo ragaa kaffaltii ol-galchaa!"); return; }
-
-      const submitBtn = document.getElementById('submitBtn');
-      const statusMsg = document.getElementById('statusMsg');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="loading-spinner"></span> Galmeessaa jira...';
-      statusMsg.style.color = "#0F5132";
-      statusMsg.innerText = "Ragaan keessan sakatta'amaa jira, maaloo eegaa...";
-
-      try {
-        const imageData = await toDataUrl(fileInput);
-        const payload = {
-          name: name,
-          phone: phoneInput.getNumber(),
-          email: email,
-          qty: qty,
-          tickets: selectedTickets.map(Number),
-          method: method,
-          paidAmount: paidAmt,
-          txn: txn,
-          image: imageData,
-          turnstile: turnstileToken
-        };
-
-        const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await res.json();
-        
-        if (result.ok) {
-          document.getElementById('appCard').innerHTML = `
-            <div style="text-align: center; padding: 20px;">
-              <h2 style="color: #0F5132;">Galatoomaa! 🎉</h2>
-              <p style="font-size: 16px; color: #333;">Ajajni keessan milkaa'inaan galmaa'eera.</p>
-              <hr style="border: 0.5px solid #eee; margin: 15px 0;">
-              <p><b>Lakk. Carraa Kee:</b> <span style="color:#0F5132; font-weight:bold;">${selectedTickets.map(t => "#" + t).join(", ")}</span></p>
-              <p><b>Gatii Kaffalame:</b> ${result.total} ETB</p>
-              <p><b>Order ID:</b> <code>${result.id}</code></p>
-              <p style="color: #666; font-size: 13px; margin-top: 15px;">Mirkaneessi kaffaltii keessanii ilaalchisee ergaan email irratti isiniif ergama.</p>
-            </div>
-          `;
-        } else {
-          statusMsg.style.color = "red";
-          statusMsg.innerText = result.error || "Dogoggorri uumameera.";
-          submitBtn.disabled = false;
-          submitBtn.innerText = "GALMEESSI";
-          if (result.refresh) {
-            loadTickets();
-          }
-        }
-      } catch(err) {
-        statusMsg.style.color = "red";
-        statusMsg.innerText = "Dogoggora Network: Kaffaltiin hin ergamne. Maaloo irra deebi'aa!";
-        submitBtn.disabled = false;
-        submitBtn.innerText = "GALMEESSI";
-      }
-    }
-
-    loadTickets();
-  </script>
-</body>
-</html>
+          res(c.toDataURL("
