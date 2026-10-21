@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carraa Biiftuu - Form Ajajaa</title>
   
+  <!-- International Telephone Input CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
   
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
-    .card { background: white; max-width: 500px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .card { background: white; max-width: 520px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     h2 { color: #0F5132; margin-top: 0; text-align: center; }
     .counter-box { background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid #c8e6c9; }
     .account-box { background: #e3f2fd; color: #0d47a1; padding: 14px; border-radius: 8px; font-size: 15px; margin-top: 10px; border: 1px solid #bbdefb; display: none; line-height: 1.6; }
@@ -18,18 +19,20 @@
     input, select, button { width: 100%; padding: 12px; margin-top: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
     .iti { width: 100%; margin-top: 6px; }
     input[readonly] { background: #f9f9f9; font-weight: bold; color: #0F5132; }
-    button { background: #0F5132; color: white; border: none; font-size: 16px; font-weight: bold; margin-top: 22px; cursor: pointer; transition: 0.3s; }
+    button { background: #0F5132; color: white; border: none; font-size: 16px; font-weight: bold; margin-top: 22px; cursor: pointer; transition: 0.3s; border-radius: 6px; }
     button:hover { background: #0b3d26; }
     button:disabled { background: #ccc; cursor: not-allowed; }
-    .status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
+    .status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; line-height: 1.5; }
     .selected-box { margin-top: 6px; font-size: 13px; color: #0F5132; font-weight: bold; }
+    .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <div class="card" id="appCard">
     <h2>Carraa Biiftuu</h2>
     <div class="counter-box">
-      Carraan Hafe: <span id="remainingCount">1000</span> / 1000 (1 Ticket = 1000 ETB)
+      Carraan Hafe: <span id="remainingCount">Fe'aa jira...</span> / 1000 (1 Ticket = 1000 ETB)
     </div>
     
     <form id="orderForm" onsubmit="event.preventDefault(); submitOrder();">
@@ -48,7 +51,7 @@
       <label>Gatii Waliigalaa (ETB):</label>
       <input type="text" id="totalPrice" readonly value="1000 ETB">
 
-      <label>5. Lakk. Carraa Filadhu (<span id="selectPrompt">1 Select</span>):</label>
+      <label>5. Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
       <select id="ticketSelect" onchange="handleTicketDropdown()">
         <option value="">-- Carraa Duwwaa Filadhu --</option>
       </select>
@@ -70,20 +73,22 @@
       <label>8. Transaction ID (Lakk. Kaffaltii):</label>
       <input type="text" id="txnId" required placeholder="Fkn: TX12345678">
 
-      <label>9. Ragaa Kaffaltii (Screenshot/File Kamiyyuu):</label>
-      <input type="file" id="screenshot" required>
+      <label>9. Ragaa Kaffaltii (Screenshot - JPG, PNG ykn PDF):</label>
+      <input type="file" id="screenshot" accept="image/*,.pdf" required>
 
       <button type="submit" id="submitBtn">GALMEESSI</button>
     </form>
     <div id="statusMsg" class="status"></div>
   </div>
 
+  <!-- Intl Tel Input Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
+    // URL Web App isa keessanii
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
-    let TICKET_PRICE = 1000;
     
+    let TICKET_PRICE = 1000;
     let ACCOUNTS_DATA = {
       Telebirr: { number: "0909506573", name: "Lemma Asefa" },
       CBE: { number: "1000342728743", name: "Lemma Asefa" },
@@ -93,6 +98,7 @@
     let freeTickets = [];
     let selectedTickets = [];
 
+    // Bilbila qindeessuu
     const phoneInputField = document.querySelector("#phone");
     const phoneInput = window.intlTelInput(phoneInputField, {
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -100,11 +106,6 @@
       separateDialCode: true,
       preferredCountries: ["et"]
     });
-
-    function populateDefaultTickets() {
-      freeTickets = Array.from({length: 1000}, (_, i) => i + 1);
-      renderTicketsDropdown(freeTickets);
-    }
 
     function renderTicketsDropdown(ticketsList) {
       document.getElementById('remainingCount').innerText = ticketsList.length;
@@ -118,6 +119,7 @@
       });
     }
 
+    // Carraawwan duwwaa ta'an Google Sheet irraa fiduu (doGet)
     async function loadTickets() {
       try {
         const res = await fetch(WEB_APP_URL);
@@ -129,12 +131,11 @@
           if (data.accounts) ACCOUNTS_DATA = data.accounts;
           renderTicketsDropdown(freeTickets);
         } else {
-          throw new Error("no data");
+          throw new Error("No data received");
         }
       } catch(e) {
         document.getElementById('statusMsg').style.color = "red";
-        document.getElementById('statusMsg').innerText = "Rakkoon connection jira. Fuula haaromsaa.";
-        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('statusMsg').innerText = "Carraawwan duwwaa fiduun hin danda'amne. Maaloo fuula haaromsaa (refresh).";
       }
       handleQtyChange();
     }
@@ -144,7 +145,7 @@
       const total = qty * TICKET_PRICE;
       document.getElementById('totalPrice').value = total + " ETB";
       document.getElementById('paidAmount').value = total;
-      document.getElementById('selectPrompt').innerText = qty + " Select";
+      document.getElementById('selectPrompt').innerText = qty + " Filadhaa";
       selectedTickets = [];
       document.getElementById('selectedTicketsDisplay').innerText = "";
     }
@@ -155,7 +156,7 @@
       if (method && ACCOUNTS_DATA[method]) {
         const acc = ACCOUNTS_DATA[method];
         box.style.display = "block";
-        box.innerHTML = `📌 <b>Odeeffannoo Kaffaltii ${method}:</b><br>👤 <b>Maqaa Receiver:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size: 16px; font-weight: bold;">${acc.number}</span>`;
+        box.innerHTML = `📌 <b>Odeeffannoo Kaffaltii ${method}:</b><br>👤 <b>Maqaa:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size: 16px; font-weight: bold; letter-spacing: 1px;">${acc.number}</span>`;
       } else {
         box.style.display = "none";
         box.innerHTML = "";
@@ -164,19 +165,22 @@
 
     function handleTicketDropdown() {
       const select = document.getElementById('ticketSelect');
-      const val = select.value;
+      const val = parseInt(select.value);
       const qty = parseInt(document.getElementById('qty').value) || 1;
 
       if (val && !selectedTickets.includes(val)) {
         if (selectedTickets.length < qty) {
           selectedTickets.push(val);
         } else {
+          // Yoo baay'inni guute isa duraa bakka buusa
           selectedTickets = [val];
         }
       }
-      document.getElementById('selectedTicketsDisplay').innerText = "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ");
+      document.getElementById('selectedTicketsDisplay').innerText = 
+        selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
     }
 
+    // Suuraa base64 gochuu fi size isaa xiqqeessuu
     function toDataUrl(file){
       return new Promise(function(res, rej){  
         if(file.type === "application/pdf"){
@@ -188,7 +192,8 @@
         }  
         var im = new Image();
         im.onload = function(){
-          var s = Math.min(1, 1000 / Math.max(im.width, im.height)), c = document.createElement("canvas");  
+          var s = Math.min(1, 1000 / Math.max(im.width, im.height));
+          var c = document.createElement("canvas");  
           c.width = im.width * s;
           c.height = im.height * s;
           c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
@@ -199,18 +204,22 @@
       });
     }
 
+    // Formii galmeessuu (doPost)
     async function submitOrder() {
       const name = document.getElementById('name').value.trim();
-      if (!name) { alert("1. Maaloo maqaa guutuu keessan galchaa!"); document.getElementById('name').focus(); return; }
+      if (!name) { alert("1. Maaloo maqaa guutuu galchaa!"); return; }
 
-      if (!phoneInput.isValidNumber()) { alert("2. Maaloo lakkofsa bilbilaa sirrii galchaa!"); document.getElementById('phone').focus(); return; }
+      if (!phoneInput.isValidNumber()) { 
+        alert("2. Maaloo lakkoofsa bilbilaa sirrii ta'e galchaa!"); 
+        return; 
+      }
 
       const email = document.getElementById('email').value.trim();
-      if (!email) { alert("3. Maaloo imeelii sirrii galchaa!"); document.getElementById('email').focus(); return; }
+      if (!email) { alert("3. Maaloo imeelii sirrii galchaa!"); return; }
 
       const qty = parseInt(document.getElementById('qty').value) || 1;
       if (selectedTickets.length !== qty) {
-        alert("5. Maaloo lakkofsa carraa " + qty + " filadhaa!");
+        alert("5. Maaloo lakkoofsa carraa " + qty + " filadhaa! (Amma kan filattan: " + selectedTickets.length + ")");
         document.getElementById('ticketSelect').focus();
         return;
       }
@@ -221,25 +230,26 @@
       const paidAmt = parseFloat(document.getElementById('paidAmount').value);
       const expectedTotal = qty * TICKET_PRICE;
       if (paidAmt !== expectedTotal) {
-        alert("7. Mallaqni galchitan (" + paidAmt + " ETB) gatii carraa filatameetiin (" + expectedTotal + " ETB) waliin wal hin simu!");
-        document.getElementById('paidAmount').focus();
+        alert("7. Mallaqni galchitan (" + paidAmt + " ETB) gatii carraa filatameetiin (" + expectedTotal + " ETB) wal hin simu!");
         return;
       }
 
       const txn = document.getElementById('txnId').value.trim();
-      if (!txn) { alert("8. Maaloo Transaction ID kaffaltii galchaa!"); document.getElementById('txnId').focus(); return; }
+      if (!txn) { alert("8. Maaloo Transaction ID kaffaltii galchaa!"); return; }
 
       const fileInput = document.getElementById('screenshot').files[0];
-      if (!fileInput) { alert("9. Maaloo ragaa kaffaltii upload godhaa!"); return; }
+      if (!fileInput) { alert("9. Maaloo ragaa kaffaltii ol-galchaa!"); return; }
 
       const submitBtn = document.getElementById('submitBtn');
       const statusMsg = document.getElementById('statusMsg');
       
       submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading-spinner"></span> Galmeessaa jira...';
       statusMsg.style.color = "#0F5132";
-      statusMsg.innerText = "Galmeessaa jira, maaloo xiqqoo eegaa...";
+      statusMsg.innerText = "Ragaan keessan ergaa jira, maaloo xiqqoo eegaa...";
 
-      toDataUrl(fileInput).then(async function(imageData) {
+      try {
+        const imageData = await toDataUrl(fileInput);
         const payload = {
           name: name,
           phone: phoneInput.getNumber(),
@@ -252,42 +262,47 @@
           image: imageData
         };
 
-        try {
-          const res = await fetch(WEB_APP_URL, {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          const result = await res.json();
-          
-          if (result.ok) {
-            document.getElementById('appCard').innerHTML = `
-              <div style="text-align: center; padding: 20px;">
-                <h2 style="color: #0F5132;">Galatoomaa! 🎉</h2>
-                <p style="font-size: 16px;">Ajajni keessan milkaa'inaan galmeeffameera.</p>
-                <hr style="border: 0.5px solid #eee; margin: 15px 0;">
-                <p><b>Lakk. Carraa Kee:</b> ${selectedTickets.map(t => "#" + t).join(", ")}</p>
-                <p><b>Gatii Kaffalame:</b> ${result.total} ETB</p>
-                <p><b>Order ID:</b> ${result.id}</p>
-                <p style="color: #666; font-size: 13px; margin-top: 15px;">Haala kaffaltii keessanii ilaalchisee ergaan email irratti isiniif ergama.</p>
-              </div>
-            `;
-          } else {
-            statusMsg.style.color = "red";
-            statusMsg.innerText = result.error;
-            submitBtn.disabled = false;
-          }
-        } catch(err) {
+        // POST gochuu (CORS akka hin dhowwineef text/plain fayyadamna)
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+        
+        if (result.ok) {
+          document.getElementById('appCard').innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+              <h2 style="color: #0F5132;">Galatoomaa! 🎉</h2>
+              <p style="font-size: 16px; color: #333;">Ajajni keessan milkaa'inaan galmaa'eera.</p>
+              <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+              <p><b>Lakk. Carraa Kee:</b> <span style="color:#0F5132;">${selectedTickets.map(t => "#" + t).join(", ")}</span></p>
+              <p><b>Gatii Kaffalame:</b> ${result.total} ETB</p>
+              <p><b>Order ID:</b> <code>${result.id}</code></p>
+              <p style="color: #666; font-size: 13px; margin-top: 15px;">Mirkaneessi kaffaltii keessanii ilaalchisee ergaan email irratti isiniif ergama.</p>
+            </div>
+          `;
+        } else {
           statusMsg.style.color = "red";
-          statusMsg.innerText = "Dogoggorri network uumameera. Maaloo irra deebi'ii yaalaa!";
+          statusMsg.innerText = result.error || "Dogoggorri uumameera.";
           submitBtn.disabled = false;
+          submitBtn.innerText = "GALMEESSI";
+          if (result.refresh) {
+            loadTickets(); // Carraan yoo duraan qabame haaromsa
+          }
         }
-      }).catch(function(){
+      } catch(err) {
         statusMsg.style.color = "red";
-        statusMsg.innerText = "Faayilii dubbisuu hin dandeenye.";
+        statusMsg.innerText = "Dogoggora Network: Kaffaltiin hin ergamne. Maaloo intarneetii keessan ilaalaatii irra deebi'aa!";
         submitBtn.disabled = false;
-      });
+        submitBtn.innerText = "GALMEESSI";
+      }
     }
 
+    // Yeroo fuulli banamu carraawwan fiduuf
     loadTickets();
   </script>
 </body>
