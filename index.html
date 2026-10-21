@@ -29,7 +29,7 @@
   <div class="card" id="appCard">
     <h2>Carraa Biiftuu</h2>
     <div class="counter-box">
-      Carraan Hafe: <span id="remainingCount">Fe'aa jira...</span> / 1000 (1 Ticket = 1000 ETB)
+      Carraan Hafe: <span id="remainingCount">1000</span> / 1000 (1 Ticket = 1000 ETB)
     </div>
     
     <form id="orderForm">
@@ -90,6 +90,7 @@
       BOA: { number: "212322628", name: "Lemma Asefa" },
       Awash: { number: "013351316799600", name: "Lemma Asefa" }
     };
+    let freeTickets = [];
     let selectedTickets = [];
 
     const phoneInputField = document.querySelector("#phone");
@@ -100,29 +101,40 @@
       preferredCountries: ["et"]
     });
 
+    function populateDefaultTickets() {
+      freeTickets = Array.from({length: 1000}, (_, i) => i + 1);
+      renderTicketsDropdown(freeTickets);
+    }
+
+    function renderTicketsDropdown(ticketsList) {
+      document.getElementById('remainingCount').innerText = ticketsList.length;
+      const select = document.getElementById('ticketSelect');
+      select.innerHTML = '<option value="">-- Carraa Duwwaa Filadhu --</option>';
+      ticketsList.forEach(num => {
+        const opt = document.createElement('option');
+        opt.value = num;
+        opt.innerText = "Carraa #" + num;
+        select.appendChild(opt);
+      });
+    }
+
     async function loadTickets() {
       try {
         const res = await fetch(WEB_APP_URL);
         const data = await res.json();
         
-        if (data.ok) {
-          document.getElementById('remainingCount').innerText = data.free.length;
+        if (data.ok && Array.isArray(data.free) && data.free.length > 0) {
+          freeTickets = data.free;
           TICKET_PRICE = data.price || 1000;
           if (data.accounts) ACCOUNTS_DATA = data.accounts;
-          handleQtyChange();
-          
-          const select = document.getElementById('ticketSelect');
-          select.innerHTML = '<option value="">-- Carraa Duwwaa Filadhu --</option>';
-          data.free.forEach(num => {
-            const opt = document.createElement('option');
-            opt.value = num;
-            opt.innerText = "Carraa #" + num;
-            select.appendChild(opt);
-          });
+          renderTicketsDropdown(freeTickets);
+        } else {
+          populateDefaultTickets();
         }
       } catch(e) {
-        document.getElementById('remainingCount').innerText = "Error";
+        populateDefaultTickets();
       }
+      handleQtyChange();
     }
 
     function handleQtyChange() {
