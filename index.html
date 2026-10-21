@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carraa Biiftuu - Form Ajajaa</title>
+  
+  <!-- International Phone Input CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
+    .card { background: white; max-width: 500px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    h2 { color: #0F5132; margin-top: 0; text-align: center; }
+    .counter-box { background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid #c8e6c9; }
+    label { font-weight: 600; margin-top: 14px; display: block; color: #333; }
+    input, select, button { width: 100%; padding: 12px; margin-top: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
+    .iti { width: 100%; margin-top: 6px; }
+    input[readonly] { background: #f9f9f9; font-weight: bold; color: #0F5132; }
+    button { background: #0F5132; color: white; border: none; font-size: 16px; font-weight: bold; margin-top: 22px; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #0b3d26; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
+    .selected-box { margin-top: 6px; font-size: 13px; color: #0F5132; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="card" id="appCard">
+    <h2>Carraa Biiftuu</h2>
+    <div class="counter-box">
+      Carraan Hafe: <span id="remainingCount">Fe'aa jira...</span> / 1000
+    </div>
+    
+    <form id="orderForm">
+      <label>Maqaa Guutuu:</label>
+      <input type="text" id="name" required placeholder="Fkn: Lemmaa Asefa">
+
+      <label>Lakk. Bilbilaa (International):</label>
+      <input type="tel" id="phone" required>
+
+      <label>Email Address:</label>
+      <input type="email" id="email" required placeholder="example@gmail.com">
+
+      <label>Baay'ina Carraa Bituu Feetu (Max 10):</label>
+      <input type="number" id="qty" min="1" max="10" value="1" required onchange="handleQtyChange()">
+
+      <label>Gatii Waliigalaa (ETB):</label>
+      <input type="text" id="totalPrice" readonly value="100 ETB">
+
+      <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Select</span>):</label>
+      <select id="ticketSelect" required onchange="handleTicketDropdown()">
+        <option value="">-- Carraa Duwwaa Filadhu --</option>
+      </select>
+      <div id="selectedTicketsDisplay" class="selected-box"></div>
+
+      <label>Mala Kaffaltii:</label>
+      <select id="paymentMethod" required>
+        <option value="">-- Mala Kaffaltii Filadhu --</option>
+        <option value="Telebirr">Telebirr</option>
+        <option value="CBE">CBE (Baankii Daggala)</option>
+        <option value="Awash">Awash Bank</option>
+        <option value="BOA">Bank of Abyssinia</option>
+      </select>
+
+      <label>Transaction ID (Lakk. Kaffaltii):</label>
+      <input type="text" id="txnId" required placeholder="Fkn: TX12345678">
+
+      <label>Screenshot Kaffaltii (Fakkii Ragaa):</label>
+      <input type="file" id="screenshot" accept="image/*" required>
+
+      <button type="submit" id="submitBtn">GALMEESSI</button>
+    </form>
+    <div id="statusMsg" class="status"></div>
+  </div>
+
+  <!-- International Phone Input JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
+    let TICKET_PRICE = 100;
+    let selectedTickets = [];
+
+    const phoneInputField = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+      initialCountry: "et",
+      separateDialCode: true,
+      preferredCountries: ["et", "us", "gb", "ke", "ae"]
+    });
+
+    async function loadTickets() {
+      try {
+        const res = await fetch(WEB_APP_URL);
+        const data = await res.json();
+        
+        if (data.ok) {
+          document.getElementById('remainingCount').innerText = data.free.length;
+          TICKET_PRICE = data.price || 100;
+          handleQtyChange();
+          
+          const select = document.getElementById('ticketSelect');
+          select.innerHTML = '<option value="">-- Carraa Duwwaa Filadhu --</option>';
+          data.free.forEach(num => {
+            const opt = document.createElement('option');
+            opt.value = num;
+            opt.innerText = "Carraa #" + num;
+            select.appendChild(opt);
+          });
+        }
+      } catch(e) {
+        document.getElementById('remainingCount').innerText = "Error";
+      }
+    }
+
+    function handleQtyChange() {
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      document.getElementById('totalPrice').value = (qty * TICKET_PRICE) + " ETB";
+      document.getElementById('selectPrompt').innerText = qty + " Select";
+      selectedTickets = [];
+      document.getElementById('selectedTicketsDisplay').innerText = "";
+    }
+
+    function handleTicketDropdown() {
+      const select = document.getElementById('ticketSelect');
+      const val = select.value;
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+
+      if (val && !selectedTickets.includes(val)) {
+        if (selectedTickets.length < qty) {
+          selectedTickets.push(val);
+        } else {
+          selectedTickets = [val];
+        }
+      }
+      document.getElementById('selectedTicketsDisplay').innerText = "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ");
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      
+      if (selectedTickets.length !== qty) {
+        alert("Maaloo carraa " + qty + " filadhaa!");
+        return;
+      }
+
+      const fullPhoneNumber = phoneInput.getNumber();
+      if (!phoneInput.isValidNumber()) {
+        alert("Maaloo lakkofsa bilbilaa sirrii galchaa!");
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      const statusMsg = document.getElementById('statusMsg');
+      
+      submitBtn.disabled = true;
+      statusMsg.style.color = "#333";
+      statusMsg.innerText = "Galmeessaa jira, maaloo eegaa...";
+
+      const fileInput = document.getElementById('screenshot').files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function() {
+        const payload = {
+          name: document.getElementById('name').value,
+          phone: fullPhoneNumber,
+          email: document.getElementById('email').value,
+          qty: qty,
+          tickets: selectedTickets.map(Number),
+          method: document.getElementById('paymentMethod').value,
+          txn: document.getElementById('txnId').value,
+          image: reader.result
+        };
+
+        try {
+          const res = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+          
+          if (result.ok) {
+            document.getElementById('appCard').innerHTML = `
+              <div style="text-align: center; padding: 10px;">
+                <h2 style="color: #0F5132;">Galatoomaa! 🎉</h2>
+                <p style="font-size: 16px;">Ajajni keessan milkaa'inaan galmeeffameera.</p>
+                <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+                <p><b>Lakk. Carraa Kee:</b> ${selectedTickets.map(t => "#" + t).join(", ")}</p>
+                <p><b>Gatii Kaffalame:</b> ${result.total} ETB</p>
+                <p><b>Order ID:</b> ${result.id}</p>
+                <p style="color: #666; font-size: 13px; margin-top: 15px;">Haala kaffaltii keessanii ilaalchisee ergaan email irratti isiniif ergama.</p>
+              </div>
+            `;
+          } else {
+            statusMsg.style.color = "red";
+            statusMsg.innerText = result.error;
+            submitBtn.disabled = false;
+          }
+        } catch(err) {
+          statusMsg.style.color = "red";
+          statusMsg.innerText = "Dogoggorri uumameera. Maaloo irra deebi'ii yaalaa!";
+          submitBtn.disabled = false;
+        }
+      };
+
+      reader.readAsDataURL(fileInput);
+    });
+
+    loadTickets();
+  </script>
+</body>
+</html>
