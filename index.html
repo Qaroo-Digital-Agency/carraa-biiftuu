@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carraa Biiftuu - Form Ajajaa</title>
   
-  <!-- International Telephone Input CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  <!-- Cloudflare Turnstile API -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   
   <style>
     * { box-sizing: border-box; }
@@ -24,6 +25,7 @@
     button:disabled { background: #ccc; cursor: not-allowed; }
     .status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; line-height: 1.5; }
     .selected-box { margin-top: 6px; font-size: 13px; color: #0F5132; font-weight: bold; }
+    .captcha-container { margin-top: 16px; display: flex; justify-content: center; }
     .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -76,16 +78,19 @@
       <label>9. Ragaa Kaffaltii (Screenshot - JPG, PNG ykn PDF):</label>
       <input type="file" id="screenshot" accept="image/*,.pdf" required>
 
+      <!-- Cloudflare Turnstile Box (Always Pass / Managed test key duraan qindaa'eera) -->
+      <div class="captcha-container">
+        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-callback="onTurnstileSuccess"></div>
+      </div>
+
       <button type="submit" id="submitBtn">GALMEESSI</button>
     </form>
     <div id="statusMsg" class="status"></div>
   </div>
 
-  <!-- Intl Tel Input Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
-    // URL Web App isa keessanii
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
     
     let TICKET_PRICE = 1000;
@@ -97,8 +102,12 @@
     };
     let freeTickets = [];
     let selectedTickets = [];
+    let turnstileToken = "";
 
-    // Bilbila qindeessuu
+    function onTurnstileSuccess(token) {
+      turnstileToken = token;
+    }
+
     const phoneInputField = document.querySelector("#phone");
     const phoneInput = window.intlTelInput(phoneInputField, {
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -119,7 +128,6 @@
       });
     }
 
-    // Carraawwan duwwaa ta'an Google Sheet irraa fiduu (doGet)
     async function loadTickets() {
       try {
         const res = await fetch(WEB_APP_URL);
@@ -135,7 +143,7 @@
         }
       } catch(e) {
         document.getElementById('statusMsg').style.color = "red";
-        document.getElementById('statusMsg').innerText = "Carraawwan duwwaa fiduun hin danda'amne. Maaloo fuula haaromsaa (refresh).";
+        document.getElementById('statusMsg').innerText = "Carraawwan duwwaa fiduun hin danda'amne. Maaloo fuula haaromsaa.";
       }
       handleQtyChange();
     }
@@ -172,7 +180,6 @@
         if (selectedTickets.length < qty) {
           selectedTickets.push(val);
         } else {
-          // Yoo baay'inni guute isa duraa bakka buusa
           selectedTickets = [val];
         }
       }
@@ -180,7 +187,6 @@
         selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
     }
 
-    // Suuraa base64 gochuu fi size isaa xiqqeessuu
     function toDataUrl(file){
       return new Promise(function(res, rej){  
         if(file.type === "application/pdf"){
@@ -204,13 +210,12 @@
       });
     }
 
-    // Formii galmeessuu (doPost)
     async function submitOrder() {
       const name = document.getElementById('name').value.trim();
       if (!name) { alert("1. Maaloo maqaa guutuu galchaa!"); return; }
 
       if (!phoneInput.isValidNumber()) { 
-        alert("2. Maaloo lakkoofsa bilbilaa sirrii ta'e galchaa!"); 
+        alert("2. Maaloo lakkoofsa bilbilaa sirrii galchaa!"); 
         return; 
       }
 
@@ -246,7 +251,7 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="loading-spinner"></span> Galmeessaa jira...';
       statusMsg.style.color = "#0F5132";
-      statusMsg.innerText = "Ragaan keessan ergaa jira, maaloo xiqqoo eegaa...";
+      statusMsg.innerText = "Ragaan keessan sakatta'amaa jira, maaloo eegaa...";
 
       try {
         const imageData = await toDataUrl(fileInput);
@@ -259,10 +264,10 @@
           method: method,
           paidAmount: paidAmt,
           txn: txn,
-          image: imageData
+          image: imageData,
+          turnstile: turnstileToken
         };
 
-        // POST gochuu (CORS akka hin dhowwineef text/plain fayyadamna)
         const res = await fetch(WEB_APP_URL, {
           method: "POST",
           headers: {
@@ -279,7 +284,7 @@
               <h2 style="color: #0F5132;">Galatoomaa! 🎉</h2>
               <p style="font-size: 16px; color: #333;">Ajajni keessan milkaa'inaan galmaa'eera.</p>
               <hr style="border: 0.5px solid #eee; margin: 15px 0;">
-              <p><b>Lakk. Carraa Kee:</b> <span style="color:#0F5132;">${selectedTickets.map(t => "#" + t).join(", ")}</span></p>
+              <p><b>Lakk. Carraa Kee:</b> <span style="color:#0F5132; font-weight:bold;">${selectedTickets.map(t => "#" + t).join(", ")}</span></p>
               <p><b>Gatii Kaffalame:</b> ${result.total} ETB</p>
               <p><b>Order ID:</b> <code>${result.id}</code></p>
               <p style="color: #666; font-size: 13px; margin-top: 15px;">Mirkaneessi kaffaltii keessanii ilaalchisee ergaan email irratti isiniif ergama.</p>
@@ -291,18 +296,17 @@
           submitBtn.disabled = false;
           submitBtn.innerText = "GALMEESSI";
           if (result.refresh) {
-            loadTickets(); // Carraan yoo duraan qabame haaromsa
+            loadTickets();
           }
         }
       } catch(err) {
         statusMsg.style.color = "red";
-        statusMsg.innerText = "Dogoggora Network: Kaffaltiin hin ergamne. Maaloo intarneetii keessan ilaalaatii irra deebi'aa!";
+        statusMsg.innerText = "Dogoggora Network: Kaffaltiin hin ergamne. Maaloo irra deebi'aa!";
         submitBtn.disabled = false;
         submitBtn.innerText = "GALMEESSI";
       }
     }
 
-    // Yeroo fuulli banamu carraawwan fiduuf
     loadTickets();
   </script>
 </body>
