@@ -136,7 +136,7 @@
 
     .account-card { background: var(--box-accent); border: 1.5px dashed var(--gold-primary); padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 10px; display: none; line-height: 1.6; }
 
-    /* USSD BOX */
+    /* USSD CARD */
     .ussd-card {
       display: none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--gold-primary);
       border-radius: 12px; padding: 14px; margin-top: 12px; text-align: center;
@@ -226,7 +226,7 @@
         <div class="step-item" id="stepIndicator6"><div class="step-num">6</div><span id="stLbl6">Qunnamaa</span></div>
       </div>
 
-      <!-- PAGE 1: SIMANNAA & BADHAASOTA -->
+      <!-- PAGE 1 -->
       <div class="wizard-step active-step" id="stepPage1">
         <div class="hero-banner">
           <div class="hero-title" id="heroTitle">Baga Nagaan Dhuftan! 🎉</div>
@@ -260,7 +260,7 @@
         </div>
       </div>
 
-      <!-- PAGE 2: ODEEFFANNOO DHUUNFAA -->
+      <!-- PAGE 2 -->
       <div class="wizard-step" id="stepPage2">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p2Header">👤 2. Odeeffannoo Dhuunfaa Keessanii</h3>
         <label id="lblFullName">Maqaa Guutuu:</label>
@@ -278,7 +278,7 @@
         </div>
       </div>
 
-      <!-- PAGE 3: FILANNOO CARRAA & GATII -->
+      <!-- PAGE 3 -->
       <div class="wizard-step" id="stepPage3">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p3Header">🎟️ 3. Filannoo Carraa & Gatii</h3>
 
@@ -306,7 +306,7 @@
         </div>
       </div>
 
-      <!-- PAGE 4: KAFFALTII & MIRKANEESSA -->
+      <!-- PAGE 4 -->
       <div class="wizard-step" id="stepPage4">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p4Header">💳 4. Mala Kaffaltii & Ragaa</h3>
 
@@ -354,7 +354,7 @@
         <div id="statusMsg" style="margin-top:14px; text-align:center; font-size:13.5px; font-weight:bold; line-height:1.5;"></div>
       </div>
 
-      <!-- PAGE 5: QOODAA -->
+      <!-- PAGE 5 -->
       <div class="wizard-step" id="stepPage5">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p5Header">📲 5. Hiriyoota Keessaniif Qoodaa</h3>
         <p style="font-size:13px; color:var(--text-muted); line-height:1.5;" id="p5Desc">Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!</p>
@@ -372,7 +372,7 @@
         </div>
       </div>
 
-      <!-- PAGE 6: NU QUNNAMAA -->
+      <!-- PAGE 6 -->
       <div class="wizard-step" id="stepPage6">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p6Header">📞 6. Karaalee Nu Qunnamtan</h3>
         <div class="contact-card">
@@ -465,6 +465,63 @@
 
     function onTurnstileSuccess(token) { turnstileToken = token; }
 
+    // ==============================================
+    // 5-MINUTE BACKGROUND AUTO-SAVE & RESTORE
+    // ==============================================
+    function saveDraftState() {
+      const draft = {
+        step: currentStep,
+        name: document.getElementById('name').value,
+        phone: phoneInput.getNumber(),
+        email: document.getElementById('email').value,
+        qty: document.getElementById('qty').value,
+        selectedTickets: selectedTickets,
+        method: document.getElementById('paymentMethod').value,
+        paidAmount: document.getElementById('paidAmount').value,
+        txnId: document.getElementById('txnId').value,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('carraa_order_draft', JSON.stringify(draft));
+    }
+
+    function restoreDraftState() {
+      try {
+        const raw = localStorage.getItem('carraa_order_draft');
+        if (!raw) return;
+        const draft = JSON.parse(raw);
+        if (Date.now() - draft.timestamp <= 5 * 60 * 1000) {
+          if (draft.name) document.getElementById('name').value = draft.name;
+          if (draft.phone) phoneInputField.value = draft.phone;
+          if (draft.email) document.getElementById('email').value = draft.email;
+          if (draft.qty) {
+            document.getElementById('qty').value = draft.qty;
+            handleQtyChange();
+          }
+          if (draft.selectedTickets && Array.isArray(draft.selectedTickets)) {
+            selectedTickets = draft.selectedTickets;
+            document.getElementById('selectedTicketsDisplay').innerText = 
+              selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+          }
+          if (draft.method) {
+            document.getElementById('paymentMethod').value = draft.method;
+            handlePaymentChange();
+          }
+          if (draft.paidAmount) document.getElementById('paidAmount').value = draft.paidAmount;
+          if (draft.txnId) document.getElementById('txnId').value = draft.txnId;
+          
+          if (draft.step && draft.step > 1 && draft.step <= 4) {
+            goToStep(draft.step);
+          }
+        } else {
+          localStorage.removeItem('carraa_order_draft');
+        }
+      } catch(e) {}
+    }
+
+    window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveDraftState(); });
+    window.addEventListener('beforeunload', saveDraftState);
+
+    // Multilingual Dictionary
     const I18N = {
       om: {
         greetingDay: "Akkam ooltan ☀️", greetingMorning: "Akkam bultan 🌅", greetingNight: "Galgala gaarii 🌙",
@@ -603,6 +660,7 @@
       const targetInd = document.getElementById('stepIndicator' + step);
       if (targetPage) targetPage.classList.add('active-step');
       if (targetInd) targetInd.classList.add('active');
+      saveDraftState();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -682,6 +740,7 @@
         }
       } catch(e) {}
       handleQtyChange();
+      restoreDraftState();
     }
 
     function handleQtyChange() {
@@ -699,6 +758,7 @@
       else vipArea.innerHTML = "";
 
       updateUssdDetails();
+      saveDraftState();
     }
 
     function handlePaymentChange() {
@@ -712,10 +772,11 @@
         box.style.display = "none";
       }
       updateUssdDetails();
+      saveDraftState();
     }
 
     // ==============================================
-    // 1-CLICK USSD LINK & COPY LOGIC
+    // 1-CLICK USSD LINK (TELEBIRR RANDOM REASON & CBE *889#)
     // ==============================================
     function updateUssdDetails() {
       const method = document.getElementById('paymentMethod').value;
@@ -724,15 +785,22 @@
       const ussdBox = document.getElementById('ussdDialBox');
       const callBtn = document.getElementById('ussdCallBtn');
 
+      let ticketReason = "Carraa";
+      if (selectedTickets && selectedTickets.length > 0) {
+        // Randomly pick one ticket number as reason
+        const randomPick = selectedTickets[Math.floor(Math.random() * selectedTickets.length)];
+        ticketReason = String(randomPick);
+      }
+
       if (method === "Telebirr") {
         ussdBox.style.display = "block";
-        const rawCode = `*127*2*1*1*0909506573*1*${total}*CarraaBiiftuu*1#`;
+        const rawCode = `*127*2*1*1*0909506573*1*${total}*${ticketReason}*1#`;
         currentUssdCode = rawCode;
-        callBtn.href = `tel:*127*2*1*1*0909506573*1*${total}*CarraaBiiftuu*1%23`;
+        callBtn.href = `tel:*127*2*1*1*0909506573*1*${total}*${ticketReason}*1%23`;
       } else if (method === "CBE") {
         ussdBox.style.display = "block";
-        currentUssdCode = "*847#";
-        callBtn.href = "tel:*847%23";
+        currentUssdCode = "*889#";
+        callBtn.href = "tel:*889%23";
       } else if (method === "Awash") {
         ussdBox.style.display = "block";
         currentUssdCode = "*901#";
@@ -766,6 +834,8 @@
       }
       document.getElementById('selectedTicketsDisplay').innerText = 
         selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+      updateUssdDetails();
+      saveDraftState();
     }
 
     function openMatrixModal() {
@@ -808,6 +878,8 @@
           }
           document.getElementById('selectedTicketsDisplay').innerText = 
             selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+          updateUssdDetails();
+          saveDraftState();
           renderMatrixTab(start, end);
         };
         container.appendChild(cell);
@@ -862,7 +934,7 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "GALMEESSAA JIRA (OCR SAKATTA'AA JIRA)...";
       statusMsg.style.color = "var(--gold-primary)";
-      statusMsg.innerText = "Ragaan keessan (OCR Transaction ID, Maqaa, fi Mallaqni) sakatta'amaa jira, maaloo xiqqoo eegaa...";
+      statusMsg.innerText = "Ragaan keessan (OCR Transaction ID, Maqaa, Mallaqa, fi Sa'aatiin 12) sakatta'amaa jira, maaloo xiqqoo eegaa...";
 
       try {
         const imageData = await toDataUrl(fileInput);
@@ -888,6 +960,7 @@
         const result = await res.json();
         
         if (result.ok) {
+          localStorage.removeItem('carraa_order_draft');
           confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
           document.getElementById('stepperNav').style.display = 'none';
           for (let i = 1; i <= 6; i++) {
