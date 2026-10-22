@@ -449,4 +449,344 @@
         <div id="statusMsg" style="margin-top:14px; text-align:center; font-size:13.5px; font-weight:bold;"></div>
       </div>
 
-      <!-- PAGE 5: QOODAA
+      <!-- PAGE 5: QOODAA -->
+      <div class="wizard-step" id="stepPage5">
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">📲 5. Hiriyoota Keessaniif Qoodaa (Share)</h3>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+          Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!
+        </p>
+
+        <div class="share-btn-group">
+          <a id="shareTg" href="#" target="_blank" class="share-btn share-tg">Telegram</a>
+          <a id="shareWa" href="#" target="_blank" class="share-btn share-wa">WhatsApp</a>
+          <a id="shareFb" href="#" target="_blank" class="share-btn share-fb">Facebook</a>
+        </div>
+
+        <div style="text-align:center; margin-top:18px;">
+          <img id="qrImg" src="" alt="QR Link" width="110" height="110" style="border:2px solid var(--gold-primary); border-radius:10px; padding:4px; background:#fff;">
+          <div style="font-size:11.5px; color:var(--text-muted); margin-top:6px;">Scan godhuun bilbilaan banaa</div>
+        </div>
+
+        <div class="nav-btn-group">
+          <button type="button" class="btn-step btn-prev" onclick="goToStep(4)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" onclick="goToStep(6)">NU QUNNAMAA →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 6: NU QUNNAMAA -->
+      <div class="wizard-step" id="stepPage6">
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">📞 6. Karaalee Nu Qunnamtan</h3>
+        
+        <div class="contact-card">
+          <p>Yoo gaaffii ykn rakkoon kaffaltii isin mudate:</p>
+          <p>📞 <b>Bilbila:</b> <a href="tel:+251909506573">+251 909 506 573</a></p>
+          <p>✈️ <b>Telegram:</b> <a href="https://t.me/CarraaBiiftuu" target="_blank">@CarraaBiiftuu</a></p>
+          <p>📧 <b>Email:</b> <a href="mailto:support@carraabiiftuu.com">support@carraabiiftuu.com</a></p>
+          <p>🕒 <b>Sa'aatii Hojii:</b> Guyyaa guyyaan Sa'aatii 2:00 - 12:00</p>
+        </div>
+
+        <div style="margin-top:16px; text-align:center;">
+          <a href="check.html" style="color:var(--gold-primary); text-decoration:none; font-weight:700; font-size:13.5px;">🔍 Haala Ajaja Kee Sakatta'i (Check Status) →</a>
+        </div>
+
+        <div class="nav-btn-group">
+          <button type="button" class="btn-step btn-prev" onclick="goToStep(5)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" onclick="goToStep(1)">GARA JALQABAATTI 🏠</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS SCREEN -->
+      <div class="wizard-step" id="stepSuccess">
+        <div style="text-align: center; padding: 15px 5px;">
+          <h2 style="color: var(--gold-primary); font-size: 24px; margin-bottom: 8px;">GALATOOMAA! 🎉</h2>
+          <p style="font-size: 14.5px; color: var(--text-main); margin-bottom: 16px;">
+            Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.
+          </p>
+          <div style="background: var(--box-accent); border: 1.5px dashed var(--gold-primary); border-radius: 12px; padding: 16px; text-align: left; line-height: 1.7; font-size: 13.5px;">
+            <p><b>Order ID:</b> <code id="resOrderId">---</code></p>
+            <p><b>Lakk. Carraa Kee:</b> <span id="resTickets" style="color:var(--gold-primary); font-weight:bold; font-size:16px;">---</span></p>
+            <p><b>Gatii Kaffalame:</b> <span id="resTotal">---</span> ETB</p>
+          </div>
+          <p style="color: var(--gold-primary); font-weight: bold; margin-top: 15px; font-size: 13.5px;">
+            🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!
+          </p>
+          <a href="index.html" style="display:inline-block; margin-top:16px; color:var(--gold-primary); font-weight:bold; text-decoration: none;">← Gara Fuula Duraatti Deebi'i</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
+    
+    let TICKET_PRICE = 1000;
+    let ACCOUNTS_DATA = {
+      Telebirr: { number: "0909506573", name: "Lemma Asefa" },
+      CBE: { number: "1000342728743", name: "Lemma Asefa" },
+      BOA: { number: "212322628", name: "Lemma Asefa" },
+      Awash: { number: "013351316799600", name: "Lemma Asefa" }
+    };
+    let freeTickets = [];
+    let selectedTickets = [];
+    let turnstileToken = "";
+    let currentStep = 1;
+
+    function onTurnstileSuccess(token) { turnstileToken = token; }
+
+    function goToStep(step) {
+      currentStep = step;
+      for (let i = 1; i <= 6; i++) {
+        const page = document.getElementById('stepPage' + i);
+        const ind = document.getElementById('stepIndicator' + i);
+        if (page) page.classList.remove('active-step');
+        if (ind) {
+          ind.classList.remove('active');
+          if (i < step) ind.classList.add('completed');
+          else ind.classList.remove('completed');
+        }
+      }
+      const targetPage = document.getElementById('stepPage' + step);
+      const targetInd = document.getElementById('stepIndicator' + step);
+      if (targetPage) targetPage.classList.add('active-step');
+      if (targetInd) targetInd.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateStep2() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!name || name.length < 3) { alert("Maaloo maqaa guutuu galchaa!"); return; }
+      if (!phoneInput.isValidNumber()) { alert("Maaloo lakkoofsa bilbilaa sirrii galchaa!"); return; }
+      if (!email || !email.includes("@")) { alert("Maaloo imeelii sirrii galchaa!"); return; }
+      goToStep(3);
+    }
+
+    function validateStep3() {
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      if (selectedTickets.length !== qty) {
+        alert("Maaloo lakkoofsa carraa " + qty + " filadhaa! (Amma: " + selectedTickets.length + ")");
+        return;
+      }
+      goToStep(4);
+    }
+
+    function initCultureAndDate() {
+      const now = new Date();
+      const hour = now.getHours();
+      let greeting = "Akkam ooltan";
+      if (hour >= 5 && hour < 12) greeting = "Akkam bultan 🌅";
+      else if (hour >= 12 && hour < 18) greeting = "Akkam ooltan ☀️";
+      else greeting = "Galgala gaarii 🌙";
+      document.getElementById('greetingLbl').innerText = greeting;
+      document.getElementById('ethDateLbl').innerText = "Onkololeessa 12, 2019";
+
+      const currentUrl = encodeURIComponent(window.location.href);
+      const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
+      document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
+      document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
+      document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+      document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        root.removeAttribute('data-theme');
+        document.getElementById('themeBtn').innerText = "🌙 Dark";
+        localStorage.setItem("carraa_theme", "light");
+      } else {
+        root.setAttribute('data-theme', 'dark');
+        document.getElementById('themeBtn').innerText = "☀️ Light";
+        localStorage.setItem("carraa_theme", "dark");
+      }
+    }
+    if (localStorage.getItem("carraa_theme") === "dark") {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeBtn').innerText = "☀️ Light";
+    }
+
+    const phoneInputField = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+      initialCountry: "et",
+      separateDialCode: true,
+      preferredCountries: ["et"]
+    });
+
+    // Optimistic UI: Dropdown keessatti carraawwan 1000 battalatti guuta
+    function renderTicketsDropdown(ticketsList) {
+      const select = document.getElementById('ticketSelect');
+      select.innerHTML = '<option value="">-- Carraa Duwwaa Filadhu --</option>';
+      ticketsList.forEach(num => {
+        const opt = document.createElement('option');
+        opt.value = num;
+        opt.innerText = "Carraa #" + num;
+        select.appendChild(opt);
+      });
+
+      const sold = 1000 - ticketsList.length;
+      const pct = Math.round((sold / 1000) * 100);
+      document.getElementById('soldCountTxt').innerText = `${sold} / 1000`;
+      document.getElementById('percentTxt').innerText = `${pct}%`;
+      document.getElementById('progressBarFill').style.width = `${pct}%`;
+    }
+
+    // Battalatti 1-1000 guuta (Maamilli saanduqa duwwaa akka hin argineef)
+    freeTickets = Array.from({length: 1000}, (_, i) => i + 1);
+    renderTicketsDropdown(freeTickets);
+
+    // Ergasii Google Sheet irraa kanneen qabaman keessaa baasa
+    async function loadTickets() {
+      try {
+        const res = await fetch(WEB_APP_URL);
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.free) && data.free.length > 0) {
+          freeTickets = data.free;
+          TICKET_PRICE = data.price || 1000;
+          if (data.accounts) ACCOUNTS_DATA = data.accounts;
+          renderTicketsDropdown(freeTickets);
+        }
+      } catch(e) {}
+      handleQtyChange();
+    }
+
+    function handleQtyChange() {
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      const total = qty * TICKET_PRICE;
+      document.getElementById('totalPrice').value = total.toLocaleString() + " ETB";
+      document.getElementById('paidAmount').value = total;
+      document.getElementById('selectPrompt').innerText = qty + " Filadhaa";
+      selectedTickets = [];
+      document.getElementById('selectedTicketsDisplay').innerText = "";
+
+      const vipArea = document.getElementById('vipBadgeArea');
+      if (qty >= 10) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:linear-gradient(135deg,#ffd700,#ff9800); color:#000;">👑 DIAMOND VIP (Carraa 10x)</span>`;
+      else if (qty >= 5) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:#ffd700; color:#000;">🥇 GOLD VIP (Carraa 5x)</span>`;
+      else if (qty >= 3) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:#c0c0c0; color:#000;">🥈 SILVER VIP</span>`;
+      else vipArea.innerHTML = "";
+    }
+
+    function handlePaymentChange() {
+      const method = document.getElementById('paymentMethod').value;
+      const box = document.getElementById('accountDetails');
+      if (method && ACCOUNTS_DATA[method]) {
+        const acc = ACCOUNTS_DATA[method];
+        box.style.display = "block";
+        box.innerHTML = `📌 <b>Kaffaltii ${method}:</b><br>👤 <b>Maqaa:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size:15px; font-weight:bold;">${acc.number}</span>`;
+      } else {
+        box.style.display = "none";
+      }
+    }
+
+    function handleTicketDropdown() {
+      const select = document.getElementById('ticketSelect');
+      const val = parseInt(select.value);
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      if (val && !selectedTickets.includes(val)) {
+        if (selectedTickets.length < qty) selectedTickets.push(val);
+        else selectedTickets = [val];
+      }
+      document.getElementById('selectedTicketsDisplay').innerText = 
+        selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+    }
+
+    function toDataUrl(file){
+      return new Promise(function(res, rej){  
+        if(file.type === "application/pdf"){
+          var r = new FileReader();
+          r.onload = function(){ res(r.result); };
+          r.onerror = rej;
+          r.readAsDataURL(file);
+          return;
+        }  
+        var im = new Image();
+        im.onload = function(){
+          var s = Math.min(1, 1000 / Math.max(im.width, im.height));
+          var c = document.createElement("canvas");  
+          c.width = im.width * s;
+          c.height = im.height * s;
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+          res(c.toDataURL("image/jpeg", 0.7));
+        };  
+        im.onerror = rej;
+        im.src = URL.createObjectURL(file);
+      });
+    }
+
+    async function submitFinalOrder() {
+      const method = document.getElementById('paymentMethod').value;
+      if (!method) { alert("Maaloo mala kaffaltii filadhaa!"); return; }
+      const paidAmt = parseFloat(document.getElementById('paidAmount').value);
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      if (paidAmt !== qty * TICKET_PRICE) { alert("Mallaqni galchitan gatii carraa filatameetiin wal hin simu!"); return; }
+      const txn = document.getElementById('txnId').value.trim();
+      if (!txn) { alert("Maaloo Transaction ID galchaa!"); return; }
+      const fileInput = document.getElementById('screenshot').files[0];
+      if (!fileInput) { alert("Maaloo ragaa kaffaltii ol-galchaa!"); return; }
+
+      const submitBtn = document.getElementById('submitBtn');
+      const statusMsg = document.getElementById('statusMsg');
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "GALMEESSAA JIRA...";
+      statusMsg.style.color = "var(--gold-primary)";
+      statusMsg.innerText = "Ragaan keessan sakatta'amaa jira, maaloo eegaa...";
+
+      try {
+        const imageData = await toDataUrl(fileInput);
+        const payload = {
+          name: document.getElementById('name').value.trim(),
+          phone: phoneInput.getNumber(),
+          email: document.getElementById('email').value.trim(),
+          qty: qty,
+          tickets: selectedTickets.map(Number),
+          method: method,
+          paidAmount: paidAmt,
+          txn: txn,
+          image: imageData,
+          turnstile: turnstileToken
+        };
+
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+        
+        if (result.ok) {
+          confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+          document.getElementById('stepperNav').style.display = 'none';
+          for (let i = 1; i <= 6; i++) {
+            const p = document.getElementById('stepPage' + i);
+            if (p) p.style.display = 'none';
+          }
+          document.getElementById('stepSuccess').classList.add('active-step');
+          document.getElementById('resOrderId').innerText = result.id;
+          document.getElementById('resTickets').innerText = selectedTickets.map(t => "#" + t).join(", ");
+          document.getElementById('resTotal').innerText = result.total.toLocaleString();
+        } else {
+          statusMsg.style.color = "#ff4d4f";
+          statusMsg.innerText = result.error || "Dogoggorri uumameera.";
+          submitBtn.disabled = false;
+          submitBtn.innerText = "GALMEESSI 🔥";
+          if (result.refresh) loadTickets();
+        }
+      } catch(err) {
+        statusMsg.style.color = "#ff4d4f";
+        statusMsg.innerText = "Dogoggora Network. Maaloo irra deebi'aa!";
+        submitBtn.disabled = false;
+        submitBtn.innerText = "GALMEESSI 🔥";
+      }
+    }
+
+    initCultureAndDate();
+    loadTickets();
+  </script>
+</body>
+</html>
