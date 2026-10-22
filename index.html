@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <!-- HTML2Canvas: Tikkeetii gara Suuraatti jijjiiree buusuuf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style>
     :root {
@@ -56,6 +58,7 @@
       position: relative;
     }
 
+    /* Top Bar */
     .top-bar {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.25);
@@ -136,7 +139,6 @@
 
     .account-card { background: var(--box-accent); border: 1.5px dashed var(--gold-primary); padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 10px; display: none; line-height: 1.6; }
 
-    /* USSD CARD */
     .ussd-card {
       display: none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--gold-primary);
       border-radius: 12px; padding: 14px; margin-top: 12px; text-align: center;
@@ -159,6 +161,91 @@
 
     .contact-card { background: var(--box-accent); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; line-height: 1.8; font-size: 13px; margin-top: 10px; }
     .contact-card a { color: var(--gold-primary); font-weight: bold; text-decoration: none; }
+
+    /* ======================================================== */
+    /* LUXURY DIGITAL E-TICKET CARD (DOWNLOADABLE)               */
+    /* ======================================================== */
+    .e-ticket-card {
+      background: linear-gradient(135deg, #092317 0%, #03140c 100%);
+      border: 2px solid #d4af37;
+      border-radius: 16px;
+      padding: 20px 18px;
+      color: #fff;
+      text-align: left;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      margin: 15px 0;
+      overflow: hidden;
+    }
+    .e-ticket-card::before {
+      content: "OFFICIAL TICKET";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 38px;
+      font-weight: 900;
+      color: rgba(212, 175, 55, 0.05);
+      letter-spacing: 5px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .ticket-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px dashed rgba(212, 175, 55, 0.4);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .ticket-brand { font-size: 16px; font-weight: 900; color: #ffd700; text-transform: uppercase; }
+    .ticket-badge { background: #d4af37; color: #000; font-size: 10.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px; }
+    
+    .ticket-body-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; }
+    .ticket-body-row span { color: #a0b8ac; }
+    .ticket-body-row b { color: #fff; }
+
+    .ticket-highlight-box {
+      background: rgba(212, 175, 55, 0.12);
+      border: 1.5px solid #d4af37;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      margin: 14px 0;
+    }
+    .ticket-highlight-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #a0b8ac; }
+    .ticket-highlight-num { font-size: 26px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); margin-top: 3px; }
+
+    .ticket-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px dashed rgba(212, 175, 55, 0.4);
+      padding-top: 12px;
+      margin-top: 10px;
+    }
+    .ticket-qr-area { text-align: center; }
+    .ticket-qr-area img { border: 2px solid #d4af37; border-radius: 8px; background: #fff; padding: 2px; }
+    .ticket-qr-caption { font-size: 10px; color: #a0b8ac; margin-top: 4px; }
+
+    .btn-download-ticket {
+      width: 100%;
+      background: linear-gradient(135deg, #ffd700, #d4af37, #aa771c);
+      color: #000;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-download-ticket:hover { transform: scale(1.02); }
 
     /* Modals */
     #videoModalOverlay, #matrixModalOverlay {
@@ -320,7 +407,7 @@
         </select>
         <div id="accountDetails" class="account-card"></div>
 
-        <!-- 1-CLICK USSD PAYMENT BOX -->
+        <!-- 1-CLICK USSD -->
         <div id="ussdDialBox" class="ussd-card">
           <p><b>⚡ Kaffaltii Salphaa (1-Click USSD Dialing):</b><br>Koodiin kaffaltii bilbila keessan irratti qophaa'a; Call gochuun PIN keessan qofa galchaa!</p>
           <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
@@ -383,619 +470,4 @@
           <a href="check.html" style="color:var(--gold-primary); text-decoration:none; font-weight:700; font-size:13.5px;" id="linkCheckStatus">🔍 Haala Ajaja Kee Sakatta'i →</a>
         </div>
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-prev" id="btnBack6" onclick="goToStep(5)">← DUUBATTI</button>
-          <button type="button" class="btn-step btn-next" id="btnNext6" onclick="goToStep(1)">GARA JALQABAATTI 🏠</button>
-        </div>
-      </div>
-
-      <!-- SUCCESS SCREEN -->
-      <div class="wizard-step" id="stepSuccess">
-        <div style="text-align: center; padding: 15px 5px;">
-          <h2 style="color: var(--gold-primary); font-size: 24px; margin-bottom: 8px;" id="succHeader">GALATOOMAA! 🎉</h2>
-          <p style="font-size: 14.5px; color: var(--text-main); margin-bottom: 16px;" id="succDesc">Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.</p>
-          <div style="background: var(--box-accent); border: 1.5px dashed var(--gold-primary); border-radius: 12px; padding: 16px; text-align: left; line-height: 1.7; font-size: 13.5px;">
-            <p><b>Order ID:</b> <code id="resOrderId">---</code></p>
-            <p><b>Lakk. Carraa Kee:</b> <span id="resTickets" style="color:var(--gold-primary); font-weight:bold; font-size:16px;">---</span></p>
-            <p><b>Gatii Kaffalame:</b> <span id="resTotal">---</span> ETB</p>
-          </div>
-          <p style="color: var(--gold-primary); font-weight: bold; margin-top: 15px; font-size: 13.5px;" id="blessingText">🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!</p>
-          <a href="index.html" style="display:inline-block; margin-top:16px; color:var(--gold-primary); font-weight:bold; text-decoration: none;" id="btnReturnHome">← Gara Fuula Duraatti Deebi'i</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Video Modal -->
-  <div id="videoModalOverlay">
-    <div style="width:100%; max-width:500px; background:#000; border-radius:12px; overflow:hidden; position:relative;">
-      <button style="position:absolute; top:10px; right:12px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; font-weight:bold; cursor:pointer; z-index:10;" onclick="closeVideoModal()">✕</button>
-      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
-        <iframe id="videoIframe" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-
-  <!-- Visual Matrix Modal -->
-  <div id="matrixModalOverlay">
-    <div class="matrix-card">
-      <div class="matrix-header">
-        <h3 id="matrixTitle">🗺️ Gabatee Carraa 1 - 1000</h3>
-        <button class="matrix-close-btn" onclick="closeMatrixModal()">✕</button>
-      </div>
-
-      <div class="matrix-legend">
-        <div class="legend-item"><div class="legend-dot dot-free"></div> <span id="legFree">Duwwaa</span></div>
-        <div class="legend-item"><div class="legend-dot dot-selected"></div> <span id="legSelected">Filatame</span></div>
-        <div class="legend-item"><div class="legend-dot dot-sold"></div> <span id="legSold">Qabameera</span></div>
-      </div>
-
-      <div class="matrix-tabs" id="matrixTabsContainer">
-        <button class="tab-btn active" onclick="renderMatrixTab(1, 200)">1 - 200</button>
-        <button class="tab-btn" onclick="renderMatrixTab(201, 400)">201 - 400</button>
-        <button class="tab-btn" onclick="renderMatrixTab(401, 600)">401 - 600</button>
-        <button class="tab-btn" onclick="renderMatrixTab(601, 800)">601 - 800</button>
-        <button class="tab-btn" onclick="renderMatrixTab(801, 1000)">801 - 1000</button>
-      </div>
-
-      <div class="matrix-grid" id="matrixGridBox"></div>
-
-      <button class="btn-step btn-next" style="margin-top:10px; padding:10px;" id="btnConfirmMatrix" onclick="closeMatrixModal()">FILANNOO MIRKANEESSI ✓</button>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-
-  <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
-    
-    let TICKET_PRICE = 1000;
-    let ACCOUNTS_DATA = {
-      Telebirr: { number: "0909506573", name: "Lemma Asefa" },
-      CBE: { number: "1000342728743", name: "Lemma Asefa" },
-      BOA: { number: "212322628", name: "Lemma Asefa" },
-      Awash: { number: "013351316799600", name: "Lemma Asefa" }
-    };
-    let freeTickets = [];
-    let selectedTickets = [];
-    let turnstileToken = "";
-    let currentStep = 1;
-    let currentLang = localStorage.getItem("carraa_lang") || "om";
-    let currentUssdCode = "";
-
-    function onTurnstileSuccess(token) { turnstileToken = token; }
-
-    // ==============================================
-    // 5-MINUTE BACKGROUND AUTO-SAVE & RESTORE
-    // ==============================================
-    function saveDraftState() {
-      const draft = {
-        step: currentStep,
-        name: document.getElementById('name').value,
-        phone: phoneInput.getNumber(),
-        email: document.getElementById('email').value,
-        qty: document.getElementById('qty').value,
-        selectedTickets: selectedTickets,
-        method: document.getElementById('paymentMethod').value,
-        paidAmount: document.getElementById('paidAmount').value,
-        txnId: document.getElementById('txnId').value,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('carraa_order_draft', JSON.stringify(draft));
-    }
-
-    function restoreDraftState() {
-      try {
-        const raw = localStorage.getItem('carraa_order_draft');
-        if (!raw) return;
-        const draft = JSON.parse(raw);
-        if (Date.now() - draft.timestamp <= 5 * 60 * 1000) {
-          if (draft.name) document.getElementById('name').value = draft.name;
-          if (draft.phone) phoneInputField.value = draft.phone;
-          if (draft.email) document.getElementById('email').value = draft.email;
-          if (draft.qty) {
-            document.getElementById('qty').value = draft.qty;
-            handleQtyChange();
-          }
-          if (draft.selectedTickets && Array.isArray(draft.selectedTickets)) {
-            selectedTickets = draft.selectedTickets;
-            document.getElementById('selectedTicketsDisplay').innerText = 
-              selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
-          }
-          if (draft.method) {
-            document.getElementById('paymentMethod').value = draft.method;
-            handlePaymentChange();
-          }
-          if (draft.paidAmount) document.getElementById('paidAmount').value = draft.paidAmount;
-          if (draft.txnId) document.getElementById('txnId').value = draft.txnId;
-          
-          if (draft.step && draft.step > 1 && draft.step <= 4) {
-            goToStep(draft.step);
-          }
-        } else {
-          localStorage.removeItem('carraa_order_draft');
-        }
-      } catch(e) {}
-    }
-
-    window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveDraftState(); });
-    window.addEventListener('beforeunload', saveDraftState);
-
-    // Multilingual Dictionary
-    const I18N = {
-      om: {
-        greetingDay: "Akkam ooltan ☀️", greetingMorning: "Akkam bultan 🌅", greetingNight: "Galgala gaarii 🌙",
-        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Sirna Qulqulluu fi Amansiisaa Carraa Bituu",
-        st1: "Simannaa", st2: "Eenyummaa", st3: "Carraa", st4: "Kaffaltii", st5: "Qoodaa", st6: "Qunnamaa",
-        heroTitle: "Baga Nagaan Dhuftan! 🎉", heroDesc: "Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!",
-        videoCaption: "🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa",
-        prize1T: "Badhaasa 1ffaa: Konkolaataa", prize1D: "Badhaasa qaalii isa ol'aanaa.",
-        prize2T: "Badhaasa 2ffaa: Mootarsayikilii", prize2D: "Meeshaa ammayyaa tajaajila addaa.",
-        prize3T: "Badhaasa 3ffaa: Smart Phone", prize3D: "Bilbila ammayyaa fi badhaasa jajjabeessaa.",
-        soldLbl: "Carraa Gurgurame:", drawNote: "🎯 <b>Akkuma 1000/1000 guuteen geengoon carraa kallattiin banama!</b>",
-        btnNext1: "ITTI FUFI (CARRAA BITADHU) →",
-        p2Header: "👤 2. Odeeffannoo Dhuunfaa Keessanii", lblName: "Maqaa Guutuu:", lblPhone: "Lakk. Bilbilaa (International):", lblEmail: "Email Address:", btnBack: "← DUUBATTI", btnNext: "ITTI FUFI →",
-        p3Header: "🎟️ 3. Filannoo Carraa & Gatii", lblQty: "Baay'ina Carraa Bituu Feetu (Max 10):", lblTotal: "Gatii Waliigalaa (ETB):", lblPick: "Lakk. Carraa Filadhu:",
-        btnMatrix: "🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali (Visual Seat Matrix)",
-        p4Header: "💳 4. Mala Kaffaltii & Ragaa", lblMethod: "Mala Kaffaltii:", lblPaid: "Mallaqa Kaffalame (ETB):", lblTxn: "Transaction ID (Lakk. Kaffaltii):", lblProof: "Ragaa Kaffaltii (Screenshot):", btnSubmit: "GALMEESSI 🔥",
-        p5Header: "📲 5. Hiriyoota Keessaniif Qoodaa", p5Desc: "Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!",
-        p6Header: "📞 6. Karaalee Nu Qunnamtan", linkCheck: "🔍 Haala Ajaja Kee Sakatta'i →", btnHome: "GARA JALQABAATTI 🏠",
-        succHeader: "GALATOOMAA! 🎉", succDesc: "Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.",
-        blessing: "🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!",
-        matrixTitle: "🗺️ Gabatee Carraa 1 - 1000", legFree: "Duwwaa", legSelected: "Filatame", legSold: "Qabameera", btnConfMatrix: "FILANNOO MIRKANEESSI ✓"
-      },
-      am: {
-        greetingDay: "እንደምን ዋላችሁ ☀️", greetingMorning: "እንደምን አደራችሁ 🌅", greetingNight: "መልካም ምሽት 🌙",
-        brandTitle: "ካራ ቢፍቱ 🌟", brandSlogan: "ታማኝ እና ግልጽ የዕድል ትኬት መቁረጫ ስርዓት",
-        st1: "መግቢያ", st2: "ማንነት", st3: "ትኬት", st4: "ክፍያ", st5: "ያጋሩ", st6: "ያግኙን",
-        heroTitle: "እንኳን ደህና መጣችሁ! 🎉", heroDesc: "ካራ ቢፍቱ በሙሉ ታማኝነትና ግልጽነት የተዘጋጀ ነው። ትኬትዎን በመምረጥ ታላላቅ ሽልማቶችን ያሸንፉ!",
-        videoCaption: "🎬 የማረጋገጫ ቪዲዮ ይመልከቱ",
-        prize1T: "1ኛ ሽልማት: መኪና", prize1D: "የዚህ ዙር ታላቁ እና ዋናው ሽልማት።",
-        prize2T: "2ኛ ሽልማት: ሞተርሳይክል", prize2D: "ዘመናዊ እና ውድ አገልግሎት ሰጪ መሳሪያ።",
-        prize3T: "3ኛ ሽልማት: ስማርት ስልክ", prize3D: "ዘመናዊ ስልክ እና አበረታች ሽልማት።",
-        soldLbl: "የተሸጠው ትኬት:", drawNote: "🎯 <b>ልክ 1000/1000 እንደተሞላ የቀጥታ እጣ ማውጫው ይከፈታል!</b>",
-        btnNext1: "ይቀጥሉ (ትኬት ይቁረጡ) →",
-        p2Header: "👤 2. የግል መረጃዎን ያስገቡ", lblName: "ሙሉ ስም:", lblPhone: "ስልክ ቁጥር (International):", lblEmail: "ኢሜይል አድራሻ:", btnBack: "← ተመለስ", btnNext: "ይቀጥሉ →",
-        p3Header: "🎟️ 3. የትኬት ምርጫ እና ዋጋ", lblQty: "የሚገዙት የትኬት ብዛት (እስከ 10):", lblTotal: "ጠቅላላ ዋጋ (ETB):", lblPick: "የትኬት ቁጥር ይምረጡ:",
-        btnMatrix: "🗺️ ሙሉውን 1-1000 ትኬት በሰንጠረዥ ይመልከቱ",
-        p4Header: "💳 4. የክፍያ መንገድ እና ማረጋገጫ", lblMethod: "የክፍያ መንገድ:", lblPaid: "የተከፈለው ገንዘብ (ETB):", lblTxn: "የትራንዛክሽን መለያ ቁጥር (Txn ID):", lblProof: "የክፍያ ማረጋገጫ ስክሪንሾት:", btnSubmit: "ይመዝገቡ 🔥",
-        p5Header: "📲 5. ለወዳጅ ዘመድ ያጋሩ", p5Desc: "ይህን መልዕክት ለጓደኞችዎ በማጋራት እድላቸውን እንዲሞክሩ ይጋብዙ!",
-        p6Header: "📞 6. የመገናኛ መንገዶች", linkCheck: "🔍 የትኬትዎን ሁኔታ ይከታተሉ →", btnHome: "ወደ መጀመሪያው ገጽ 🏠",
-        succHeader: "እናመሰግናለን! 🎉", succDesc: "የእኛን እድል ስለተጠቀሙ እናመሰግናለን! ትዕዛዝዎ በተሳካ ሁኔታ ተመዝግቧል።",
-        blessing: "🌟 መልካም እድል እንዲገጥምዎት እንመኛለን!",
-        matrixTitle: "🗺️ የትኬት ሰንጠረዥ 1 - 1000", legFree: "ክፍት", legSelected: "የተመረጠ", legSold: "የተያዘ", btnConfMatrix: "ምርጫን ያረጋግጡ ✓"
-      },
-      en: {
-        greetingDay: "Good day ☀️", greetingMorning: "Good morning 🌅", greetingNight: "Good evening 🌙",
-        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Trusted & Transparent Digital Lottery Platform",
-        st1: "Welcome", st2: "Identity", st3: "Tickets", st4: "Payment", st5: "Share", st6: "Contact",
-        heroTitle: "Welcome! 🎉", heroDesc: "Carraa Biiftuu is prepared with 100% transparency. Choose your lucky tickets and win big prizes!",
-        videoCaption: "🎬 Watch Official Video Proof",
-        prize1T: "1st Prize: Brand New Car", prize1D: "The grand master prize of this season.",
-        prize2T: "2nd Prize: Motorcycle", prize2D: "Modern and premium productivity gadget.",
-        prize3T: "3rd Prize: Smart Phone", prize3D: "Latest smartphone and encouraging cash prize.",
-        soldLbl: "Tickets Sold:", drawNote: "🎯 <b>The live draw unlocks immediately when 1,000/1,000 is reached!</b>",
-        btnNext1: "CONTINUE (BUY TICKET) →",
-        p2Header: "👤 2. Personal Information", lblName: "Full Name:", lblPhone: "Phone Number (International):", lblEmail: "Email Address:", btnBack: "← BACK", btnNext: "CONTINUE →",
-        p3Header: "🎟️ 3. Ticket Selection & Pricing", lblQty: "Quantity of Tickets (Max 10):", lblTotal: "Total Price (ETB):", lblPick: "Select Ticket Number:",
-        btnMatrix: "🗺️ View Full 1-1000 Seat Matrix",
-        p4Header: "💳 4. Payment & Proof", lblMethod: "Payment Method:", lblPaid: "Paid Amount (ETB):", lblTxn: "Transaction ID:", lblProof: "Payment Screenshot:", btnSubmit: "SUBMIT ORDER 🔥",
-        p5Header: "📲 5. Share with Friends", p5Desc: "Share this link with your friends and family so they can try their luck!",
-        p6Header: "📞 6. Contact & Support", linkCheck: "🔍 Check My Order Status →", btnHome: "BACK TO HOME 🏠",
-        succHeader: "THANK YOU! 🎉", succDesc: "Thank you for choosing Carraa Biiftuu! Your order has been successfully recorded.",
-        blessing: "🌟 Best of luck to you in the upcoming draw!",
-        matrixTitle: "🗺️ Interactive Ticket Matrix 1 - 1000", legFree: "Available", legSelected: "Selected", legSold: "Sold Out", btnConfMatrix: "CONFIRM SELECTION ✓"
-      }
-    };
-
-    function switchLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem("carraa_lang", lang);
-      document.getElementById('langSwitcher').value = lang;
-      const t = I18N[lang] || I18N.om;
-
-      document.getElementById('brandTitle').innerText = t.brandTitle;
-      document.getElementById('brandSlogan').innerText = t.brandSlogan;
-      document.getElementById('stLbl1').innerText = t.st1;
-      document.getElementById('stLbl2').innerText = t.st2;
-      document.getElementById('stLbl3').innerText = t.st3;
-      document.getElementById('stLbl4').innerText = t.st4;
-      document.getElementById('stLbl5').innerText = t.st5;
-      document.getElementById('stLbl6').innerText = t.st6;
-      document.getElementById('heroTitle').innerText = t.heroTitle;
-      document.getElementById('heroDesc').innerText = t.heroDesc;
-      document.getElementById('videoCaptionTxt').innerText = t.videoCaption;
-      document.getElementById('prize1Title').innerText = t.prize1T; document.getElementById('prize1Desc').innerText = t.prize1D;
-      document.getElementById('prize2Title').innerText = t.prize2T; document.getElementById('prize2Desc').innerText = t.prize2D;
-      document.getElementById('prize3Title').innerText = t.prize3T; document.getElementById('prize3Desc').innerText = t.prize3D;
-      document.getElementById('soldLabel').innerText = t.soldLbl;
-      document.getElementById('drawLiveNote').innerHTML = t.drawNote;
-      document.getElementById('btnNext1').innerText = t.btnNext1;
-      document.getElementById('p2Header').innerText = t.p2Header;
-      document.getElementById('lblFullName').innerText = t.lblName;
-      document.getElementById('lblPhone').innerText = t.lblPhone;
-      document.getElementById('lblEmail').innerText = t.lblEmail;
-      document.getElementById('btnBack2').innerText = t.btnBack; document.getElementById('btnNext2').innerText = t.btnNext;
-      document.getElementById('p3Header').innerText = t.p3Header;
-      document.getElementById('lblQty').innerText = t.lblQty;
-      document.getElementById('lblTotalPrice').innerText = t.lblTotal;
-      document.getElementById('btnOpenMatrix').innerText = t.btnMatrix;
-      document.getElementById('btnBack3').innerText = t.btnBack; document.getElementById('btnNext3').innerText = t.btnNext;
-      document.getElementById('p4Header').innerText = t.p4Header;
-      document.getElementById('lblPaymentMethod').innerText = t.lblMethod;
-      document.getElementById('lblPaidAmount').innerText = t.lblPaid;
-      document.getElementById('lblTxnId').innerText = t.lblTxn;
-      document.getElementById('lblScreenshot').innerText = t.lblProof;
-      document.getElementById('btnBack4').innerText = t.btnBack; document.getElementById('submitBtn').innerText = t.btnSubmit;
-      document.getElementById('p5Header').innerText = t.p5Header; document.getElementById('p5Desc').innerText = t.p5Desc;
-      document.getElementById('btnBack5').innerText = t.btnBack; document.getElementById('btnNext5').innerText = t.btnNext;
-      document.getElementById('p6Header').innerText = t.p6Header; document.getElementById('linkCheckStatus').innerText = t.linkCheck;
-      document.getElementById('btnBack6').innerText = t.btnBack; document.getElementById('btnNext6').innerText = t.btnHome;
-      document.getElementById('succHeader').innerText = t.succHeader; document.getElementById('succDesc').innerText = t.succDesc;
-      document.getElementById('blessingText').innerText = t.blessing; document.getElementById('btnReturnHome').innerText = t.btnHome;
-      document.getElementById('matrixTitle').innerText = t.matrixTitle;
-      document.getElementById('legFree').innerText = t.legFree; document.getElementById('legSelected').innerText = t.legSelected; document.getElementById('legSold').innerText = t.legSold;
-      document.getElementById('btnConfirmMatrix').innerText = t.btnConfMatrix;
-
-      const h = new Date().getHours();
-      let g = t.greetingDay;
-      if (h >= 5 && h < 12) g = t.greetingMorning;
-      else if (h >= 18 || h < 5) g = t.greetingNight;
-      document.getElementById('greetingLbl').innerText = g;
-    }
-
-    function goToStep(step) {
-      currentStep = step;
-      for (let i = 1; i <= 6; i++) {
-        const page = document.getElementById('stepPage' + i);
-        const ind = document.getElementById('stepIndicator' + i);
-        if (page) page.classList.remove('active-step');
-        if (ind) {
-          ind.classList.remove('active');
-          if (i < step) ind.classList.add('completed');
-          else ind.classList.remove('completed');
-        }
-      }
-      const targetPage = document.getElementById('stepPage' + step);
-      const targetInd = document.getElementById('stepIndicator' + step);
-      if (targetPage) targetPage.classList.add('active-step');
-      if (targetInd) targetInd.classList.add('active');
-      saveDraftState();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function validateStep2() {
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      if (!name || name.length < 3) { alert("Maaloo maqaa guutuu galchaa!"); return; }
-      if (!phoneInput.isValidNumber()) { alert("Maaloo lakkoofsa bilbilaa sirrii galchaa!"); return; }
-      if (!email || !email.includes("@")) { alert("Maaloo imeelii sirrii galchaa!"); return; }
-      goToStep(3);
-    }
-
-    function validateStep3() {
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (selectedTickets.length !== qty) {
-        alert("Maaloo lakkoofsa carraa " + qty + " filadhaa! (Amma: " + selectedTickets.length + ")");
-        return;
-      }
-      goToStep(4);
-    }
-
-    function toggleTheme() {
-      const root = document.documentElement;
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        root.removeAttribute('data-theme');
-        document.getElementById('themeBtn').innerText = "🌙 Dark";
-        localStorage.setItem("carraa_theme", "light");
-      } else {
-        root.setAttribute('data-theme', 'dark');
-        document.getElementById('themeBtn').innerText = "☀️ Light";
-        localStorage.setItem("carraa_theme", "dark");
-      }
-    }
-    if (localStorage.getItem("carraa_theme") === "dark") {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('themeBtn').innerText = "☀️ Light";
-    }
-
-    const phoneInputField = document.querySelector("#phone");
-    const phoneInput = window.intlTelInput(phoneInputField, {
-      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-      initialCountry: "et",
-      separateDialCode: true,
-      preferredCountries: ["et"]
-    });
-
-    function renderTicketsDropdown(ticketsList) {
-      const select = document.getElementById('ticketSelect');
-      select.innerHTML = '<option value="">-- Carraa Duwwaa Filadhu --</option>';
-      ticketsList.forEach(num => {
-        const opt = document.createElement('option');
-        opt.value = num;
-        opt.innerText = "Carraa #" + num;
-        select.appendChild(opt);
-      });
-
-      const sold = 1000 - ticketsList.length;
-      const pct = Math.round((sold / 1000) * 100);
-      document.getElementById('soldCountTxt').innerText = `${sold} / 1000`;
-      document.getElementById('percentTxt').innerText = `${pct}%`;
-      document.getElementById('progressBarFill').style.width = `${pct}%`;
-    }
-
-    freeTickets = Array.from({length: 1000}, (_, i) => i + 1);
-    renderTicketsDropdown(freeTickets);
-
-    async function loadTickets() {
-      try {
-        const res = await fetch(WEB_APP_URL);
-        const data = await res.json();
-        if (data.ok && Array.isArray(data.free) && data.free.length > 0) {
-          freeTickets = data.free;
-          TICKET_PRICE = data.price || 1000;
-          if (data.accounts) ACCOUNTS_DATA = data.accounts;
-          renderTicketsDropdown(freeTickets);
-        }
-      } catch(e) {}
-      handleQtyChange();
-      restoreDraftState();
-    }
-
-    function handleQtyChange() {
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      const total = qty * TICKET_PRICE;
-      document.getElementById('totalPrice').value = total.toLocaleString() + " ETB";
-      document.getElementById('paidAmount').value = total;
-      selectedTickets = [];
-      document.getElementById('selectedTicketsDisplay').innerText = "";
-
-      const vipArea = document.getElementById('vipBadgeArea');
-      if (qty >= 10) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:linear-gradient(135deg,#ffd700,#ff9800); color:#000;">👑 DIAMOND VIP (Carraa 10x)</span>`;
-      else if (qty >= 5) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:#ffd700; color:#000;">🥇 GOLD VIP (Carraa 5x)</span>`;
-      else if (qty >= 3) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:#c0c0c0; color:#000;">🥈 SILVER VIP</span>`;
-      else vipArea.innerHTML = "";
-
-      updateUssdDetails();
-      saveDraftState();
-    }
-
-    function handlePaymentChange() {
-      const method = document.getElementById('paymentMethod').value;
-      const box = document.getElementById('accountDetails');
-      if (method && ACCOUNTS_DATA[method]) {
-        const acc = ACCOUNTS_DATA[method];
-        box.style.display = "block";
-        box.innerHTML = `📌 <b>Kaffaltii ${method}:</b><br>👤 <b>Maqaa:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size:15px; font-weight:bold;">${acc.number}</span>`;
-      } else {
-        box.style.display = "none";
-      }
-      updateUssdDetails();
-      saveDraftState();
-    }
-
-    // ==============================================
-    // 1-CLICK USSD LINK (TELEBIRR RANDOM REASON & CBE *889#)
-    // ==============================================
-    function updateUssdDetails() {
-      const method = document.getElementById('paymentMethod').value;
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      const total = qty * TICKET_PRICE;
-      const ussdBox = document.getElementById('ussdDialBox');
-      const callBtn = document.getElementById('ussdCallBtn');
-
-      let ticketReason = "Carraa";
-      if (selectedTickets && selectedTickets.length > 0) {
-        // Randomly pick one ticket number as reason
-        const randomPick = selectedTickets[Math.floor(Math.random() * selectedTickets.length)];
-        ticketReason = String(randomPick);
-      }
-
-      if (method === "Telebirr") {
-        ussdBox.style.display = "block";
-        const rawCode = `*127*2*1*1*0909506573*1*${total}*${ticketReason}*1#`;
-        currentUssdCode = rawCode;
-        callBtn.href = `tel:*127*2*1*1*0909506573*1*${total}*${ticketReason}*1%23`;
-      } else if (method === "CBE") {
-        ussdBox.style.display = "block";
-        currentUssdCode = "*889#";
-        callBtn.href = "tel:*889%23";
-      } else if (method === "Awash") {
-        ussdBox.style.display = "block";
-        currentUssdCode = "*901#";
-        callBtn.href = "tel:*901%23";
-      } else if (method === "BOA") {
-        ussdBox.style.display = "block";
-        currentUssdCode = "*815#";
-        callBtn.href = "tel:*815%23";
-      } else {
-        ussdBox.style.display = "none";
-        currentUssdCode = "";
-      }
-    }
-
-    function copyUssdCode() {
-      if (!currentUssdCode) return;
-      navigator.clipboard.writeText(currentUssdCode).then(() => {
-        const alertBox = document.getElementById('ussdCopyAlert');
-        alertBox.style.display = 'block';
-        setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
-      });
-    }
-
-    function handleTicketDropdown() {
-      const select = document.getElementById('ticketSelect');
-      const val = parseInt(select.value);
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (val && !selectedTickets.includes(val)) {
-        if (selectedTickets.length < qty) selectedTickets.push(val);
-        else selectedTickets = [val];
-      }
-      document.getElementById('selectedTicketsDisplay').innerText = 
-        selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
-      updateUssdDetails();
-      saveDraftState();
-    }
-
-    function openMatrixModal() {
-      document.getElementById('matrixModalOverlay').style.display = 'flex';
-      renderMatrixTab(1, 200);
-    }
-    function closeMatrixModal() { document.getElementById('matrixModalOverlay').style.display = 'none'; }
-
-    function renderMatrixTab(start, end) {
-      const container = document.getElementById('matrixGridBox');
-      container.innerHTML = "";
-
-      const tabs = document.querySelectorAll('.tab-btn');
-      tabs.forEach(t => {
-        if (t.innerText.includes(start)) t.classList.add('active');
-        else t.classList.remove('active');
-      });
-
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-
-      for (let i = start; i <= end; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell-ticket';
-        cell.innerText = i;
-
-        const isFree = freeTickets.includes(i);
-        const isSelected = selectedTickets.includes(i);
-
-        if (isSelected) cell.classList.add('cell-selected');
-        else if (isFree) cell.classList.add('cell-free');
-        else cell.classList.add('cell-sold');
-
-        cell.onclick = function() {
-          if (!isFree) return;
-          if (selectedTickets.includes(i)) {
-            selectedTickets = selectedTickets.filter(n => n !== i);
-          } else {
-            if (selectedTickets.length < qty) selectedTickets.push(i);
-            else selectedTickets = [i];
-          }
-          document.getElementById('selectedTicketsDisplay').innerText = 
-            selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
-          updateUssdDetails();
-          saveDraftState();
-          renderMatrixTab(start, end);
-        };
-        container.appendChild(cell);
-      }
-    }
-
-    function openVideoModal() {
-      document.getElementById('videoModalOverlay').style.display = 'flex';
-      document.getElementById('videoIframe').src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
-    }
-    function closeVideoModal() {
-      document.getElementById('videoModalOverlay').style.display = 'none';
-      document.getElementById('videoIframe').src = "";
-    }
-
-    function toDataUrl(file){
-      return new Promise(function(res, rej){  
-        if(file.type === "application/pdf"){
-          var r = new FileReader();
-          r.onload = function(){ res(r.result); };
-          r.onerror = rej;
-          r.readAsDataURL(file);
-          return;
-        }  
-        var im = new Image();
-        im.onload = function(){
-          var s = Math.min(1, 1000 / Math.max(im.width, im.height));
-          var c = document.createElement("canvas");  
-          c.width = im.width * s; c.height = im.height * s;
-          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
-          res(c.toDataURL("image/jpeg", 0.7));
-        };  
-        im.onerror = rej;
-        im.src = URL.createObjectURL(file);
-      });
-    }
-
-    async function submitFinalOrder() {
-      const method = document.getElementById('paymentMethod').value;
-      if (!method) { alert("Maaloo mala kaffaltii filadhaa!"); return; }
-      const paidAmt = parseFloat(document.getElementById('paidAmount').value);
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (paidAmt !== qty * TICKET_PRICE) { alert("Mallaqni galchitan gatii carraa filatameetiin wal hin simu!"); return; }
-      const txn = document.getElementById('txnId').value.trim();
-      if (!txn) { alert("Maaloo Transaction ID galchaa!"); return; }
-      const fileInput = document.getElementById('screenshot').files[0];
-      if (!fileInput) { alert("Maaloo ragaa kaffaltii ol-galchaa!"); return; }
-
-      const submitBtn = document.getElementById('submitBtn');
-      const statusMsg = document.getElementById('statusMsg');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerText = "GALMEESSAA JIRA (OCR SAKATTA'AA JIRA)...";
-      statusMsg.style.color = "var(--gold-primary)";
-      statusMsg.innerText = "Ragaan keessan (OCR Transaction ID, Maqaa, Mallaqa, fi Sa'aatiin 12) sakatta'amaa jira, maaloo xiqqoo eegaa...";
-
-      try {
-        const imageData = await toDataUrl(fileInput);
-        const payload = {
-          name: document.getElementById('name').value.trim(),
-          phone: phoneInput.getNumber(),
-          email: document.getElementById('email').value.trim(),
-          qty: qty,
-          tickets: selectedTickets.map(Number),
-          method: method,
-          paidAmount: paidAmt,
-          txn: txn,
-          image: imageData,
-          turnstile: turnstileToken
-        };
-
-        const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await res.json();
-        
-        if (result.ok) {
-          localStorage.removeItem('carraa_order_draft');
-          confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-          document.getElementById('stepperNav').style.display = 'none';
-          for (let i = 1; i <= 6; i++) {
-            const p = document.getElementById('stepPage' + i);
-            if (p) p.style.display = 'none';
-          }
-          document.getElementById('stepSuccess').classList.add('active-step');
-          document.getElementById('resOrderId').innerText = result.id;
-          document.getElementById('resTickets').innerText = selectedTickets.map(t => "#" + t).join(", ");
-          document.getElementById('resTotal').innerText = result.total.toLocaleString();
-        } else {
-          statusMsg.style.color = "#ff4d4f";
-          statusMsg.innerText = result.error || "Dogoggorri uumameera.";
-          submitBtn.disabled = false;
-          submitBtn.innerText = "GALMEESSI 🔥";
-          if (result.refresh) loadTickets();
-        }
-      } catch(err) {
-        statusMsg.style.color = "#ff4d4f";
-        statusMsg.innerText = "Dogoggora Network. Maaloo irra deebi'aa!";
-        submitBtn.disabled = false;
-        submitBtn.innerText = "GALMEESSI 🔥";
-      }
-    }
-
-    // Social Links
-    const currentUrl = encodeURIComponent(window.location.href);
-    const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
-    document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
-    document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
-    document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
-    document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
-
-    switchLanguage(currentLang);
-    loadTickets();
-  </script>
-</body>
-</html>
+          <button type="button
