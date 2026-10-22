@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <!-- HTML2Canvas: Tikkeetii gara Suuraatti jijjiiree buusuuf -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style>
@@ -58,7 +57,6 @@
       position: relative;
     }
 
-    /* Top Bar */
     .top-bar {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.25);
@@ -162,121 +160,49 @@
     .contact-card { background: var(--box-accent); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; line-height: 1.8; font-size: 13px; margin-top: 10px; }
     .contact-card a { color: var(--gold-primary); font-weight: bold; text-decoration: none; }
 
-    /* ======================================================== */
-    /* LUXURY DIGITAL E-TICKET CARD (DOWNLOADABLE)               */
-    /* ======================================================== */
+    /* E-TICKET CARD */
     .e-ticket-card {
-      background: linear-gradient(135deg, #092317 0%, #03140c 100%);
-      border: 2px solid #d4af37;
-      border-radius: 16px;
-      padding: 20px 18px;
-      color: #fff;
-      text-align: left;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      margin: 15px 0;
-      overflow: hidden;
+      background: linear-gradient(135deg, #092317 0%, #03140c 100%); border: 2px solid #d4af37;
+      border-radius: 16px; padding: 18px 16px; color: #fff; text-align: left; position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); margin: 15px 0;
     }
-    .e-ticket-card::before {
-      content: "OFFICIAL TICKET";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-30deg);
-      font-size: 38px;
-      font-weight: 900;
-      color: rgba(212, 175, 55, 0.05);
-      letter-spacing: 5px;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-    .ticket-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1.5px dashed rgba(212, 175, 55, 0.4);
-      padding-bottom: 12px;
-      margin-bottom: 14px;
-    }
-    .ticket-brand { font-size: 16px; font-weight: 900; color: #ffd700; text-transform: uppercase; }
-    .ticket-badge { background: #d4af37; color: #000; font-size: 10.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px; }
-    
-    .ticket-body-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; }
+    .ticket-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed rgba(212, 175, 55, 0.4); padding-bottom: 10px; margin-bottom: 12px; }
+    .ticket-brand { font-size: 15px; font-weight: 900; color: #ffd700; }
+    .ticket-badge { background: #d4af37; color: #000; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
+    .ticket-body-row { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: 12px; }
     .ticket-body-row span { color: #a0b8ac; }
-    .ticket-body-row b { color: #fff; }
-
-    .ticket-highlight-box {
-      background: rgba(212, 175, 55, 0.12);
-      border: 1.5px solid #d4af37;
-      border-radius: 10px;
-      padding: 12px;
-      text-align: center;
-      margin: 14px 0;
-    }
-    .ticket-highlight-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #a0b8ac; }
-    .ticket-highlight-num { font-size: 26px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); margin-top: 3px; }
-
-    .ticket-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1.5px dashed rgba(212, 175, 55, 0.4);
-      padding-top: 12px;
-      margin-top: 10px;
-    }
-    .ticket-qr-area { text-align: center; }
-    .ticket-qr-area img { border: 2px solid #d4af37; border-radius: 8px; background: #fff; padding: 2px; }
-    .ticket-qr-caption { font-size: 10px; color: #a0b8ac; margin-top: 4px; }
+    .ticket-highlight-box { background: rgba(212, 175, 55, 0.12); border: 1.5px solid #d4af37; border-radius: 10px; padding: 10px; text-align: center; margin: 12px 0; }
+    .ticket-highlight-num { font-size: 24px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); margin-top: 2px; }
+    .ticket-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1.5px dashed rgba(212, 175, 55, 0.4); padding-top: 10px; margin-top: 10px; }
 
     .btn-download-ticket {
-      width: 100%;
-      background: linear-gradient(135deg, #ffd700, #d4af37, #aa771c);
-      color: #000;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 14.5px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
-      margin-top: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      width: 100%; background: linear-gradient(135deg, #ffd700, #d4af37); color: #000;
+      border: none; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 900;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); margin-top: 10px;
     }
-    .btn-download-ticket:hover { transform: scale(1.02); }
 
-    /* Modals */
-    #videoModalOverlay, #matrixModalOverlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000;
-      padding: 15px;
+    /* ======================================================== */
+    /* SCRATCH & WIN CANVAS CARD (ADMIN OPTIONAL)               */
+    /* ======================================================== */
+    .scratch-wrapper {
+      position: relative; width: 280px; height: 130px; margin: 16px auto;
+      border: 2px solid #d4af37; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
     }
-    .matrix-card {
-      background: var(--card-bg); border: 2px solid var(--gold-primary);
-      width: 100%; max-width: 480px; max-height: 85vh; border-radius: 18px;
-      display: flex; flex-direction: column; padding: 18px 14px;
+    .scratch-prize-layer {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: #0d2417; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; color: #ffd700; text-align: center; padding: 10px;
     }
-    .matrix-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .matrix-close-btn { background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer; }
+    #scratchCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; }
 
-    .matrix-legend { display: flex; justify-content: space-around; margin-bottom: 12px; font-size: 11.5px; font-weight: 700; }
-    .legend-item { display: flex; align-items: center; gap: 5px; }
-    .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
-    .dot-free { background: #2ed573; }
-    .dot-selected { background: #ffd700; }
-    .dot-sold { background: #e74c3c; }
-
-    .matrix-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; }
-    .tab-btn { padding: 6px 10px; font-size: 11px; font-weight: bold; border-radius: 6px; border: 1px solid var(--card-border); background: var(--box-accent); color: var(--text-main); cursor: pointer; white-space: nowrap; }
-    .tab-btn.active { background: var(--gold-primary); color: #000; }
-
-    .matrix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; overflow-y: auto; padding: 6px 2px; flex: 1; max-height: 48vh; }
-    .cell-ticket { height: 38px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; user-select: none; }
-    .cell-free { background: rgba(46, 213, 115, 0.15); border: 1.5px solid #2ed573; color: #2ed573; }
-    .cell-selected { background: #ffd700 !important; color: #000 !important; border: 1.5px solid #d4af37 !important; }
-    .cell-sold { background: rgba(231, 76, 60, 0.12); border: 1px solid #e74c3c; color: #e74c3c; text-decoration: line-through; opacity: 0.55; cursor: not-allowed; }
+    /* Referral Box */
+    .referral-box {
+      background: var(--box-accent); border: 1.5px dashed var(--gold-primary);
+      border-radius: 12px; padding: 14px; margin-top: 14px; text-align: center;
+    }
+    .referral-input-group { display: flex; gap: 6px; margin-top: 8px; }
+    .referral-input-group input { margin-top: 0; font-size: 12.5px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -350,15 +276,9 @@
       <!-- PAGE 2 -->
       <div class="wizard-step" id="stepPage2">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p2Header">👤 2. Odeeffannoo Dhuunfaa Keessanii</h3>
-        <label id="lblFullName">Maqaa Guutuu:</label>
-        <input type="text" id="name" placeholder="Fkn: Lemmaa Asefa">
-
-        <label id="lblPhone">Lakk. Bilbilaa (International):</label>
-        <input type="tel" id="phone">
-
-        <label id="lblEmail">Email Address:</label>
-        <input type="email" id="email" placeholder="example@gmail.com">
-
+        <label id="lblFullName">Maqaa Guutuu:</label><input type="text" id="name" placeholder="Fkn: Lemmaa Asefa">
+        <label id="lblPhone">Lakk. Bilbilaa (International):</label><input type="tel" id="phone">
+        <label id="lblEmail">Email Address:</label><input type="email" id="email" placeholder="example@gmail.com">
         <div class="nav-btn-group">
           <button type="button" class="btn-step btn-prev" id="btnBack2" onclick="goToStep(1)">← DUUBATTI</button>
           <button type="button" class="btn-step btn-next" id="btnNext2" onclick="validateStep2()">ITTI FUFI →</button>
@@ -368,35 +288,22 @@
       <!-- PAGE 3 -->
       <div class="wizard-step" id="stepPage3">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p3Header">🎟️ 3. Filannoo Carraa & Gatii</h3>
-
-        <label id="lblQty">Baay'ina Carraa Bituu Feetu (Max 10):</label>
-        <input type="number" id="qty" min="1" max="10" value="1" onchange="handleQtyChange()">
+        <label id="lblQty">Baay'ina Carraa Bituu Feetu (Max 10):</label><input type="number" id="qty" min="1" max="10" value="1" onchange="handleQtyChange()">
         <div id="vipBadgeArea" style="margin-top:6px;"></div>
-
-        <label id="lblTotalPrice">Gatii Waliigalaa (ETB):</label>
-        <input type="text" id="totalPrice" readonly value="1,000 ETB">
-
+        <label id="lblTotalPrice">Gatii Waliigalaa (ETB):</label><input type="text" id="totalPrice" readonly value="1,000 ETB">
         <label id="lblPickTicket">Lakk. Carraa Filadhu:</label>
-        <select id="ticketSelect" onchange="handleTicketDropdown()">
-          <option value="">-- Carraa Duwwaa Filadhu --</option>
-        </select>
-        
-        <button type="button" class="btn-open-matrix" id="btnOpenMatrix" onclick="openMatrixModal()">
-          🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali (Visual Seat Matrix)
-        </button>
-
+        <select id="ticketSelect" onchange="handleTicketDropdown()"><option value="">-- Carraa Duwwaa Filadhu --</option></select>
+        <button type="button" class="btn-open-matrix" id="btnOpenMatrix" onclick="openMatrixModal()">🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali</button>
         <div id="selectedTicketsDisplay" style="margin-top:8px; font-size:13.5px; color:var(--gold-primary); font-weight:bold;"></div>
-
         <div class="nav-btn-group">
           <button type="button" class="btn-step btn-prev" id="btnBack3" onclick="goToStep(2)">← DUUBATTI</button>
-          <button type="button" class="btn-step btn-next" id="btnNext3" onclick="validateStep3()">ITTI FUFI (KAFFALTIITTI) →</button>
+          <button type="button" class="btn-step btn-next" id="btnNext3" onclick="validateStep3()">ITTI FUFI →</button>
         </div>
       </div>
 
       <!-- PAGE 4 -->
       <div class="wizard-step" id="stepPage4">
         <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p4Header">💳 4. Mala Kaffaltii & Ragaa</h3>
-
         <label id="lblPaymentMethod">Mala Kaffaltii:</label>
         <select id="paymentMethod" onchange="handlePaymentChange()">
           <option value="">-- Mala Kaffaltii Filadhu --</option>
@@ -407,28 +314,18 @@
         </select>
         <div id="accountDetails" class="account-card"></div>
 
-        <!-- 1-CLICK USSD -->
         <div id="ussdDialBox" class="ussd-card">
           <p><b>⚡ Kaffaltii Salphaa (1-Click USSD Dialing):</b><br>Koodiin kaffaltii bilbila keessan irratti qophaa'a; Call gochuun PIN keessan qofa galchaa!</p>
           <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-            <a id="ussdCallBtn" href="#" class="btn-step btn-next" style="text-decoration:none; display:inline-block; padding:10px 16px; font-size:12.5px;">
-              📞 KALLATTIIN BILBILI
-            </a>
-            <button type="button" class="btn-step btn-prev" style="padding:10px 14px; font-size:12px;" onclick="copyUssdCode()">
-              📋 Koodii Kooppii Godhi
-            </button>
+            <a id="ussdCallBtn" href="#" class="btn-step btn-next" style="text-decoration:none; display:inline-block; padding:10px 16px; font-size:12.5px;">📞 KALLATTIIN BILBILI</a>
+            <button type="button" class="btn-step btn-prev" style="padding:10px 14px; font-size:12px;" onclick="copyUssdCode()">📋 Koodii Kooppii Godhi</button>
           </div>
           <div id="ussdCopyAlert" style="font-size:11.5px; color:#2ed573; margin-top:6px; display:none; font-weight:bold;">Koodiin kaffaltii kooppii ta'eera!</div>
         </div>
 
-        <label id="lblPaidAmount">Mallaqa Kaffalame (ETB):</label>
-        <input type="number" id="paidAmount" placeholder="Fkn: 1000">
-
-        <label id="lblTxnId">Transaction ID (Lakk. Kaffaltii):</label>
-        <input type="text" id="txnId" placeholder="Fkn: TX12345678">
-
-        <label id="lblScreenshot">Ragaa Kaffaltii (Screenshot):</label>
-        <input type="file" id="screenshot" accept="image/*,.pdf">
+        <label id="lblPaidAmount">Mallaqa Kaffalame (ETB):</label><input type="number" id="paidAmount" placeholder="Fkn: 1000">
+        <label id="lblTxnId">Transaction ID (Lakk. Kaffaltii):</label><input type="text" id="txnId" placeholder="Fkn: TX12345678">
+        <label id="lblScreenshot">Ragaa Kaffaltii (Screenshot):</label><input type="file" id="screenshot" accept="image/*,.pdf">
 
         <div style="margin-top:16px; display:flex; justify-content:center;">
           <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-callback="onTurnstileSuccess"></div>
@@ -438,7 +335,7 @@
           <button type="button" class="btn-step btn-prev" id="btnBack4" onclick="goToStep(3)">← DUUBATTI</button>
           <button type="button" class="btn-step btn-next" id="submitBtn" onclick="submitFinalOrder()">GALMEESSI 🔥</button>
         </div>
-        <div id="statusMsg" style="margin-top:14px; text-align:center; font-size:13.5px; font-weight:bold; line-height:1.5;"></div>
+        <div id="statusMsg" style="margin-top:14px; text-align:center; font-size:13.5px; font-weight:bold;"></div>
       </div>
 
       <!-- PAGE 5 -->
@@ -475,56 +372,70 @@
         </div>
       </div>
 
-      <!-- ======================================================== -->
-      <!-- SUCCESS SCREEN WITH DOWNLOADABLE DIGITAL E-TICKET CARD    -->
-      <!-- ======================================================== -->
+      <!-- SUCCESS SCREEN WITH OPTIONAL SCRATCH & REFERRAL -->
       <div class="wizard-step" id="stepSuccess">
         <div style="text-align: center; padding: 10px 4px;">
           <h2 style="color: var(--gold-primary); font-size: 24px; margin-bottom: 6px;" id="succHeader">GALATOOMAA! 🎉</h2>
-          <p style="font-size: 14px; color: var(--text-main); margin-bottom: 14px;" id="succDesc">
-            Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.
-          </p>
+          <p style="font-size: 14px; color: var(--text-main); margin-bottom: 14px;" id="succDesc">Ajajni keessan milkaa'inaan galmaa'eera.</p>
 
-          <!-- THE DIGITAL E-TICKET (Canvas Captured for Download) -->
+          <!-- OPTIONAL SCRATCH & WIN CANVAS (Admin ON/OFF) -->
+          <div id="scratchContainerArea" style="display:none;">
+            <p style="font-size:13px; font-weight:bold; color:var(--gold-primary); margin-bottom:6px;">🎁 Qubaan Haxaa'ii Badhaasa Battalaa Ilaali!</p>
+            <div class="scratch-wrapper">
+              <div class="scratch-prize-layer">
+                <div style="font-size:24px;">🎉</div>
+                <b style="font-size:14px; color:#ffd700;">BAGA GAMMADDAN!</b>
+                <span style="font-size:11.5px; color:#fff;">Gammachuu Dabalataa Argattaniittu!</span>
+              </div>
+              <canvas id="scratchCanvas" width="280" height="130"></canvas>
+            </div>
+          </div>
+
+          <!-- THE DIGITAL E-TICKET CARD -->
           <div class="e-ticket-card" id="digitalTicketCard">
             <div class="ticket-top">
               <div>
                 <div class="ticket-brand">CARRAA BIIFTUU 🌟</div>
-                <div style="font-size:10px; color:#d4af37; letter-spacing:0.5px;">OFFICIAL DIGITAL E-TICKET</div>
+                <div style="font-size:10px; color:#d4af37;">OFFICIAL DIGITAL E-TICKET</div>
               </div>
               <div class="ticket-badge">VERIFIED ✓</div>
             </div>
-
             <div class="ticket-body-row"><span>Maqaa Maamilaa:</span> <b id="tktName">---</b></div>
             <div class="ticket-body-row"><span>Lakk. Bilbilaa:</span> <b id="tktPhone">---</b></div>
             <div class="ticket-body-row"><span>Order ID:</span> <b id="resOrderId">---</b></div>
-            <div class="ticket-body-row"><span>Guyyaa & Sa'aatii:</span> <b id="tktDate">---</b></div>
+            <div class="ticket-body-row"><span>Guyyaa:</span> <b id="tktDate">---</b></div>
 
-            <!-- Big Golden Ticket Numbers Highlight -->
             <div class="ticket-highlight-box">
-              <div class="ticket-highlight-label">LAKKOOFSA CARRAA KEESSANII (TICKETS)</div>
+              <div style="font-size:11px; color:#a0b8ac;">LAKKOOFSA CARRAA KEESSANII</div>
               <div class="ticket-highlight-num" id="resTickets">#---</div>
             </div>
 
-            <div class="ticket-body-row"><span>Mallaqa Kaffalame:</span> <b style="color:#ffd700;"><span id="resTotal">---</span> ETB</b></div>
-            <div class="ticket-body-row"><span>Mala Kaffaltii:</span> <b id="tktMethod">---</b></div>
-            <div class="ticket-body-row"><span>Transaction ID:</span> <b id="tktTxn">---</b></div>
+            <div class="ticket-body-row"><span>Mallaqa:</span> <b style="color:#ffd700;"><span id="resTotal">---</span> ETB</b></div>
+            <div class="ticket-body-row"><span>Mala:</span> <b id="tktMethod">---</b></div>
+            <div class="ticket-body-row"><span>TXN ID:</span> <b id="tktTxn">---</b></div>
 
             <div class="ticket-bottom">
-              <div style="font-size:11px; color:#a0b8ac; max-width:65%; line-height:1.4;">
-                ⚠️ <i>Ragaa kana bilbila keessanitti buufadhaatii eeggadhaa. Guyyaa carraan ba'u ragaa kanaan badhaasa keessan fudhattu!</i>
+              <div style="font-size:10.5px; color:#a0b8ac; max-width:65%;">
+                ⚠️ <i>Ragaa kana bilbila keessanitti buufadhaatii eeggadhaa!</i>
               </div>
-              <div class="ticket-qr-area">
-                <img id="tktQrImg" src="" alt="QR" width="75" height="75">
-                <div class="ticket-qr-caption">Scan to Verify</div>
+              <div style="text-align:center;">
+                <img id="tktQrImg" src="" alt="QR" width="75" height="75" style="border:2px solid #d4af37; border-radius:6px; background:#fff;">
               </div>
             </div>
           </div>
 
-          <!-- Download Action Button -->
           <button type="button" class="btn-download-ticket" id="btnDownloadTicket" onclick="downloadTicketImage()">
             📥 TIKKEETII BILBILATTI BUUFADHU (SAVE)
           </button>
+
+          <!-- OPTIONAL REFERRAL / AFFILIATE BOX (Admin ON/OFF) -->
+          <div class="referral-box" id="referralBoxArea" style="display:none;">
+            <p style="font-size:12.5px; font-weight:bold; color:var(--gold-primary);">🔗 Liinkii Afeerraa Kee (Hiriyootaaf Qoodi):</p>
+            <div class="referral-input-group">
+              <input type="text" id="refLinkInput" readonly>
+              <button type="button" class="btn-step btn-next" style="padding:6px 12px; font-size:12px;" onclick="copyRefLink()">Kooppii</button>
+            </div>
+          </div>
 
           <p style="color: var(--gold-primary); font-weight: bold; margin-top: 15px; font-size: 13.5px;" id="blessingText">
             🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!
@@ -533,44 +444,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-
-  <!-- Video Modal -->
-  <div id="videoModalOverlay">
-    <div style="width:100%; max-width:500px; background:#000; border-radius:12px; overflow:hidden; position:relative;">
-      <button style="position:absolute; top:10px; right:12px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; font-weight:bold; cursor:pointer; z-index:10;" onclick="closeVideoModal()">✕</button>
-      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
-        <iframe id="videoIframe" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-
-  <!-- Visual Matrix Modal -->
-  <div id="matrixModalOverlay">
-    <div class="matrix-card">
-      <div class="matrix-header">
-        <h3 id="matrixTitle">🗺️ Gabatee Carraa 1 - 1000</h3>
-        <button class="matrix-close-btn" onclick="closeMatrixModal()">✕</button>
-      </div>
-
-      <div class="matrix-legend">
-        <div class="legend-item"><div class="legend-dot dot-free"></div> <span id="legFree">Duwwaa</span></div>
-        <div class="legend-item"><div class="legend-dot dot-selected"></div> <span id="legSelected">Filatame</span></div>
-        <div class="legend-item"><div class="legend-dot dot-sold"></div> <span id="legSold">Qabameera</span></div>
-      </div>
-
-      <div class="matrix-tabs" id="matrixTabsContainer">
-        <button class="tab-btn active" onclick="renderMatrixTab(1, 200)">1 - 200</button>
-        <button class="tab-btn" onclick="renderMatrixTab(201, 400)">201 - 400</button>
-        <button class="tab-btn" onclick="renderMatrixTab(401, 600)">401 - 600</button>
-        <button class="tab-btn" onclick="renderMatrixTab(601, 800)">601 - 800</button>
-        <button class="tab-btn" onclick="renderMatrixTab(801, 1000)">801 - 1000</button>
-      </div>
-
-      <div class="matrix-grid" id="matrixGridBox"></div>
-
-      <button class="btn-step btn-next" style="margin-top:10px; padding:10px;" id="btnConfirmMatrix" onclick="closeMatrixModal()">FILANNOO MIRKANEESSI ✓</button>
     </div>
   </div>
 
@@ -592,21 +465,20 @@
     let currentStep = 1;
     let currentLang = localStorage.getItem("carraa_lang") || "om";
     let currentUssdCode = "";
+    let CONFIG_SETTINGS = { scratchEnabled: false, referralEnabled: false };
+
+    // Get URL ref parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeRefCode = urlParams.get('ref') || "";
 
     function onTurnstileSuccess(token) { turnstileToken = token; }
 
-    // Draft State
     function saveDraftState() {
       const draft = {
-        step: currentStep,
-        name: document.getElementById('name').value,
-        phone: phoneInput.getNumber(),
-        email: document.getElementById('email').value,
-        qty: document.getElementById('qty').value,
-        selectedTickets: selectedTickets,
-        method: document.getElementById('paymentMethod').value,
-        paidAmount: document.getElementById('paidAmount').value,
-        txnId: document.getElementById('txnId').value,
+        step: currentStep, name: document.getElementById('name').value, phone: phoneInput.getNumber(),
+        email: document.getElementById('email').value, qty: document.getElementById('qty').value,
+        selectedTickets: selectedTickets, method: document.getElementById('paymentMethod').value,
+        paidAmount: document.getElementById('paidAmount').value, txnId: document.getElementById('txnId').value,
         timestamp: Date.now()
       };
       localStorage.setItem('carraa_order_draft', JSON.stringify(draft));
@@ -621,156 +493,21 @@
           if (draft.name) document.getElementById('name').value = draft.name;
           if (draft.phone) phoneInputField.value = draft.phone;
           if (draft.email) document.getElementById('email').value = draft.email;
-          if (draft.qty) {
-            document.getElementById('qty').value = draft.qty;
-            handleQtyChange();
-          }
+          if (draft.qty) { document.getElementById('qty').value = draft.qty; handleQtyChange(); }
           if (draft.selectedTickets && Array.isArray(draft.selectedTickets)) {
             selectedTickets = draft.selectedTickets;
-            document.getElementById('selectedTicketsDisplay').innerText = 
-              selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+            document.getElementById('selectedTicketsDisplay').innerText = selectedTickets.length > 0 ? "Carraawwan: " + selectedTickets.map(t => "#" + t).join(", ") : "";
           }
-          if (draft.method) {
-            document.getElementById('paymentMethod').value = draft.method;
-            handlePaymentChange();
-          }
+          if (draft.method) { document.getElementById('paymentMethod').value = draft.method; handlePaymentChange(); }
           if (draft.paidAmount) document.getElementById('paidAmount').value = draft.paidAmount;
           if (draft.txnId) document.getElementById('txnId').value = draft.txnId;
-          
-          if (draft.step && draft.step > 1 && draft.step <= 4) {
-            goToStep(draft.step);
-          }
-        } else {
-          localStorage.removeItem('carraa_order_draft');
+          if (draft.step && draft.step > 1 && draft.step <= 4) goToStep(draft.step);
         }
       } catch(e) {}
     }
 
     window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveDraftState(); });
     window.addEventListener('beforeunload', saveDraftState);
-
-    // Multilingual Dictionary
-    const I18N = {
-      om: {
-        greetingDay: "Akkam ooltan ☀️", greetingMorning: "Akkam bultan 🌅", greetingNight: "Galgala gaarii 🌙",
-        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Sirna Qulqulluu fi Amansiisaa Carraa Bituu",
-        st1: "Simannaa", st2: "Eenyummaa", st3: "Carraa", st4: "Kaffaltii", st5: "Qoodaa", st6: "Qunnamaa",
-        heroTitle: "Baga Nagaan Dhuftan! 🎉", heroDesc: "Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!",
-        videoCaption: "🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa",
-        prize1T: "Badhaasa 1ffaa: Konkolaataa", prize1D: "Badhaasa qaalii isa ol'aanaa.",
-        prize2T: "Badhaasa 2ffaa: Mootarsayikilii", prize2D: "Meeshaa ammayyaa tajaajila addaa.",
-        prize3T: "Badhaasa 3ffaa: Smart Phone", prize3D: "Bilbila ammayyaa fi badhaasa jajjabeessaa.",
-        soldLbl: "Carraa Gurgurame:", drawNote: "🎯 <b>Akkuma 1000/1000 guuteen geengoon carraa kallattiin banama!</b>",
-        btnNext1: "ITTI FUFI (CARRAA BITADHU) →",
-        p2Header: "👤 2. Odeeffannoo Dhuunfaa Keessanii", lblName: "Maqaa Guutuu:", lblPhone: "Lakk. Bilbilaa (International):", lblEmail: "Email Address:", btnBack: "← DUUBATTI", btnNext: "ITTI FUFI →",
-        p3Header: "🎟️ 3. Filannoo Carraa & Gatii", lblQty: "Baay'ina Carraa Bituu Feetu (Max 10):", lblTotal: "Gatii Waliigalaa (ETB):", lblPick: "Lakk. Carraa Filadhu:",
-        btnMatrix: "🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali (Visual Seat Matrix)",
-        p4Header: "💳 4. Mala Kaffaltii & Ragaa", lblMethod: "Mala Kaffaltii:", lblPaid: "Mallaqa Kaffalame (ETB):", lblTxn: "Transaction ID (Lakk. Kaffaltii):", lblProof: "Ragaa Kaffaltii (Screenshot):", btnSubmit: "GALMEESSI 🔥",
-        p5Header: "📲 5. Hiriyoota Keessaniif Qoodaa", p5Desc: "Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!",
-        p6Header: "📞 6. Karaalee Nu Qunnamtan", linkCheck: "🔍 Haala Ajaja Kee Sakatta'i →", btnHome: "GARA JALQABAATTI 🏠",
-        succHeader: "GALATOOMAA! 🎉", succDesc: "Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.",
-        blessing: "🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!",
-        matrixTitle: "🗺️ Gabatee Carraa 1 - 1000", legFree: "Duwwaa", legSelected: "Filatame", legSold: "Qabameera", btnConfMatrix: "FILANNOO MIRKANEESSI ✓"
-      },
-      am: {
-        greetingDay: "እንደምን ዋላችሁ ☀️", greetingMorning: "እንደምን አደራችሁ 🌅", greetingNight: "መልካም ምሽት 🌙",
-        brandTitle: "ካራ ቢፍቱ 🌟", brandSlogan: "ታማኝ እና ግልጽ የዕድል ትኬት መቁረጫ ስርዓት",
-        st1: "መግቢያ", st2: "ማንነት", st3: "ትኬት", st4: "ክፍያ", st5: "ያጋሩ", st6: "ያግኙን",
-        heroTitle: "እንኳን ደህና መጣችሁ! 🎉", heroDesc: "ካራ ቢፍቱ በሙሉ ታማኝነትና ግልጽነት የተዘጋጀ ነው። ትኬትዎን በመምረጥ ታላላቅ ሽልማቶችን ያሸንፉ!",
-        videoCaption: "🎬 የማረጋገጫ ቪዲዮ ይመልከቱ",
-        prize1T: "1ኛ ሽልማት: መኪና", prize1D: "የዚህ ዙር ታላቁ እና ዋናው ሽልማት።",
-        prize2T: "2ኛ ሽልማት: ሞተርሳይክል", prize2D: "ዘመናዊ እና ውድ አገልግሎት ሰጪ መሳሪያ።",
-        prize3T: "3ኛ ሽልማት: ስማርት ስልክ", prize3D: "ዘመናዊ ስልክ እና አበረታች ሽልማት።",
-        soldLbl: "የተሸጠው ትኬት:", drawNote: "🎯 <b>ልክ 1000/1000 እንደተሞላ የቀጥታ እጣ ማውጫው ይከፈታል!</b>",
-        btnNext1: "ይቀጥሉ (ትኬት ይቁረጡ) →",
-        p2Header: "👤 2. የግል መረጃዎን ያስገቡ", lblName: "ሙሉ ስም:", lblPhone: "ስልክ ቁጥር (International):", lblEmail: "ኢሜይል አድራሻ:", btnBack: "← ተመለስ", btnNext: "ይቀጥሉ →",
-        p3Header: "🎟️ 3. የትኬት ምርጫ እና ዋጋ", lblQty: "የሚገዙት የትኬት ብዛት (እስከ 10):", lblTotal: "ጠቅላላ ዋጋ (ETB):", lblPick: "የትኬት ቁጥር ይምረጡ:",
-        btnMatrix: "🗺️ ሙሉውን 1-1000 ትኬት በሰንጠረዥ ይመልከቱ",
-        p4Header: "💳 4. የክፍያ መንገድ እና ማረጋገጫ", lblMethod: "የክፍያ መንገድ:", lblPaid: "የተከፈለው ገንዘብ (ETB):", lblTxn: "የትራንዛክሽን መለያ ቁጥር (Txn ID):", lblProof: "የክፍያ ማረጋገጫ ስክሪንሾት:", btnSubmit: "ይመዝገቡ 🔥",
-        p5Header: "📲 5. ለወዳጅ ዘመድ ያጋሩ", p5Desc: "ይህን መልዕክት ለጓደኞችዎ በማጋራት እድላቸውን እንዲሞክሩ ይጋብዙ!",
-        p6Header: "📞 6. የመገናኛ መንገዶች", linkCheck: "🔍 የትኬትዎን ሁኔታ ይከታተሉ →", btnHome: "ወደ መጀመሪያው ገጽ 🏠",
-        succHeader: "እናመሰግናለን! 🎉", succDesc: "የእኛን እድል ስለተጠቀሙ እናመሰግናለን! ትዕዛዝዎ በተሳካ ሁኔታ ተመዝግቧል።",
-        blessing: "🌟 መልካም እድል እንዲገጥምዎት እንመኛለን!",
-        matrixTitle: "🗺️ የትኬት ሰንጠረዥ 1 - 1000", legFree: "ክፍት", legSelected: "የተመረጠ", legSold: "የተያዘ", btnConfMatrix: "ምርጫን ያረጋግጡ ✓"
-      },
-      en: {
-        greetingDay: "Good day ☀️", greetingMorning: "Good morning 🌅", greetingNight: "Good evening 🌙",
-        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Trusted & Transparent Digital Lottery Platform",
-        st1: "Welcome", st2: "Identity", st3: "Tickets", st4: "Payment", st5: "Share", st6: "Contact",
-        heroTitle: "Welcome! 🎉", heroDesc: "Carraa Biiftuu is prepared with 100% transparency. Choose your lucky tickets and win big prizes!",
-        videoCaption: "🎬 Watch Official Video Proof",
-        prize1T: "1st Prize: Brand New Car", prize1D: "The grand master prize of this season.",
-        prize2T: "2nd Prize: Motorcycle", prize2D: "Modern and premium productivity gadget.",
-        prize3T: "3rd Prize: Smart Phone", prize3D: "Latest smartphone and encouraging cash prize.",
-        soldLbl: "Tickets Sold:", drawNote: "🎯 <b>The live draw unlocks immediately when 1,000/1,000 is reached!</b>",
-        btnNext1: "CONTINUE (BUY TICKET) →",
-        p2Header: "👤 2. Personal Information", lblName: "Full Name:", lblPhone: "Phone Number (International):", lblEmail: "Email Address:", btnBack: "← BACK", btnNext: "CONTINUE →",
-        p3Header: "🎟️ 3. Ticket Selection & Pricing", lblQty: "Quantity of Tickets (Max 10):", lblTotal: "Total Price (ETB):", lblPick: "Select Ticket Number:",
-        btnMatrix: "🗺️ View Full 1-1000 Seat Matrix",
-        p4Header: "💳 4. Payment & Proof", lblMethod: "Payment Method:", lblPaid: "Paid Amount (ETB):", lblTxn: "Transaction ID:", lblProof: "Payment Screenshot:", btnSubmit: "SUBMIT ORDER 🔥",
-        p5Header: "📲 5. Share with Friends", p5Desc: "Share this link with your friends and family so they can try their luck!",
-        p6Header: "📞 6. Contact & Support", linkCheck: "🔍 Check My Order Status →", btnHome: "BACK TO HOME 🏠",
-        succHeader: "THANK YOU! 🎉", succDesc: "Thank you for choosing Carraa Biiftuu! Your order has been successfully recorded.",
-        blessing: "🌟 Best of luck to you in the upcoming draw!",
-        matrixTitle: "🗺️ Interactive Ticket Matrix 1 - 1000", legFree: "Available", legSelected: "Selected", legSold: "Sold Out", btnConfMatrix: "CONFIRM SELECTION ✓"
-      }
-    };
-
-    function switchLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem("carraa_lang", lang);
-      document.getElementById('langSwitcher').value = lang;
-      const t = I18N[lang] || I18N.om;
-
-      document.getElementById('brandTitle').innerText = t.brandTitle;
-      document.getElementById('brandSlogan').innerText = t.brandSlogan;
-      document.getElementById('stLbl1').innerText = t.st1;
-      document.getElementById('stLbl2').innerText = t.st2;
-      document.getElementById('stLbl3').innerText = t.st3;
-      document.getElementById('stLbl4').innerText = t.st4;
-      document.getElementById('stLbl5').innerText = t.st5;
-      document.getElementById('stLbl6').innerText = t.st6;
-      document.getElementById('heroTitle').innerText = t.heroTitle;
-      document.getElementById('heroDesc').innerText = t.heroDesc;
-      document.getElementById('videoCaptionTxt').innerText = t.videoCaption;
-      document.getElementById('prize1Title').innerText = t.prize1T; document.getElementById('prize1Desc').innerText = t.prize1D;
-      document.getElementById('prize2Title').innerText = t.prize2T; document.getElementById('prize2Desc').innerText = t.prize2D;
-      document.getElementById('prize3Title').innerText = t.prize3T; document.getElementById('prize3Desc').innerText = t.prize3D;
-      document.getElementById('soldLabel').innerText = t.soldLbl;
-      document.getElementById('drawLiveNote').innerHTML = t.drawNote;
-      document.getElementById('btnNext1').innerText = t.btnNext1;
-      document.getElementById('p2Header').innerText = t.p2Header;
-      document.getElementById('lblFullName').innerText = t.lblName;
-      document.getElementById('lblPhone').innerText = t.lblPhone;
-      document.getElementById('lblEmail').innerText = t.lblEmail;
-      document.getElementById('btnBack2').innerText = t.btnBack; document.getElementById('btnNext2').innerText = t.btnNext;
-      document.getElementById('p3Header').innerText = t.p3Header;
-      document.getElementById('lblQty').innerText = t.lblQty;
-      document.getElementById('lblTotalPrice').innerText = t.lblTotal;
-      document.getElementById('btnOpenMatrix').innerText = t.btnMatrix;
-      document.getElementById('btnBack3').innerText = t.btnBack; document.getElementById('btnNext3').innerText = t.btnNext;
-      document.getElementById('p4Header').innerText = t.p4Header;
-      document.getElementById('lblPaymentMethod').innerText = t.lblMethod;
-      document.getElementById('lblPaidAmount').innerText = t.lblPaid;
-      document.getElementById('lblTxnId').innerText = t.lblTxn;
-      document.getElementById('lblScreenshot').innerText = t.lblProof;
-      document.getElementById('btnBack4').innerText = t.btnBack; document.getElementById('submitBtn').innerText = t.btnSubmit;
-      document.getElementById('p5Header').innerText = t.p5Header; document.getElementById('p5Desc').innerText = t.p5Desc;
-      document.getElementById('btnBack5').innerText = t.btnBack; document.getElementById('btnNext5').innerText = t.btnNext;
-      document.getElementById('p6Header').innerText = t.p6Header; document.getElementById('linkCheckStatus').innerText = t.linkCheck;
-      document.getElementById('btnBack6').innerText = t.btnBack; document.getElementById('btnNext6').innerText = t.btnHome;
-      document.getElementById('succHeader').innerText = t.succHeader; document.getElementById('succDesc').innerText = t.succDesc;
-      document.getElementById('blessingText').innerText = t.blessing; document.getElementById('btnReturnHome').innerText = t.btnHome;
-      document.getElementById('matrixTitle').innerText = t.matrixTitle;
-      document.getElementById('legFree').innerText = t.legFree; document.getElementById('legSelected').innerText = t.legSelected; document.getElementById('legSold').innerText = t.legSold;
-      document.getElementById('btnConfirmMatrix').innerText = t.btnConfMatrix;
-
-      const h = new Date().getHours();
-      let g = t.greetingDay;
-      if (h >= 5 && h < 12) g = t.greetingMorning;
-      else if (h >= 18 || h < 5) g = t.greetingNight;
-      document.getElementById('greetingLbl').innerText = g;
-    }
 
     function goToStep(step) {
       currentStep = step;
@@ -795,18 +532,15 @@
     function validateStep2() {
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
-      if (!name || name.length < 3) { alert("Maaloo maqaa guutuu galchaa!"); return; }
-      if (!phoneInput.isValidNumber()) { alert("Maaloo lakkoofsa bilbilaa sirrii galchaa!"); return; }
-      if (!email || !email.includes("@")) { alert("Maaloo imeelii sirrii galchaa!"); return; }
+      if (!name || name.length < 3) return alert("Maqaa guutuu galchaa!");
+      if (!phoneInput.isValidNumber()) return alert("Lakkoofsa bilbilaa sirrii galchaa!");
+      if (!email || !email.includes("@")) return alert("Imeelii sirrii galchaa!");
       goToStep(3);
     }
 
     function validateStep3() {
       const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (selectedTickets.length !== qty) {
-        alert("Maaloo lakkoofsa carraa " + qty + " filadhaa! (Amma: " + selectedTickets.length + ")");
-        return;
-      }
+      if (selectedTickets.length !== qty) return alert("Lakkoofsa carraa " + qty + " filadhaa!");
       goToStep(4);
     }
 
@@ -845,12 +579,10 @@
         opt.innerText = "Carraa #" + num;
         select.appendChild(opt);
       });
-
       const sold = 1000 - ticketsList.length;
-      const pct = Math.round((sold / 1000) * 100);
       document.getElementById('soldCountTxt').innerText = `${sold} / 1000`;
-      document.getElementById('percentTxt').innerText = `${pct}%`;
-      document.getElementById('progressBarFill').style.width = `${pct}%`;
+      document.getElementById('percentTxt').innerText = `${Math.round((sold/1000)*100)}%`;
+      document.getElementById('progressBarFill').style.width = `${Math.round((sold/1000)*100)}%`;
     }
 
     freeTickets = Array.from({length: 1000}, (_, i) => i + 1);
@@ -864,6 +596,8 @@
           freeTickets = data.free;
           TICKET_PRICE = data.price || 1000;
           if (data.accounts) ACCOUNTS_DATA = data.accounts;
+          CONFIG_SETTINGS.scratchEnabled = data.scratchEnabled;
+          CONFIG_SETTINGS.referralEnabled = data.referralEnabled;
           renderTicketsDropdown(freeTickets);
         }
       } catch(e) {}
@@ -878,13 +612,6 @@
       document.getElementById('paidAmount').value = total;
       selectedTickets = [];
       document.getElementById('selectedTicketsDisplay').innerText = "";
-
-      const vipArea = document.getElementById('vipBadgeArea');
-      if (qty >= 10) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:linear-gradient(135deg,#ffd700,#ff9800); color:#000;">👑 DIAMOND VIP (Carraa 10x)</span>`;
-      else if (qty >= 5) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:#ffd700; color:#000;">🥇 GOLD VIP (Carraa 5x)</span>`;
-      else if (qty >= 3) vipArea.innerHTML = `<span style="padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; background:#c0c0c0; color:#000;">🥈 SILVER VIP</span>`;
-      else vipArea.innerHTML = "";
-
       updateUssdDetails();
       saveDraftState();
     }
@@ -893,9 +620,8 @@
       const method = document.getElementById('paymentMethod').value;
       const box = document.getElementById('accountDetails');
       if (method && ACCOUNTS_DATA[method]) {
-        const acc = ACCOUNTS_DATA[method];
         box.style.display = "block";
-        box.innerHTML = `📌 <b>Kaffaltii ${method}:</b><br>👤 <b>Maqaa:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size:15px; font-weight:bold;">${acc.number}</span>`;
+        box.innerHTML = `📌 <b>Kaffaltii ${method}:</b><br>👤 <b>Maqaa:</b> ${ACCOUNTS_DATA[method].name}<br>💳 <b>Lakk. Account:</b> <span style="font-size:15px; font-weight:bold;">${ACCOUNTS_DATA[method].number}</span>`;
       } else {
         box.style.display = "none";
       }
@@ -912,14 +638,12 @@
 
       let ticketReason = "Carraa";
       if (selectedTickets && selectedTickets.length > 0) {
-        const randomPick = selectedTickets[Math.floor(Math.random() * selectedTickets.length)];
-        ticketReason = String(randomPick);
+        ticketReason = String(selectedTickets[Math.floor(Math.random() * selectedTickets.length)]);
       }
 
       if (method === "Telebirr") {
         ussdBox.style.display = "block";
-        const rawCode = `*127*2*1*1*0909506573*1*${total}*${ticketReason}*1#`;
-        currentUssdCode = rawCode;
+        currentUssdCode = `*127*2*1*1*0909506573*1*${total}*${ticketReason}*1#`;
         callBtn.href = `tel:*127*2*1*1*0909506573*1*${total}*${ticketReason}*1%23`;
       } else if (method === "CBE") {
         ussdBox.style.display = "block";
@@ -956,52 +680,38 @@
         if (selectedTickets.length < qty) selectedTickets.push(val);
         else selectedTickets = [val];
       }
-      document.getElementById('selectedTicketsDisplay').innerText = 
-        selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+      document.getElementById('selectedTicketsDisplay').innerText = selectedTickets.length > 0 ? "Carraawwan: " + selectedTickets.map(t => "#" + t).join(", ") : "";
       updateUssdDetails();
       saveDraftState();
     }
 
-    function openMatrixModal() {
-      document.getElementById('matrixModalOverlay').style.display = 'flex';
-      renderMatrixTab(1, 200);
-    }
+    function openMatrixModal() { document.getElementById('matrixModalOverlay').style.display = 'flex'; renderMatrixTab(1, 200); }
     function closeMatrixModal() { document.getElementById('matrixModalOverlay').style.display = 'none'; }
 
     function renderMatrixTab(start, end) {
       const container = document.getElementById('matrixGridBox');
       container.innerHTML = "";
-
       const tabs = document.querySelectorAll('.tab-btn');
-      tabs.forEach(t => {
-        if (t.innerText.includes(start)) t.classList.add('active');
-        else t.classList.remove('active');
-      });
+      tabs.forEach(t => { if (t.innerText.includes(start)) t.classList.add('active'); else t.classList.remove('active'); });
 
       const qty = parseInt(document.getElementById('qty').value) || 1;
-
       for (let i = start; i <= end; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell-ticket';
         cell.innerText = i;
-
-        const isFree = freeTickets.includes(i);
-        const isSelected = selectedTickets.includes(i);
-
+        const isFree = freeTickets.includes(i), isSelected = selectedTickets.includes(i);
         if (isSelected) cell.classList.add('cell-selected');
         else if (isFree) cell.classList.add('cell-free');
         else cell.classList.add('cell-sold');
 
         cell.onclick = function() {
           if (!isFree) return;
-          if (selectedTickets.includes(i)) {
-            selectedTickets = selectedTickets.filter(n => n !== i);
-          } else {
+          if (selectedTickets.includes(i)) selectedTickets = selectedTickets.filter(n => n !== i);
+          else {
             if (selectedTickets.length < qty) selectedTickets.push(i);
             else selectedTickets = [i];
           }
-          document.getElementById('selectedTicketsDisplay').innerText = 
-            selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
+          document.getElementById('selectedTicketsDisplay').innerText = selectedTickets.length > 0 ? "Carraawwan: " + selectedTickets.map(t => "#" + t).join(", ") : "";
           updateUssdDetails();
           saveDraftState();
           renderMatrixTab(start, end);
@@ -1022,43 +732,36 @@
     function toDataUrl(file){
       return new Promise(function(res, rej){  
         if(file.type === "application/pdf"){
-          var r = new FileReader();
-          r.onload = function(){ res(r.result); };
-          r.onerror = rej;
-          r.readAsDataURL(file);
-          return;
+          var r = new FileReader(); r.onload = function(){ res(r.result); }; r.onerror = rej; r.readAsDataURL(file); return;
         }  
         var im = new Image();
         im.onload = function(){
           var s = Math.min(1, 1000 / Math.max(im.width, im.height));
-          var c = document.createElement("canvas");  
-          c.width = im.width * s; c.height = im.height * s;
+          var c = document.createElement("canvas"); c.width = im.width * s; c.height = im.height * s;
           c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
           res(c.toDataURL("image/jpeg", 0.7));
         };  
-        im.onerror = rej;
-        im.src = URL.createObjectURL(file);
+        im.onerror = rej; im.src = URL.createObjectURL(file);
       });
     }
 
     async function submitFinalOrder() {
       const method = document.getElementById('paymentMethod').value;
-      if (!method) { alert("Maaloo mala kaffaltii filadhaa!"); return; }
+      if (!method) return alert("Mala kaffaltii filadhaa!");
       const paidAmt = parseFloat(document.getElementById('paidAmount').value);
       const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (paidAmt !== qty * TICKET_PRICE) { alert("Mallaqni galchitan gatii carraa filatameetiin wal hin simu!"); return; }
+      if (paidAmt !== qty * TICKET_PRICE) return alert("Mallaqni galchitan gatii carraa filatameetiin wal hin simu!");
       const txn = document.getElementById('txnId').value.trim();
-      if (!txn) { alert("Maaloo Transaction ID galchaa!"); return; }
+      if (!txn) return alert("Transaction ID galchaa!");
       const fileInput = document.getElementById('screenshot').files[0];
-      if (!fileInput) { alert("Maaloo ragaa kaffaltii ol-galchaa!"); return; }
+      if (!fileInput) return alert("Ragaa kaffaltii ol-galchaa!");
 
       const submitBtn = document.getElementById('submitBtn');
       const statusMsg = document.getElementById('statusMsg');
-      
       submitBtn.disabled = true;
-      submitBtn.innerText = "GALMEESSAA JIRA (OCR SAKATTA'AA JIRA)...";
+      submitBtn.innerText = "GALMEESSAA JIRA (OCR)...";
       statusMsg.style.color = "var(--gold-primary)";
-      statusMsg.innerText = "Ragaan keessan (OCR Transaction ID, Maqaa, Mallaqa, fi Sa'aatiin 12) sakatta'amaa jira, maaloo xiqqoo eegaa...";
+      statusMsg.innerText = "Ragaan keessan (OCR & Security) sakatta'amaa jira, maaloo eegaa...";
 
       const custName = document.getElementById('name').value.trim();
       const custPhone = phoneInput.getNumber();
@@ -1067,38 +770,24 @@
       try {
         const imageData = await toDataUrl(fileInput);
         const payload = {
-          name: custName,
-          phone: custPhone,
-          email: custEmail,
-          qty: qty,
-          tickets: selectedTickets.map(Number),
-          method: method,
-          paidAmount: paidAmt,
-          txn: txn,
-          image: imageData,
-          turnstile: turnstileToken
+          name: custName, phone: custPhone, email: custEmail, qty: qty,
+          tickets: selectedTickets.map(Number), method: method, paidAmount: paidAmt,
+          txn: txn, image: imageData, turnstile: turnstileToken, refCode: activeRefCode
         };
 
         const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
+          method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload)
         });
-
         const result = await res.json();
         
         if (result.ok) {
           localStorage.removeItem('carraa_order_draft');
           confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-          
           document.getElementById('stepperNav').style.display = 'none';
-          for (let i = 1; i <= 6; i++) {
-            const p = document.getElementById('stepPage' + i);
-            if (p) p.style.display = 'none';
-          }
+          for (let i = 1; i <= 6; i++) { const p = document.getElementById('stepPage' + i); if (p) p.style.display = 'none'; }
           document.getElementById('stepSuccess').classList.add('active-step');
 
-          // Populate the E-Ticket Data
+          // Ticket Details
           document.getElementById('resOrderId').innerText = result.id;
           document.getElementById('tktName').innerText = custName;
           document.getElementById('tktPhone').innerText = custPhone;
@@ -1107,10 +796,19 @@
           document.getElementById('resTotal').innerText = result.total.toLocaleString();
           document.getElementById('tktMethod').innerText = method;
           document.getElementById('tktTxn').innerText = txn;
+          document.getElementById('tktQrImg').src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.origin + '/check.html?phone=' + encodeURIComponent(custPhone) + '&txn=' + encodeURIComponent(txn))}&size=90&dark=0a3d24`;
 
-          // Generate Ticket QR Code
-          const checkUrl = `${window.location.origin}/check.html?phone=${encodeURIComponent(custPhone)}&txn=${encodeURIComponent(txn)}`;
-          document.getElementById('tktQrImg').src = `https://quickchart.io/qr?text=${encodeURIComponent(checkUrl)}&size=90&dark=0a3d24`;
+          // Scratch Card (Admin Toggle)
+          if (CONFIG_SETTINGS.scratchEnabled) {
+            document.getElementById('scratchContainerArea').style.display = 'block';
+            initScratchCard();
+          }
+
+          // Referral Box (Admin Toggle)
+          if (CONFIG_SETTINGS.referralEnabled) {
+            document.getElementById('referralBoxArea').style.display = 'block';
+            document.getElementById('refLinkInput').value = `${window.location.origin}/?ref=${result.id}`;
+          }
 
         } else {
           statusMsg.style.color = "#ff4d4f";
@@ -1128,28 +826,58 @@
     }
 
     // ==============================================
-    // DOWNLOAD DIGITAL E-TICKET AS IMAGE (PNG)
+    // SCRATCH & WIN CANVAS LOGIC (QUBAAN HAXAA'UU)
     // ==============================================
+    function initScratchCard() {
+      const canvas = document.getElementById('scratchCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#C0C0C0';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🪙 Qubaan Haxaa\'aa (Scratch Here)', canvas.width / 2, canvas.height / 2 + 5);
+
+      let isDrawing = false;
+      function scratch(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 16, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      canvas.addEventListener('mousedown', () => isDrawing = true);
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+      canvas.addEventListener('mousemove', scratch);
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('touchend', () => isDrawing = false);
+      canvas.addEventListener('touchmove', scratch);
+    }
+
+    function copyRefLink() {
+      const refInput = document.getElementById('refLinkInput');
+      navigator.clipboard.writeText(refInput.value).then(() => alert("Liinkiin afeerraa kooppii ta'eera!"));
+    }
+
     function downloadTicketImage() {
       const ticketEl = document.getElementById('digitalTicketCard');
       const btn = document.getElementById('btnDownloadTicket');
-      const orderId = document.getElementById('resOrderId').innerText || "Ticket";
-      
       btn.disabled = true;
       btn.innerText = "Tikkeetii qopheessaa jira...";
-
       html2canvas(ticketEl, { scale: 2.5, useCORS: true, backgroundColor: "#06180f" }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `Tikkeetii_CarraaBiiftuu_${orderId}.png`;
+        link.download = `Tikkeetii_${document.getElementById('resOrderId').innerText}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-
         btn.disabled = false;
-        btn.innerText = "✅ TIKKEETIIN BU'EERA! (AMMAS BUUFADHU)";
+        btn.innerText = "✅ TIKKEETIIN BU'EERA!";
       }).catch(err => {
-        alert("Tikkeetii buusuun hin danda'amne. Maaloo screenshot godhadhaa!");
+        alert("Screenshot godhadhaa!");
         btn.disabled = false;
-        btn.innerText = "📥 TIKKEETII BILBILATTI BUUFADHU (SAVE)";
+        btn.innerText = "📥 TIKKEETII BUUFADHU";
       });
     }
 
@@ -1161,7 +889,6 @@
     document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
     document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
 
-    switchLanguage(currentLang);
     loadTickets();
   </script>
 </body>
