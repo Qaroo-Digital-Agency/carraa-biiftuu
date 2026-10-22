@@ -56,11 +56,16 @@
       position: relative;
     }
 
+    /* Top Bar: Language & Theme */
     .top-bar {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.25);
     }
-    .greeting-text { font-size: 12.5px; font-weight: 700; color: var(--gold-primary); }
+    .top-left-controls { display: flex; align-items: center; gap: 8px; }
+    .lang-select {
+      background: var(--box-accent); border: 1px solid var(--card-border); color: var(--gold-primary);
+      padding: 4px 8px; border-radius: 12px; font-size: 11.5px; font-weight: bold; cursor: pointer;
+    }
     .theme-btn {
       background: transparent; border: 1px solid var(--card-border); color: var(--text-main);
       padding: 4px 10px; border-radius: 16px; cursor: pointer; font-size: 12px; font-weight: 600;
@@ -93,6 +98,25 @@
     .hero-title { font-size: 17px; font-weight: 800; color: var(--gold-primary); margin-bottom: 6px; }
     .hero-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
 
+    /* Video Player Card */
+    .video-showcase-card {
+      background: #000; border: 1.5px solid var(--gold-primary); border-radius: 12px;
+      overflow: hidden; margin-bottom: 16px; position: relative; text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .video-thumbnail-wrap {
+      position: relative; width: 100%; height: 160px;
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80') center/cover;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .play-circle {
+      width: 50px; height: 50px; border-radius: 50%; background: rgba(212, 175, 55, 0.9);
+      display: flex; align-items: center; justify-content: center; font-size: 20px; color: #000;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.8); transition: transform 0.2s;
+    }
+    .play-circle:hover { transform: scale(1.1); }
+    .video-caption { font-size: 12.5px; font-weight: 700; color: #ffd700; margin-top: 8px; }
+
     .prize-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
     .prize-card { background: var(--box-accent); border: 1.5px solid var(--card-border); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; }
     .prize-rank { font-size: 24px; width: 42px; height: 42px; background: rgba(212, 175, 55, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -112,7 +136,6 @@
     .iti { width: 100%; margin-top: 6px; }
     input[readonly] { background: var(--box-accent); font-weight: 800; color: var(--gold-primary); }
 
-    /* Button Visual Matrix Toggle */
     .btn-open-matrix {
       width: 100%; background: var(--box-accent); border: 1.5px dashed var(--gold-primary);
       color: var(--gold-primary); font-weight: 800; padding: 11px; border-radius: 10px;
@@ -123,7 +146,10 @@
     .account-card { background: var(--box-accent); border: 1.5px dashed var(--gold-primary); padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 10px; display: none; line-height: 1.6; }
 
     .nav-btn-group { display: flex; gap: 10px; margin-top: 20px; }
-    .btn-step { flex: 1; padding: 13px 16px; border-radius: 10px; font-size: 14.5px; font-weight: 800; border: none; cursor: pointer; text-transform: uppercase; }
+    .btn-step {
+      flex: 1; padding: 13px 16px; border-radius: 10px; font-size: 14.5px; font-weight: 800;
+      border: none; cursor: pointer; text-transform: uppercase;
+    }
     .btn-next { background: linear-gradient(135deg, #ffd700, #d4af37, #0a3d24); color: #fff; }
     .btn-prev { background: var(--box-accent); border: 1px solid var(--card-border); color: var(--text-main); }
 
@@ -136,9 +162,16 @@
     .contact-card { background: var(--box-accent); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; line-height: 1.8; font-size: 13px; margin-top: 10px; }
     .contact-card a { color: var(--gold-primary); font-weight: bold; text-decoration: none; }
 
-    /* ============================================== */
-    /* MODAL: VISUAL SEAT-MATRIX (1-1000 GRID)        */
-    /* ============================================== */
+    /* Modal Video Player */
+    #videoModalOverlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000;
+      padding: 15px;
+    }
+    .video-modal-card { width: 100%; max-width: 500px; background: #000; border-radius: 12px; overflow: hidden; position: relative; }
+    .video-close-btn { position: absolute; top: 10px; right: 12px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 10; }
+
+    /* Modal Matrix */
     #matrixModalOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000;
@@ -153,7 +186,6 @@
     .matrix-header h3 { font-size: 16px; color: var(--gold-primary); }
     .matrix-close-btn { background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer; font-weight: bold; }
 
-    /* Legend */
     .matrix-legend { display: flex; justify-content: space-around; margin-bottom: 12px; font-size: 11.5px; font-weight: 700; }
     .legend-item { display: flex; align-items: center; gap: 5px; }
     .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
@@ -161,7 +193,6 @@
     .dot-selected { background: #ffd700; }
     .dot-sold { background: #e74c3c; }
 
-    /* Tab Filters (1-200, 201-400...) */
     .matrix-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; }
     .tab-btn {
       padding: 6px 10px; font-size: 11px; font-weight: bold; border-radius: 6px;
@@ -169,7 +200,6 @@
     }
     .tab-btn.active { background: var(--gold-primary); color: #000; }
 
-    /* Grid Container */
     .matrix-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px;
       overflow-y: auto; padding: 6px 2px; flex: 1; max-height: 48vh;
@@ -179,7 +209,6 @@
       font-size: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; user-select: none;
     }
     .cell-free { background: rgba(46, 213, 115, 0.15); border: 1.5px solid #2ed573; color: #2ed573; }
-    .cell-free:hover { background: #2ed573; color: #000; }
     .cell-selected { background: #ffd700 !important; color: #000 !important; border: 1.5px solid #d4af37 !important; box-shadow: 0 0 8px rgba(255, 215, 0, 0.8); }
     .cell-sold { background: rgba(231, 76, 60, 0.12); border: 1px solid #e74c3c; color: #e74c3c; text-decoration: line-through; opacity: 0.55; cursor: not-allowed; }
   </style>
@@ -189,36 +218,50 @@
   <div class="app-wrapper">
     <div class="main-card" id="appCard">
       
-      <!-- Top Bar -->
+      <!-- Top Bar: Languages & Theme -->
       <div class="top-bar">
-        <div class="greeting-text">
-          <span id="greetingLbl">Akkam</span> • <span id="ethDateLbl">...</span>
+        <div class="top-left-controls">
+          <select class="lang-select" id="langSwitcher" onchange="switchLanguage(this.value)">
+            <option value="om">Afaan Oromoo</option>
+            <option value="am">አማርኛ</option>
+            <option value="en">English</option>
+          </select>
+          <span class="greeting-text" id="greetingLbl">Akkam</span>
         </div>
         <button type="button" class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
       </div>
 
       <!-- Brand Area -->
       <div class="brand-area">
-        <div class="brand-pill">Carraa Biiftuu 🌟</div>
-        <div class="brand-slogan">Sirna Qulqulluu fi Amansiisaa Carraa Bituu</div>
+        <div class="brand-pill" id="brandTitle">Carraa Biiftuu 🌟</div>
+        <div class="brand-slogan" id="brandSlogan">Sirna Qulqulluu fi Amansiisaa Carraa Bituu</div>
       </div>
 
       <!-- Stepper Header -->
       <div class="stepper-header" id="stepperNav">
-        <div class="step-item active" id="stepIndicator1"><div class="step-num">1</div>Simannaa</div>
-        <div class="step-item" id="stepIndicator2"><div class="step-num">2</div>Eenyummaa</div>
-        <div class="step-item" id="stepIndicator3"><div class="step-num">3</div>Carraa</div>
-        <div class="step-item" id="stepIndicator4"><div class="step-num">4</div>Kaffaltii</div>
-        <div class="step-item" id="stepIndicator5"><div class="step-num">5</div>Qoodaa</div>
-        <div class="step-item" id="stepIndicator6"><div class="step-num">6</div>Qunnamaa</div>
+        <div class="step-item active" id="stepIndicator1"><div class="step-num">1</div><span id="stLbl1">Simannaa</span></div>
+        <div class="step-item" id="stepIndicator2"><div class="step-num">2</div><span id="stLbl2">Eenyummaa</span></div>
+        <div class="step-item" id="stepIndicator3"><div class="step-num">3</div><span id="stLbl3">Carraa</span></div>
+        <div class="step-item" id="stepIndicator4"><div class="step-num">4</div><span id="stLbl4">Kaffaltii</span></div>
+        <div class="step-item" id="stepIndicator5"><div class="step-num">5</div><span id="stLbl5">Qoodaa</span></div>
+        <div class="step-item" id="stepIndicator6"><div class="step-num">6</div><span id="stLbl6">Qunnamaa</span></div>
       </div>
 
       <!-- PAGE 1: SIMANNAA & BADHAASOTA -->
       <div class="wizard-step active-step" id="stepPage1">
+        
         <div class="hero-banner">
-          <div class="hero-title">Baga Nagaan Dhuftan! 🎉</div>
-          <div class="hero-desc">
+          <div class="hero-title" id="heroTitle">Baga Nagaan Dhuftan! 🎉</div>
+          <div class="hero-desc" id="heroDesc">
             Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!
+          </div>
+        </div>
+
+        <!-- Video Proof Showcase Card -->
+        <div class="video-showcase-card">
+          <div class="video-thumbnail-wrap" onclick="openVideoModal()">
+            <div class="play-circle">▶</div>
+            <div class="video-caption" id="videoCaptionTxt">🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa</div>
           </div>
         </div>
 
@@ -226,96 +269,95 @@
           <div class="prize-card">
             <div class="prize-rank">🥇</div>
             <div class="prize-info">
-              <h4>Badhaasa 1ffaa: Konkolaataa / Mallaqa Guddaa</h4>
-              <p>Badhaasa qaalii fi addaa isa ol'aanaa marsaa kanaa.</p>
+              <h4 id="prize1Title">Badhaasa 1ffaa: Konkolaataa / Mallaqa Guddaa</h4>
+              <p id="prize1Desc">Badhaasa qaalii fi addaa isa ol'aanaa marsaa kanaa.</p>
             </div>
           </div>
           <div class="prize-card">
             <div class="prize-rank">🥈</div>
             <div class="prize-info">
-              <h4>Badhaasa 2ffaa: Mootarsayikilii / Laappitooppii</h4>
-              <p>Meeshaa ammayyaa tajaajila addaa qabu.</p>
+              <h4 id="prize2Title">Badhaasa 2ffaa: Mootarsayikilii / Laappitooppii</h4>
+              <p id="prize2Desc">Meeshaa ammayyaa tajaajila addaa qabu.</p>
             </div>
           </div>
           <div class="prize-card">
             <div class="prize-rank">🥉</div>
             <div class="prize-info">
-              <h4>Badhaasa 3ffaa: Smart Phone / Mallaqa Callaa</h4>
-              <p>Bilbila ammayyaa fi badhaasa jajjabeessaa.</p>
+              <h4 id="prize3Title">Badhaasa 3ffaa: Smart Phone / Mallaqa Callaa</h4>
+              <p id="prize3Desc">Bilbila ammayyaa fi badhaasa jajjabeessaa.</p>
             </div>
           </div>
         </div>
 
         <div class="progress-box">
           <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; color:var(--gold-primary);">
-            <span>Carraa Gurgurame: <b id="soldCountTxt">0 / 1000</b></span>
+            <span><span id="soldLabel">Carraa Gurgurame:</span> <b id="soldCountTxt">0 / 1000</b></span>
             <span id="percentTxt">0%</span>
           </div>
           <div class="progress-bar-bg">
             <div class="progress-bar-fill" id="progressBarFill"></div>
           </div>
-          <div style="font-size:11.5px; color:var(--text-muted);">
+          <div style="font-size:11.5px; color:var(--text-muted);" id="drawLiveNote">
             🎯 <b>Akkuma 1000/1000 guuteen geengoon carraa kallattiin banama!</b>
           </div>
         </div>
 
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-next" onclick="goToStep(2)">ITTI FUFI (CARRAA BITADHU) →</button>
+          <button type="button" class="btn-step btn-next" id="btnNext1" onclick="goToStep(2)">ITTI FUFI (CARRAA BITADHU) →</button>
         </div>
       </div>
 
       <!-- PAGE 2: ODEEFFANNOO DHUUNFAA -->
       <div class="wizard-step" id="stepPage2">
-        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">👤 2. Odeeffannoo Dhuunfaa Keessanii</h3>
-        <label>Maqaa Guutuu:</label>
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p2Header">👤 2. Odeeffannoo Dhuunfaa Keessanii</h3>
+        <label id="lblFullName">Maqaa Guutuu:</label>
         <input type="text" id="name" placeholder="Fkn: Lemmaa Asefa">
 
-        <label>Lakk. Bilbilaa (International):</label>
+        <label id="lblPhone">Lakk. Bilbilaa (International):</label>
         <input type="tel" id="phone">
 
-        <label>Email Address:</label>
+        <label id="lblEmail">Email Address:</label>
         <input type="email" id="email" placeholder="example@gmail.com">
 
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-prev" onclick="goToStep(1)">← DUUBATTI</button>
-          <button type="button" class="btn-step btn-next" onclick="validateStep2()">ITTI FUFI →</button>
+          <button type="button" class="btn-step btn-prev" id="btnBack2" onclick="goToStep(1)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" id="btnNext2" onclick="validateStep2()">ITTI FUFI →</button>
         </div>
       </div>
 
       <!-- PAGE 3: FILANNOO CARRAA & GATII -->
       <div class="wizard-step" id="stepPage3">
-        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">🎟️ 3. Filannoo Carraa & Gatii</h3>
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p3Header">🎟️ 3. Filannoo Carraa & Gatii</h3>
 
-        <label>Baay'ina Carraa Bituu Feetu (Max 10):</label>
+        <label id="lblQty">Baay'ina Carraa Bituu Feetu (Max 10):</label>
         <input type="number" id="qty" min="1" max="10" value="1" onchange="handleQtyChange()">
         <div id="vipBadgeArea" style="margin-top:6px;"></div>
 
-        <label>Gatii Waliigalaa (ETB):</label>
+        <label id="lblTotalPrice">Gatii Waliigalaa (ETB):</label>
         <input type="text" id="totalPrice" readonly value="1,000 ETB">
 
-        <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
+        <label id="lblPickTicket">Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
         <select id="ticketSelect" onchange="handleTicketDropdown()">
           <option value="">-- Carraa Duwwaa Filadhu --</option>
         </select>
         
-        <!-- VISUAL MATRIX BUTTON -->
-        <button type="button" class="btn-open-matrix" onclick="openMatrixModal()">
+        <button type="button" class="btn-open-matrix" id="btnOpenMatrix" onclick="openMatrixModal()">
           🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali (Visual Seat Matrix)
         </button>
 
         <div id="selectedTicketsDisplay" style="margin-top:8px; font-size:13.5px; color:var(--gold-primary); font-weight:bold;"></div>
 
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-prev" onclick="goToStep(2)">← DUUBATTI</button>
-          <button type="button" class="btn-step btn-next" onclick="validateStep3()">ITTI FUFI (KAFFALTIITTI) →</button>
+          <button type="button" class="btn-step btn-prev" id="btnBack3" onclick="goToStep(2)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" id="btnNext3" onclick="validateStep3()">ITTI FUFI (KAFFALTIITTI) →</button>
         </div>
       </div>
 
       <!-- PAGE 4: KAFFALTII & MIRKANEESSA -->
       <div class="wizard-step" id="stepPage4">
-        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">💳 4. Mala Kaffaltii & Ragaa</h3>
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p4Header">💳 4. Mala Kaffaltii & Ragaa</h3>
 
-        <label>Mala Kaffaltii:</label>
+        <label id="lblPaymentMethod">Mala Kaffaltii:</label>
         <select id="paymentMethod" onchange="handlePaymentChange()">
           <option value="">-- Mala Kaffaltii Filadhu --</option>
           <option value="Telebirr">Telebirr</option>
@@ -325,13 +367,13 @@
         </select>
         <div id="accountDetails" class="account-card"></div>
 
-        <label>Mallaqa Kaffalame (ETB):</label>
+        <label id="lblPaidAmount">Mallaqa Kaffalame (ETB):</label>
         <input type="number" id="paidAmount" placeholder="Fkn: 1000">
 
-        <label>Transaction ID (Lakk. Kaffaltii):</label>
+        <label id="lblTxnId">Transaction ID (Lakk. Kaffaltii):</label>
         <input type="text" id="txnId" placeholder="Fkn: TX12345678">
 
-        <label>Ragaa Kaffaltii (Screenshot):</label>
+        <label id="lblScreenshot">Ragaa Kaffaltii (Screenshot):</label>
         <input type="file" id="screenshot" accept="image/*,.pdf">
 
         <div style="margin-top:16px; display:flex; justify-content:center;">
@@ -339,7 +381,7 @@
         </div>
 
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-prev" onclick="goToStep(3)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-prev" id="btnBack4" onclick="goToStep(3)">← DUUBATTI</button>
           <button type="button" class="btn-step btn-next" id="submitBtn" onclick="submitFinalOrder()">GALMEESSI 🔥</button>
         </div>
         <div id="statusMsg" style="margin-top:14px; text-align:center; font-size:13.5px; font-weight:bold;"></div>
@@ -347,76 +389,89 @@
 
       <!-- PAGE 5: QOODAA -->
       <div class="wizard-step" id="stepPage5">
-        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">📲 5. Hiriyoota Keessaniif Qoodaa</h3>
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p5Header">📲 5. Hiriyoota Keessaniif Qoodaa</h3>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.5;" id="p5Desc">
+          Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!
+        </p>
+
         <div class="share-btn-group">
           <a id="shareTg" href="#" target="_blank" class="share-btn share-tg">Telegram</a>
           <a id="shareWa" href="#" target="_blank" class="share-btn share-wa">WhatsApp</a>
           <a id="shareFb" href="#" target="_blank" class="share-btn share-fb">Facebook</a>
         </div>
+
         <div style="text-align:center; margin-top:18px;">
           <img id="qrImg" src="" alt="QR Link" width="110" height="110" style="border:2px solid var(--gold-primary); border-radius:10px; padding:4px; background:#fff;">
         </div>
+
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-prev" onclick="goToStep(4)">← DUUBATTI</button>
-          <button type="button" class="btn-step btn-next" onclick="goToStep(6)">NU QUNNAMAA →</button>
+          <button type="button" class="btn-step btn-prev" id="btnBack5" onclick="goToStep(4)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" id="btnNext5" onclick="goToStep(6)">NU QUNNAMAA →</button>
         </div>
       </div>
 
       <!-- PAGE 6: NU QUNNAMAA -->
       <div class="wizard-step" id="stepPage6">
-        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">📞 6. Karaalee Nu Qunnamtan</h3>
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;" id="p6Header">📞 6. Karaalee Nu Qunnamtan</h3>
         <div class="contact-card">
           <p>📞 <b>Bilbila:</b> <a href="tel:+251909506573">+251 909 506 573</a></p>
           <p>✈️ <b>Telegram:</b> <a href="https://t.me/CarraaBiiftuu" target="_blank">@CarraaBiiftuu</a></p>
         </div>
         <div style="margin-top:16px; text-align:center;">
-          <a href="check.html" style="color:var(--gold-primary); text-decoration:none; font-weight:700; font-size:13.5px;">🔍 Haala Ajaja Kee Sakatta'i →</a>
+          <a href="check.html" style="color:var(--gold-primary); text-decoration:none; font-weight:700; font-size:13.5px;" id="linkCheckStatus">🔍 Haala Ajaja Kee Sakatta'i →</a>
         </div>
         <div class="nav-btn-group">
-          <button type="button" class="btn-step btn-prev" onclick="goToStep(5)">← DUUBATTI</button>
-          <button type="button" class="btn-step btn-next" onclick="goToStep(1)">GARA JALQABAATTI 🏠</button>
+          <button type="button" class="btn-step btn-prev" id="btnBack6" onclick="goToStep(5)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" id="btnNext6" onclick="goToStep(1)">GARA JALQABAATTI 🏠</button>
         </div>
       </div>
 
       <!-- SUCCESS SCREEN -->
       <div class="wizard-step" id="stepSuccess">
         <div style="text-align: center; padding: 15px 5px;">
-          <h2 style="color: var(--gold-primary); font-size: 24px; margin-bottom: 8px;">GALATOOMAA! 🎉</h2>
-          <p style="font-size: 14.5px; color: var(--text-main); margin-bottom: 16px;">
+          <h2 style="color: var(--gold-primary); font-size: 24px; margin-bottom: 8px;" id="succHeader">GALATOOMAA! 🎉</h2>
+          <p style="font-size: 14.5px; color: var(--text-main); margin-bottom: 16px;" id="succDesc">
             Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.
           </p>
           <div style="background: var(--box-accent); border: 1.5px dashed var(--gold-primary); border-radius: 12px; padding: 16px; text-align: left; line-height: 1.7; font-size: 13.5px;">
             <p><b>Order ID:</b> <code id="resOrderId">---</code></p>
-            <p><b>Lakk. Carraa Kee:</b> <span id="resTickets" style="color:var(--gold-primary); font-weight:bold; font-size:16px;">---</span></p>
-            <p><b>Gatii Kaffalame:</b> <span id="resTotal">---</span> ETB</p>
+            <p><b id="resTicketsLabel">Lakk. Carraa Kee:</b> <span id="resTickets" style="color:var(--gold-primary); font-weight:bold; font-size:16px;">---</span></p>
+            <p><b id="resTotalLabel">Gatii Kaffalame:</b> <span id="resTotal">---</span> ETB</p>
           </div>
-          <p style="color: var(--gold-primary); font-weight: bold; margin-top: 15px; font-size: 13.5px;">
+          <p style="color: var(--gold-primary); font-weight: bold; margin-top: 15px; font-size: 13.5px;" id="blessingText">
             🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!
           </p>
-          <a href="index.html" style="display:inline-block; margin-top:16px; color:var(--gold-primary); font-weight:bold; text-decoration: none;">← Gara Fuula Duraatti Deebi'i</a>
+          <a href="index.html" style="display:inline-block; margin-top:16px; color:var(--gold-primary); font-weight:bold; text-decoration: none;" id="btnReturnHome">← Gara Fuula Duraatti Deebi'i</a>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- MODAL: VISUAL SEAT-MATRIX 1-1000               -->
-  <!-- ============================================== -->
+  <!-- Video Modal -->
+  <div id="videoModalOverlay">
+    <div class="video-modal-card">
+      <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
+      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+        <iframe id="videoIframe" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visual Matrix Modal (1-1000) -->
   <div id="matrixModalOverlay">
     <div class="matrix-card">
       <div class="matrix-header">
-        <h3>🗺️ Gabatee Carraa 1 - 1000</h3>
+        <h3 id="matrixTitle">🗺️ Gabatee Carraa 1 - 1000</h3>
         <button class="matrix-close-btn" onclick="closeMatrixModal()">✕</button>
       </div>
 
       <div class="matrix-legend">
-        <div class="legend-item"><div class="legend-dot dot-free"></div> Duwwaa</div>
-        <div class="legend-item"><div class="legend-dot dot-selected"></div> Filatame</div>
-        <div class="legend-item"><div class="legend-dot dot-sold"></div> Qabameera</div>
+        <div class="legend-item"><div class="legend-dot dot-free"></div> <span id="legFree">Duwwaa</span></div>
+        <div class="legend-item"><div class="legend-dot dot-selected"></div> <span id="legSelected">Filatame</span></div>
+        <div class="legend-item"><div class="legend-dot dot-sold"></div> <span id="legSold">Qabameera</span></div>
       </div>
 
-      <!-- Category Range Tabs -->
       <div class="matrix-tabs" id="matrixTabsContainer">
         <button class="tab-btn active" onclick="renderMatrixTab(1, 200)">1 - 200</button>
         <button class="tab-btn" onclick="renderMatrixTab(201, 400)">201 - 400</button>
@@ -425,10 +480,9 @@
         <button class="tab-btn" onclick="renderMatrixTab(801, 1000)">801 - 1000</button>
       </div>
 
-      <!-- Grid Cells -->
       <div class="matrix-grid" id="matrixGridBox"></div>
 
-      <button class="btn-step btn-next" style="margin-top:10px; padding:10px;" onclick="closeMatrixModal()">FILANNOO MIRKANEESSI ✓</button>
+      <button class="btn-step btn-next" style="margin-top:10px; padding:10px;" id="btnConfirmMatrix" onclick="closeMatrixModal()">FILANNOO MIRKANEESSI ✓</button>
     </div>
   </div>
 
@@ -448,9 +502,142 @@
     let selectedTickets = [];
     let turnstileToken = "";
     let currentStep = 1;
+    let currentLang = localStorage.getItem("carraa_lang") || "om";
 
     function onTurnstileSuccess(token) { turnstileToken = token; }
 
+    // ==============================================
+    // MULTI-LANGUAGE (i18n) DICTIONARY
+    // ==============================================
+    const I18N = {
+      om: {
+        greetingDay: "Akkam ooltan ☀️", greetingMorning: "Akkam bultan 🌅", greetingNight: "Galgala gaarii 🌙",
+        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Sirna Qulqulluu fi Amansiisaa Carraa Bituu",
+        st1: "Simannaa", st2: "Eenyummaa", st3: "Carraa", st4: "Kaffaltii", st5: "Qoodaa", st6: "Qunnamaa",
+        heroTitle: "Baga Nagaan Dhuftan! 🎉", heroDesc: "Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!",
+        videoCaption: "🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa",
+        prize1T: "Badhaasa 1ffaa: Konkolaataa / Mallaqa Guddaa", prize1D: "Badhaasa qaalii fi addaa isa ol'aanaa marsaa kanaa.",
+        prize2T: "Badhaasa 2ffaa: Mootarsayikilii / Laappitooppii", prize2D: "Meeshaa ammayyaa tajaajila addaa qabu.",
+        prize3T: "Badhaasa 3ffaa: Smart Phone / Mallaqa Callaa", prize3D: "Bilbila ammayyaa fi badhaasa jajjabeessaa.",
+        soldLbl: "Carraa Gurgurame:", drawNote: "🎯 <b>Akkuma 1000/1000 guuteen geengoon carraa kallattiin banama!</b>",
+        btnNext1: "ITTI FUFI (CARRAA BITADHU) →",
+        p2Header: "👤 2. Odeeffannoo Dhuunfaa Keessanii", lblName: "Maqaa Guutuu:", lblPhone: "Lakk. Bilbilaa (International):", lblEmail: "Email Address:", btnBack: "← DUUBATTI", btnNext: "ITTI FUFI →",
+        p3Header: "🎟️ 3. Filannoo Carraa & Gatii", lblQty: "Baay'ina Carraa Bituu Feetu (Max 10):", lblTotal: "Gatii Waliigalaa (ETB):", lblPick: "Lakk. Carraa Filadhu:",
+        btnMatrix: "🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali (Visual Seat Matrix)",
+        p4Header: "💳 4. Mala Kaffaltii & Ragaa", lblMethod: "Mala Kaffaltii:", lblPaid: "Mallaqa Kaffalame (ETB):", lblTxn: "Transaction ID (Lakk. Kaffaltii):", lblProof: "Ragaa Kaffaltii (Screenshot):", btnSubmit: "GALMEESSI 🔥",
+        p5Header: "📲 5. Hiriyoota Keessaniif Qoodaa", p5Desc: "Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!",
+        p6Header: "📞 6. Karaalee Nu Qunnamtan", linkCheck: "🔍 Haala Ajaja Kee Sakatta'i →", btnHome: "GARA JALQABAATTI 🏠",
+        succHeader: "GALATOOMAA! 🎉", succDesc: "Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.",
+        blessing: "🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!",
+        matrixTitle: "🗺️ Gabatee Carraa 1 - 1000", legFree: "Duwwaa", legSelected: "Filatame", legSold: "Qabameera", btnConfMatrix: "FILANNOO MIRKANEESSI ✓"
+      },
+      am: {
+        greetingDay: "እንደምን ዋላችሁ ☀️", greetingMorning: "እንደምን አደራችሁ 🌅", greetingNight: "መልካም ምሽት 🌙",
+        brandTitle: "ካራ ቢፍቱ 🌟", brandSlogan: "ታማኝ እና ግልጽ የዕድል ትኬት መቁረጫ ስርዓት",
+        st1: "መግቢያ", st2: "ማንነት", st3: "ትኬት", st4: "ክፍያ", st5: "ያጋሩ", st6: "ያግኙን",
+        heroTitle: "እንኳን ደህና መጣችሁ! 🎉", heroDesc: "ካራ ቢፍቱ በሙሉ ታማኝነትና ግልጽነት የተዘጋጀ ነው። ትኬትዎን በመምረጥ ታላላቅ ሽልማቶችን ያሸንፉ!",
+        videoCaption: "🎬 የማረጋገጫ ቪዲዮ ይመልከቱ",
+        prize1T: "1ኛ ሽልማት: መኪና / ከፍተኛ የገንዘብ ሽልማት", prize1D: "የዚህ ዙር ታላቁ እና ዋናው ሽልማት።",
+        prize2T: "2ኛ ሽልማት: ሞተርሳይክል / ላፕቶፕ", prize2D: "ዘመናዊ እና ውድ አገልግሎት ሰጪ መሳሪያ።",
+        prize3T: "3ኛ ሽልማት: ስማርት ስልክ / ጥሬ ገንዘብ", prize3D: "ዘመናዊ ስልክ እና አበረታች ሽልማት።",
+        soldLbl: "የተሸጠው ትኬት:", drawNote: "🎯 <b>ልክ 1000/1000 እንደተሞላ የቀጥታ እጣ ማውጫው ይከፈታል!</b>",
+        btnNext1: "ይቀጥሉ (ትኬት ይቁረጡ) →",
+        p2Header: "👤 2. የግል መረጃዎን ያስገቡ", lblName: "ሙሉ ስም:", lblPhone: "ስልክ ቁጥር (International):", lblEmail: "ኢሜይል አድራሻ:", btnBack: "← ተመለስ", btnNext: "ይቀጥሉ →",
+        p3Header: "🎟️ 3. የትኬት ምርጫ እና ዋጋ", lblQty: "የሚገዙት የትኬት ብዛት (እስከ 10):", lblTotal: "ጠቅላላ ዋጋ (ETB):", lblPick: "የትኬት ቁጥር ይምረጡ:",
+        btnMatrix: "🗺️ ሙሉውን 1-1000 ትኬት በሰንጠረዥ ይመልከቱ",
+        p4Header: "💳 4. የክፍያ መንገድ እና ማረጋገጫ", lblMethod: "የክፍያ መንገድ:", lblPaid: "የተከፈለው ገንዘብ (ETB):", lblTxn: "የትራንዛክሽን መለያ ቁጥር (Txn ID):", lblProof: "የክፍያ ማረጋገጫ ስክሪንሾት:", btnSubmit: "ይመዝገቡ 🔥",
+        p5Header: "📲 5. ለወዳጅ ዘመድ ያጋሩ", p5Desc: "ይህን መልዕክት ለጓደኞችዎ በማጋራት እድላቸውን እንዲሞክሩ ይጋብዙ!",
+        p6Header: "📞 6. የመገናኛ መንገዶች", linkCheck: "🔍 የትኬትዎን ሁኔታ ይከታተሉ →", btnHome: "ወደ መጀመሪያው ገጽ 🏠",
+        succHeader: "እናመሰግናለን! 🎉", succDesc: "የእኛን እድል ስለተጠቀሙ እናመሰግናለን! ትዕዛዝዎ በተሳካ ሁኔታ ተመዝግቧል።",
+        blessing: "🌟 መልካም እድል እንዲገጥምዎት እንመኛለን!",
+        matrixTitle: "🗺️ የትኬት ሰንጠረዥ 1 - 1000", legFree: "ክፍት", legSelected: "የተመረጠ", legSold: "የተያዘ", btnConfMatrix: "ምርጫን ያረጋግጡ ✓"
+      },
+      en: {
+        greetingDay: "Good day ☀️", greetingMorning: "Good morning 🌅", greetingNight: "Good evening 🌙",
+        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Trusted & Transparent Digital Lottery Platform",
+        st1: "Welcome", st2: "Identity", st3: "Tickets", st4: "Payment", st5: "Share", st6: "Contact",
+        heroTitle: "Welcome! 🎉", heroDesc: "Carraa Biiftuu is prepared with 100% transparency. Choose your lucky tickets and win big prizes!",
+        videoCaption: "🎬 Watch Official Video Proof",
+        prize1T: "1st Prize: Brand New Car / Grand Cash", prize1D: "The grand master prize of this season.",
+        prize2T: "2nd Prize: Motorcycle / Premium Laptop", prize2D: "Modern and premium productivity gadget.",
+        prize3T: "3rd Prize: Smart Phone / Cash Reward", prize3D: "Latest smartphone and encouraging cash prize.",
+        soldLbl: "Tickets Sold:", drawNote: "🎯 <b>The live draw unlocks immediately when 1,000/1,000 is reached!</b>",
+        btnNext1: "CONTINUE (BUY TICKET) →",
+        p2Header: "👤 2. Personal Information", lblName: "Full Name:", lblPhone: "Phone Number (International):", lblEmail: "Email Address:", btnBack: "← BACK", btnNext: "CONTINUE →",
+        p3Header: "🎟️ 3. Ticket Selection & Pricing", lblQty: "Quantity of Tickets (Max 10):", lblTotal: "Total Price (ETB):", lblPick: "Select Ticket Number:",
+        btnMatrix: "🗺️ View Full 1-1000 Seat Matrix",
+        p4Header: "💳 4. Payment & Proof", lblMethod: "Payment Method:", lblPaid: "Paid Amount (ETB):", lblTxn: "Transaction ID:", lblProof: "Payment Screenshot:", btnSubmit: "SUBMIT ORDER 🔥",
+        p5Header: "📲 5. Share with Friends", p5Desc: "Share this link with your friends and family so they can try their luck!",
+        p6Header: "📞 6. Contact & Support", linkCheck: "🔍 Check My Order Status →", btnHome: "BACK TO HOME 🏠",
+        succHeader: "THANK YOU! 🎉", succDesc: "Thank you for choosing Carraa Biiftuu! Your order has been successfully recorded.",
+        blessing: "🌟 Best of luck to you in the upcoming draw!",
+        matrixTitle: "🗺️ Interactive Ticket Matrix 1 - 1000", legFree: "Available", legSelected: "Selected", legSold: "Sold Out", btnConfMatrix: "CONFIRM SELECTION ✓"
+      }
+    };
+
+    function switchLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("carraa_lang", lang);
+      document.getElementById('langSwitcher').value = lang;
+      const t = I18N[lang] || I18N.om;
+
+      // Update Texts
+      document.getElementById('brandTitle').innerText = t.brandTitle;
+      document.getElementById('brandSlogan').innerText = t.brandSlogan;
+      document.getElementById('stLbl1').innerText = t.st1;
+      document.getElementById('stLbl2').innerText = t.st2;
+      document.getElementById('stLbl3').innerText = t.st3;
+      document.getElementById('stLbl4').innerText = t.st4;
+      document.getElementById('stLbl5').innerText = t.st5;
+      document.getElementById('stLbl6').innerText = t.st6;
+      document.getElementById('heroTitle').innerText = t.heroTitle;
+      document.getElementById('heroDesc').innerText = t.heroDesc;
+      document.getElementById('videoCaptionTxt').innerText = t.videoCaption;
+      document.getElementById('prize1Title').innerText = t.prize1T; document.getElementById('prize1Desc').innerText = t.prize1D;
+      document.getElementById('prize2Title').innerText = t.prize2T; document.getElementById('prize2Desc').innerText = t.prize2D;
+      document.getElementById('prize3Title').innerText = t.prize3T; document.getElementById('prize3Desc').innerText = t.prize3D;
+      document.getElementById('soldLabel').innerText = t.soldLbl;
+      document.getElementById('drawLiveNote').innerHTML = t.drawNote;
+      document.getElementById('btnNext1').innerText = t.btnNext1;
+      document.getElementById('p2Header').innerText = t.p2Header;
+      document.getElementById('lblFullName').innerText = t.lblName;
+      document.getElementById('lblPhone').innerText = t.lblPhone;
+      document.getElementById('lblEmail').innerText = t.lblEmail;
+      document.getElementById('btnBack2').innerText = t.btnBack; document.getElementById('btnNext2').innerText = t.btnNext;
+      document.getElementById('p3Header').innerText = t.p3Header;
+      document.getElementById('lblQty').innerText = t.lblQty;
+      document.getElementById('lblTotalPrice').innerText = t.lblTotal;
+      document.getElementById('lblPickTicket').innerHTML = `${t.lblPick} (<span id="selectPrompt">${document.getElementById('qty').value}</span>)`;
+      document.getElementById('btnOpenMatrix').innerText = t.btnMatrix;
+      document.getElementById('btnBack3').innerText = t.btnBack; document.getElementById('btnNext3').innerText = t.btnNext;
+      document.getElementById('p4Header').innerText = t.p4Header;
+      document.getElementById('lblPaymentMethod').innerText = t.lblMethod;
+      document.getElementById('lblPaidAmount').innerText = t.lblPaid;
+      document.getElementById('lblTxnId').innerText = t.lblTxn;
+      document.getElementById('lblScreenshot').innerText = t.lblProof;
+      document.getElementById('btnBack4').innerText = t.btnBack; document.getElementById('submitBtn').innerText = t.btnSubmit;
+      document.getElementById('p5Header').innerText = t.p5Header; document.getElementById('p5Desc').innerText = t.p5Desc;
+      document.getElementById('btnBack5').innerText = t.btnBack; document.getElementById('btnNext5').innerText = t.btnNext;
+      document.getElementById('p6Header').innerText = t.p6Header; document.getElementById('linkCheckStatus').innerText = t.linkCheck;
+      document.getElementById('btnBack6').innerText = t.btnBack; document.getElementById('btnNext6').innerText = t.btnHome;
+      document.getElementById('succHeader').innerText = t.succHeader; document.getElementById('succDesc').innerText = t.succDesc;
+      document.getElementById('blessingText').innerText = t.blessing; document.getElementById('btnReturnHome').innerText = t.btnHome;
+      document.getElementById('matrixTitle').innerText = t.matrixTitle;
+      document.getElementById('legFree').innerText = t.legFree; document.getElementById('legSelected').innerText = t.legSelected; document.getElementById('legSold').innerText = t.legSold;
+      document.getElementById('btnConfirmMatrix').innerText = t.btnConfMatrix;
+
+      updateGreeting(t);
+    }
+
+    function updateGreeting(t) {
+      const h = new Date().getHours();
+      let g = t.greetingDay;
+      if (h >= 5 && h < 12) g = t.greetingMorning;
+      else if (h >= 18 || h < 5) g = t.greetingNight;
+      document.getElementById('greetingLbl').innerText = g;
+    }
+
+    // Stepper Navigation
     function goToStep(step) {
       currentStep = step;
       for (let i = 1; i <= 6; i++) {
@@ -486,24 +673,6 @@
         return;
       }
       goToStep(4);
-    }
-
-    function initCultureAndDate() {
-      const now = new Date();
-      const hour = now.getHours();
-      let greeting = "Akkam ooltan";
-      if (hour >= 5 && hour < 12) greeting = "Akkam bultan 🌅";
-      else if (hour >= 12 && hour < 18) greeting = "Akkam ooltan ☀️";
-      else greeting = "Galgala gaarii 🌙";
-      document.getElementById('greetingLbl').innerText = greeting;
-      document.getElementById('ethDateLbl').innerText = "Onkololeessa 12, 2019";
-
-      const currentUrl = encodeURIComponent(window.location.href);
-      const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
-      document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
-      document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
-      document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
-      document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
     }
 
     function toggleTheme() {
@@ -549,7 +718,6 @@
       document.getElementById('progressBarFill').style.width = `${pct}%`;
     }
 
-    // Battalatti 1-1000 guuta
     freeTickets = Array.from({length: 1000}, (_, i) => i + 1);
     renderTicketsDropdown(freeTickets);
 
@@ -572,7 +740,7 @@
       const total = qty * TICKET_PRICE;
       document.getElementById('totalPrice').value = total.toLocaleString() + " ETB";
       document.getElementById('paidAmount').value = total;
-      document.getElementById('selectPrompt').innerText = qty + " Filadhaa";
+      document.getElementById('selectPrompt').innerText = qty;
       selectedTickets = [];
       document.getElementById('selectedTicketsDisplay').innerText = "";
 
@@ -611,22 +779,17 @@
         selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
     }
 
-    // ==============================================
-    // VISUAL MATRIX LOGIC (1-1000)
-    // ==============================================
+    // Visual Seat Matrix
     function openMatrixModal() {
       document.getElementById('matrixModalOverlay').style.display = 'flex';
       renderMatrixTab(1, 200);
     }
-    function closeMatrixModal() {
-      document.getElementById('matrixModalOverlay').style.display = 'none';
-    }
+    function closeMatrixModal() { document.getElementById('matrixModalOverlay').style.display = 'none'; }
 
     function renderMatrixTab(start, end) {
       const container = document.getElementById('matrixGridBox');
       container.innerHTML = "";
 
-      // Update Tab Styles
       const tabs = document.querySelectorAll('.tab-btn');
       tabs.forEach(t => {
         if (t.innerText.includes(start)) t.classList.add('active');
@@ -643,32 +806,34 @@
         const isFree = freeTickets.includes(i);
         const isSelected = selectedTickets.includes(i);
 
-        if (isSelected) {
-          cell.classList.add('cell-selected');
-        } else if (isFree) {
-          cell.classList.add('cell-free');
-        } else {
-          cell.classList.add('cell-sold');
-        }
+        if (isSelected) cell.classList.add('cell-selected');
+        else if (isFree) cell.classList.add('cell-free');
+        else cell.classList.add('cell-sold');
 
         cell.onclick = function() {
-          if (!isFree) return; // Can't select sold ticket
-
+          if (!isFree) return;
           if (selectedTickets.includes(i)) {
             selectedTickets = selectedTickets.filter(n => n !== i);
           } else {
-            if (selectedTickets.length < qty) {
-              selectedTickets.push(i);
-            } else {
-              selectedTickets = [i]; // Reset to current single
-            }
+            if (selectedTickets.length < qty) selectedTickets.push(i);
+            else selectedTickets = [i];
           }
           updateSelectedUI();
-          renderMatrixTab(start, end); // Re-render colors
+          renderMatrixTab(start, end);
         };
-
         container.appendChild(cell);
       }
+    }
+
+    // Video Lightbox Modal
+    function openVideoModal() {
+      document.getElementById('videoModalOverlay').style.display = 'flex';
+      // Viidiyoo YouTube demo (Ati booda liinkii YouTube keetiin bakka buusuu dandeessa)
+      document.getElementById('videoIframe').src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
+    }
+    function closeVideoModal() {
+      document.getElementById('videoModalOverlay').style.display = 'none';
+      document.getElementById('videoIframe').src = "";
     }
 
     function toDataUrl(file){
@@ -684,8 +849,7 @@
         im.onload = function(){
           var s = Math.min(1, 1000 / Math.max(im.width, im.height));
           var c = document.createElement("canvas");  
-          c.width = im.width * s;
-          c.height = im.height * s;
+          c.width = im.width * s; c.height = im.height * s;
           c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
           res(c.toDataURL("image/jpeg", 0.7));
         };  
@@ -762,7 +926,15 @@
       }
     }
 
-    initCultureAndDate();
+    // Social Links
+    const currentUrl = encodeURIComponent(window.location.href);
+    const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
+    document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
+    document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
+    document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+    document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
+
+    switchLanguage(currentLang);
     loadTickets();
   </script>
 </body>
