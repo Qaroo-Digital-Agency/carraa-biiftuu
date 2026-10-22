@@ -29,7 +29,7 @@
     }
     .sub-title { color: #a0b8ac; font-size: 13.5px; margin-bottom: 16px; text-align: center; }
 
-    /* LOCKED OVERLAY (Yoo Admin Cufe) */
+    /* 1. LOCKED VIEW */
     #lockScreen {
       display: flex;
       flex-direction: column;
@@ -37,16 +37,21 @@
       justify-content: center;
       text-align: center;
       max-width: 460px;
-      margin-top: 40px;
+      margin-top: 30px;
       padding: 30px 20px;
       background: rgba(10, 35, 22, 0.9);
       border: 2px dashed #d4af37;
       border-radius: 20px;
     }
-    .lock-icon { font-size: 50px; margin-bottom: 15px; }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
 
-    /* ACTIVE DRAW STAGE */
-    #activeDrawStage { display: none; flex-direction: column; align-items: center; width: 100%; }
+    /* 2. ACTIVE VIEW */
+    #activeDrawStage {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
 
     .current-round-banner {
       background: linear-gradient(135deg, #ffd700, #aa771c);
@@ -99,19 +104,34 @@
       background: linear-gradient(135deg, #ffd700, #d4af37, #0a3d24);
       color: #fff;
       border: none;
-      padding: 15px 40px;
-      font-size: 17px;
+      padding: 14px 38px;
+      font-size: 16.5px;
       font-weight: 900;
       border-radius: 40px;
       cursor: pointer;
-      margin-top: 25px;
+      margin-top: 22px;
       box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       transition: 0.3s;
     }
     .btn-spin:hover { transform: scale(1.04); }
     .btn-spin:disabled { background: #555; cursor: not-allowed; }
+
+    /* Admin Buttons */
+    .btn-admin-unlock {
+      background: transparent;
+      border: 1.5px solid #d4af37;
+      color: #d4af37;
+      padding: 9px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.2s;
+    }
+    .btn-admin-unlock:hover { background: rgba(212, 175, 55, 0.2); }
 
     /* Winner Popup */
     .winner-overlay {
@@ -137,18 +157,23 @@
   <h1>🎡 Carraa Biiftuu - Live Draw</h1>
   <div class="sub-title">Sirna Carraa Baasuu Qulqulluu fi Kallattii</div>
 
-  <!-- 1. LOCKED VIEW (YOO ADMIN CUFE) -->
+  <!-- 1. LOCKED VIEW -->
   <div id="lockScreen">
     <div class="lock-icon">🔒</div>
     <h2 style="color:#d4af37; margin-bottom:10px;">Geengoon Carraa Cufaadha!</h2>
-    <p style="color:#a0b8ac; font-size:14px; line-height:1.6;">
+    <p style="color:#a0b8ac; font-size:13.5px; line-height:1.6;">
       Carraan kun akkuma gurgurtaan 1,000/1,000 guuteen Admin kallattiin bana. Yeroo carraan baafamu kallattiin fuula kanarraa hordofaa!
     </p>
-    <button class="btn-spin" style="margin-top:18px; padding:10px 25px; font-size:13px;" onclick="checkDrawStatus()">🔄 HAAROMSI (REFRESH)</button>
-    <a href="index.html" style="color:#d4af37; margin-top:20px; text-decoration:none; font-weight:bold; font-size:13px;">← Gara Fuula Duraatti</a>
+    
+    <button class="btn-spin" style="margin-top:16px; padding:10px 25px; font-size:13px;" onclick="checkDrawStatus()">🔄 HAAROMSI (REFRESH)</button>
+    
+    <!-- Buttoonii Admin Kallattiin Ittiin Banu -->
+    <button class="btn-admin-unlock" onclick="promptAdminUnlock()">🔐 Seensa Admin (Kallattiin Bani)</button>
+    
+    <a href="index.html" style="color:#d4af37; margin-top:18px; text-decoration:none; font-weight:bold; font-size:13px;">← Gara Fuula Duraatti</a>
   </div>
 
-  <!-- 2. ACTIVE VIEW (YOO ADMIN BANE) -->
+  <!-- 2. ACTIVE VIEW -->
   <div id="activeDrawStage">
     <div class="current-round-banner" id="roundBannerTxt">🥉 Marsaa 1: Badhaasa 3ffaa</div>
 
@@ -159,7 +184,8 @@
     </div>
 
     <button id="spinBtn" class="btn-spin" onclick="spinWheel()">NAANNESSI (SPIN) 🔥</button>
-    <a href="index.html" style="color:#d4af37; margin-top:20px; text-decoration:none; font-weight:bold; font-size:13.5px;">← Gara Fuula Duraatti</a>
+    <button class="btn-admin-unlock" style="margin-top:12px;" onclick="lockAgain()">🔒 Ammas Cufi (Lock)</button>
+    <a href="index.html" style="color:#d4af37; margin-top:16px; text-decoration:none; font-weight:bold; font-size:13px;">← Gara Fuula Duraatti</a>
   </div>
 
   <!-- Winner Modal -->
@@ -177,7 +203,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
     
     let segments = [];
-    let currentRound = 1; // 1: 3rd Prize, 2: 2nd Prize, 3: 1st Prize
+    let currentRound = 1;
     const ROUND_NAMES = {
       1: "🥉 Marsaa 1: Badhaasa 3ffaa (Smart Phone)",
       2: "🥈 Marsaa 2: Badhaasa 2ffaa (Mootarsayikilii)",
@@ -190,22 +216,12 @@
     let currentAngle = 0;
     let isSpinning = false;
 
-    // Check Lock Status from Backend
     async function checkDrawStatus() {
       try {
         const res = await fetch(`${WEB_APP_URL}?action=getDrawData`);
         const data = await res.json();
-        
         if (data.ok && data.status === "UNLOCKED") {
-          document.getElementById('lockScreen').style.display = "none";
-          document.getElementById('activeDrawStage').style.display = "flex";
-          
-          if (data.approvedTickets && data.approvedTickets.length > 0) {
-            segments = data.approvedTickets.map(n => "#" + n);
-          } else {
-            segments = ["#10", "#18", "#77", "#105", "#999", "#12", "#55"];
-          }
-          drawWheel();
+          showActiveWheel(data.approvedTickets);
         } else {
           document.getElementById('lockScreen').style.display = "flex";
           document.getElementById('activeDrawStage').style.display = "none";
@@ -215,12 +231,60 @@
       }
     }
 
+    function showActiveWheel(tickets) {
+      document.getElementById('lockScreen').style.display = "none";
+      document.getElementById('activeDrawStage').style.display = "flex";
+      if (tickets && tickets.length > 0) {
+        segments = tickets.map(n => "#" + n);
+      } else {
+        segments = ["#10", "#18", "#77", "#105", "#999", "#12", "#55"];
+      }
+      drawWheel();
+    }
+
+    async function promptAdminUnlock() {
+      const pin = prompt("Maaloo Admin PIN (6573) galchaa:");
+      if (!pin) return;
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "adminToggleDraw", pin: pin.trim(), status: "UNLOCKED" })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          alert("Live Draw milkaa'inaan banameera! 🟢");
+          checkDrawStatus();
+        } else {
+          alert(data.error || "PIN dogoggora!");
+        }
+      } catch(e) {
+        alert("Network error.");
+      }
+    }
+
+    async function lockAgain() {
+      const pin = prompt("Admin PIN galchaa cufuuf:");
+      if (!pin) return;
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "adminToggleDraw", pin: pin.trim(), status: "LOCKED" })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          alert("Cufameera! 🔴");
+          checkDrawStatus();
+        }
+      } catch(e) { alert("Error."); }
+    }
+
     function drawWheel() {
       const numSegments = segments.length;
       if (numSegments === 0) return;
       const arcSize = (2 * Math.PI) / numSegments;
       const radius = canvas.width / 2;
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.translate(radius, radius);
@@ -252,7 +316,6 @@
       if (isSpinning || segments.length === 0) return;
       isSpinning = true;
       document.getElementById('spinBtn').disabled = true;
-
       const spinAngle = (Math.random() * 360 + 2160) * (Math.PI / 180);
       const duration = 6500;
       const start = performance.now();
@@ -263,7 +326,6 @@
         const easeOut = 1 - Math.pow(1 - progress, 3);
         currentAngle = easeOut * spinAngle;
         drawWheel();
-
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
@@ -281,13 +343,10 @@
       const normalizedAngle = (1.5 * Math.PI - (currentAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
       const winningIndex = Math.floor(normalizedAngle / arcSize);
       const winnerNumber = segments[winningIndex];
-
       document.getElementById('winnerTicketTxt').innerText = winnerNumber;
       document.getElementById('modalPrizeTitle').innerText = ROUND_NAMES[currentRound];
       document.getElementById('winnerModal').style.display = "flex";
-
       confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
-
       if (currentRound === 3) {
         document.getElementById('modalNextBtn').innerText = "CARRAAN GUUTUUMMAATTI XUMURAMEERA! 🏆";
       } else {
