@@ -2,166 +2,219 @@
 <html lang="om">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Carraa Biiftuu - Galmee Carraa</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a3d24">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a3d24">
-  <!-- Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   
   <style>
     :root {
-      --bg-gradient: radial-gradient(circle at top left, #0e4428, #051a10 80%);
-      --card-bg: rgba(255, 255, 255, 0.95);
-      --card-border: rgba(212, 175, 55, 0.45);
-      --text-main: #1c2826;
-      --text-muted: #556b62;
+      --bg-gradient: radial-gradient(circle at top, #0a3d24 0%, #03140b 100%);
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --card-border: rgba(212, 175, 55, 0.5);
+      --text-main: #14221b;
+      --text-muted: #5c7066;
       --gold-primary: #d4af37;
       --emerald-dark: #0a3d24;
-      --input-bg: #f8faf9;
-      --input-border: #d0dcd5;
-      --box-accent: #f0f7f3;
-      --box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+      --input-bg: #f9fbf9;
+      --input-border: #ccd8d1;
+      --box-accent: #f2f7f4;
     }
 
     [data-theme="dark"] {
-      --bg-gradient: radial-gradient(circle at top left, #051f12, #020a06 85%);
-      --card-bg: rgba(14, 28, 20, 0.94);
-      --card-border: rgba(212, 175, 55, 0.55);
-      --text-main: #edf5f0;
-      --text-muted: #a0b8ac;
+      --bg-gradient: radial-gradient(circle at top, #062415 0%, #010804 100%);
+      --card-bg: rgba(13, 26, 19, 0.96);
+      --card-border: rgba(212, 175, 55, 0.6);
+      --text-main: #f0f7f2;
+      --text-muted: #9eb8aa;
       --gold-primary: #e6c24d;
       --emerald-dark: #228b52;
-      --input-bg: #0b1a12;
-      --input-border: #234331;
-      --box-accent: #0f241a;
-      --box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      --input-bg: #091710;
+      --input-border: #1f3d2b;
+      --box-accent: #0f2419;
     }
 
-    * { box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.25s, color 0.25s; }
     
-    body {
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      background: var(--bg-gradient);
+    html, body {
+      width: 100%;
       min-height: 100vh;
-      padding: 30px 15px 50px;
-      margin: 0;
+      overflow-x: hidden;
+      background: var(--bg-gradient);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
       color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
     }
 
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+    /* 100% Full Width on Mobile, Centered on PC */
+    .app-wrapper {
       width: 100%;
-      max-width: 550px;
-      padding: 32px 28px;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 10px 40px;
+    }
+
+    .main-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      width: 100%;
       border-radius: 20px;
-      box-shadow: var(--box-shadow);
+      padding: 22px 16px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
       border: 1.5px solid var(--card-border);
       position: relative;
     }
 
+    /* Top Bar */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
       border-bottom: 1px solid rgba(212, 175, 55, 0.25);
     }
-    .greeting-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--gold-primary);
-    }
-    .theme-toggle-btn {
+    .greeting-text { font-size: 12.5px; font-weight: 700; color: var(--gold-primary); }
+    .theme-btn {
       background: transparent;
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 5px 12px;
-      border-radius: 20px;
+      padding: 4px 10px;
+      border-radius: 16px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
     }
-    .theme-toggle-btn:hover { background: rgba(212, 175, 55, 0.15); }
 
-    .brand-header { text-align: center; margin-bottom: 20px; }
-    .brand-badge {
+    /* Logo Badge */
+    .brand-area { text-align: center; margin-bottom: 16px; }
+    .brand-pill {
       display: inline-block;
-      background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #aa771c 100%);
+      background: linear-gradient(135deg, #ffd700, #d4af37, #aa771c);
       color: #0b1c13;
       font-weight: 900;
-      font-size: 21px;
-      padding: 10px 24px;
-      border-radius: 40px;
-      box-shadow: 0 4px 18px rgba(212, 175, 55, 0.45);
-      letter-spacing: 1.2px;
+      font-size: 18px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+      letter-spacing: 1px;
       text-transform: uppercase;
     }
-    .brand-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 8px; font-weight: 500; }
+    .brand-slogan { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
 
-    /* Live Progress Bar */
-    .progress-section {
+    /* Stepper Navigation */
+    .stepper-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--box-accent);
+      border: 2px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+    .step-item.active .step-num {
+      background: var(--gold-primary);
+      color: #000;
+      border-color: #ffd700;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+    }
+    .step-item.completed .step-num {
+      background: var(--emerald-dark);
+      color: #fff;
+      border-color: var(--gold-primary);
+    }
+
+    /* Wizard Steps */
+    .wizard-step { display: none; }
+    .wizard-step.active-step { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Page 1: Hero & Prizes */
+    .hero-banner {
+      background: var(--box-accent);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .hero-title { font-size: 17px; font-weight: 800; color: var(--gold-primary); margin-bottom: 6px; }
+    .hero-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+    .prize-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+    .prize-card {
+      background: var(--box-accent);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .prize-rank {
+      font-size: 24px;
+      width: 42px;
+      height: 42px;
+      background: rgba(212, 175, 55, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .prize-info h4 { font-size: 14.5px; color: var(--gold-primary); margin-bottom: 2px; }
+    .prize-info p { font-size: 12px; color: var(--text-muted); }
+
+    /* Progress Box */
+    .progress-box {
       background: var(--box-accent);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 24px;
+      padding: 12px;
+      margin-bottom: 16px;
       text-align: center;
-    }
-    .progress-label {
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      color: var(--gold-primary);
     }
     .progress-bar-bg {
       width: 100%;
-      height: 14px;
+      height: 12px;
       background: rgba(0,0,0,0.1);
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
-      border: 1px solid var(--card-border);
+      margin: 8px 0;
     }
     .progress-bar-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #d4af37, #2ed573);
-      border-radius: 10px;
+      border-radius: 8px;
       transition: width 1s ease;
-      box-shadow: 0 0 10px rgba(46, 213, 115, 0.5);
-    }
-    .progress-note {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 8px;
     }
 
-    .section-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--gold-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 22px 0 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-bottom: 1px dashed var(--card-border);
-      padding-bottom: 6px;
-    }
-
-    label { font-weight: 600; margin-top: 14px; display: block; font-size: 13.5px; }
+    /* Form Fields */
+    label { font-weight: 700; margin-top: 12px; display: block; font-size: 13px; }
     input, select {
       width: 100%;
       padding: 12px 14px;
@@ -175,100 +228,51 @@
     input:focus, select:focus {
       outline: none;
       border-color: var(--gold-primary);
-      box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+      box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
     }
     .iti { width: 100%; margin-top: 6px; }
-
-    input[readonly] {
-      background: var(--box-accent);
-      font-weight: 800;
-      color: var(--gold-primary);
-      font-size: 16px;
-    }
+    input[readonly] { background: var(--box-accent); font-weight: 800; color: var(--gold-primary); }
 
     .account-card {
       background: var(--box-accent);
       border: 1.5px dashed var(--gold-primary);
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-radius: 10px;
-      font-size: 13.5px;
+      font-size: 13px;
       margin-top: 10px;
       display: none;
       line-height: 1.6;
     }
 
-    .selected-tickets-box { margin-top: 8px; font-size: 13.5px; color: var(--gold-primary); font-weight: bold; }
-    .vip-badge-tag {
-      display: inline-block;
-      margin-top: 6px;
-      padding: 4px 10px;
+    /* Buttons */
+    .nav-btn-group { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-step {
+      flex: 1;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-next {
+      background: linear-gradient(135deg, #ffd700, #d4af37, #0a3d24);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .btn-prev {
+      background: var(--box-accent);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+
+    .share-btn-group { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .share-btn {
+      padding: 8px 14px;
       border-radius: 20px;
       font-size: 12px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffd700, #ff9800);
-      color: #000;
-    }
-
-    .btn-submit-order {
-      width: 100%;
-      background: linear-gradient(135deg, #ffd700 0%, #d4af37 40%, #0a3d24 100%);
-      color: #ffffff;
-      border: none;
-      font-size: 16.5px;
-      font-weight: 900;
-      padding: 14px;
-      margin-top: 24px;
-      cursor: pointer;
-      border-radius: 10px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-    }
-    .btn-submit-order:hover {
-      opacity: 0.95;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
-    }
-    .btn-submit-order:disabled { background: #777; cursor: not-allowed; }
-
-    .status-msg { margin-top: 16px; font-weight: bold; text-align: center; font-size: 14px; }
-
-    /* Live Draw Banner Link */
-    .live-draw-cta {
-      display: block;
-      margin-top: 22px;
-      padding: 14px;
-      text-align: center;
-      background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(10,61,36,0.3));
-      border: 1px solid var(--gold-primary);
-      border-radius: 12px;
-      color: var(--gold-primary);
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 14.5px;
-    }
-    .live-draw-cta:hover { transform: scale(1.02); }
-
-    .nav-links-area {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      font-size: 13px;
-    }
-    .nav-links-area a { color: var(--gold-primary); text-decoration: none; font-weight: 700; }
-
-    /* Social Share & QR */
-    .social-share-area {
-      margin-top: 22px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
-      text-align: center;
-    }
-    .share-btn-group { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-    .share-btn {
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-size: 12.5px;
       font-weight: 700;
       text-decoration: none;
       color: #fff;
@@ -276,402 +280,173 @@
     .share-tg { background: #229ED9; }
     .share-wa { background: #25D366; }
     .share-fb { background: #1877F2; }
-    .share-x  { background: #000000; }
 
-    .qr-container { margin-top: 16px; text-align: center; }
-    .qr-container img {
-      border: 2px solid var(--gold-primary);
-      border-radius: 10px;
-      padding: 4px;
-      background: #fff;
+    .contact-card {
+      background: var(--box-accent);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      line-height: 1.8;
+      font-size: 13px;
+      margin-top: 10px;
     }
+    .contact-card a { color: var(--gold-primary); font-weight: bold; text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <div class="card" id="appCard">
-    
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <div class="greeting-text">
-        <span id="greetingLbl">Akkam</span> • <span id="ethiopianDateLbl">...</span>
-      </div>
-      <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">
-        🌙 Dark
-      </button>
-    </div>
-
-    <!-- Brand Header -->
-    <div class="brand-header">
-      <div class="brand-badge">Carraa Biiftuu 🌟</div>
-      <div class="brand-subtitle">Sirna Qulqulluu fi Amansiisaa Carraa Bituu</div>
-    </div>
-
-    <!-- Live Dynamic Goal & Progress Bar -->
-    <div class="progress-section">
-      <div class="progress-label">
-        <span>Carraa Gurgurame: <b id="soldCountTxt">0 / 1000</b></span>
-        <span id="percentTxt">0%</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progressBarFill"></div>
-      </div>
-      <div class="progress-note">
-        🎯 <b>Carraan kun akkuma 1,000/1,000 guuteen battalatti kallattiin (Live) ba'a!</b>
-      </div>
-    </div>
-    
-    <!-- Booking Form -->
-    <form id="orderForm" onsubmit="event.preventDefault(); submitOrder();">
+  <div class="app-wrapper">
+    <div class="main-card" id="appCard">
       
-      <div class="section-title">👤 1. Odeeffannoo Dhuunfaa</div>
-      <label>Maqaa Guutuu:</label>
-      <input type="text" id="name" required placeholder="Fkn: Lemmaa Asefa">
-
-      <label>Lakk. Bilbilaa (International):</label>
-      <input type="tel" id="phone" required>
-
-      <label>Email Address:</label>
-      <input type="email" id="email" required placeholder="example@gmail.com">
-
-      <div class="section-title">🎟️ 2. Filannoo Carraa & Gatii</div>
-      <label>Baay'ina Carraa Bituu Feetu (Max 10):</label>
-      <input type="number" id="qty" min="1" max="10" value="1" required onchange="handleQtyChange()">
-      <div id="vipBadgeArea"></div>
-
-      <label>Gatii Waliigalaa (ETB):</label>
-      <input type="text" id="totalPrice" readonly value="1,000 ETB">
-
-      <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
-      <select id="ticketSelect" onchange="handleTicketDropdown()">
-        <option value="">-- Carraa Duwwaa Filadhu --</option>
-      </select>
-      <div id="selectedTicketsDisplay" class="selected-tickets-box"></div>
-
-      <div class="section-title">💳 3. Kaffaltii & Mirkaneessa</div>
-      <label>Mala Kaffaltii:</label>
-      <select id="paymentMethod" required onchange="handlePaymentChange()">
-        <option value="">-- Mala Kaffaltii Filadhu --</option>
-        <option value="Telebirr">Telebirr</option>
-        <option value="CBE">CBE (Baankii Daddala)</option>
-        <option value="BOA">Bank of Abyssinia (BOA)</option>
-        <option value="Awash">Awash Bank</option>
-      </select>
-      <div id="accountDetails" class="account-card"></div>
-
-      <label>Mallaqa Kaffalame (ETB):</label>
-      <input type="number" id="paidAmount" required placeholder="Fkn: 1000">
-
-      <label>Transaction ID (Lakk. Kaffaltii):</label>
-      <input type="text" id="txnId" required placeholder="Fkn: TX12345678">
-
-      <label>Ragaa Kaffaltii (Screenshot - JPG, PNG ykn PDF):</label>
-      <input type="file" id="screenshot" accept="image/*,.pdf" required>
-
-      <div style="margin-top: 18px; display: flex; justify-content: center;">
-        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-callback="onTurnstileSuccess"></div>
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="greeting-text">
+          <span id="greetingLbl">Akkam</span> • <span id="ethDateLbl">...</span>
+        </div>
+        <button type="button" class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
       </div>
 
-      <button type="submit" id="submitBtn" class="btn-submit-order">GALMEESSI</button>
-    </form>
-    
-    <div id="statusMsg" class="status-msg"></div>
-
-    <!-- Live Draw CTA -->
-    <a href="draw.html" class="live-draw-cta">
-      🎡 Fuula Carraa Baasuu (Live Draw Wheel) Ilaali →
-    </a>
-
-    <!-- Navigation Quick Links -->
-    <div class="nav-links-area">
-      <a href="check.html">🔍 Haala Ajaja Kee Sakatta'i</a>
-      <a href="admin.html" style="font-size: 11px; opacity: 0.6;">🔐 Admin</a>
-    </div>
-
-    <!-- Social Share & QR -->
-    <div class="social-share-area">
-      <div style="font-size: 13px; font-weight: 700; color: var(--text-muted);">Hiriyoota Keessaniif Qoodaa (Share):</div>
-      <div class="share-btn-group">
-        <a id="shareTg" href="#" target="_blank" class="share-btn share-tg">Telegram</a>
-        <a id="shareWa" href="#" target="_blank" class="share-btn share-wa">WhatsApp</a>
-        <a id="shareFb" href="#" target="_blank" class="share-btn share-fb">Facebook</a>
-        <a id="shareX"  href="#" target="_blank" class="share-btn share-x">𝕏 Post</a>
+      <!-- Brand Logo Area -->
+      <div class="brand-area">
+        <div class="brand-pill">Carraa Biiftuu 🌟</div>
+        <div class="brand-slogan">Sirna Qulqulluu fi Amansiisaa Carraa Bituu</div>
       </div>
 
-      <div class="qr-container">
-        <img id="qrImg" src="" alt="QR Link" width="95" height="95">
-        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 5px;">Scan godhuun bilbilaan banaa</div>
+      <!-- Stepper Header (1-6) -->
+      <div class="stepper-header" id="stepperNav">
+        <div class="step-item active" id="stepIndicator1"><div class="step-num">1</div>Simannaa</div>
+        <div class="step-item" id="stepIndicator2"><div class="step-num">2</div>Eenyummaa</div>
+        <div class="step-item" id="stepIndicator3"><div class="step-num">3</div>Carraa</div>
+        <div class="step-item" id="stepIndicator4"><div class="step-num">4</div>Kaffaltii</div>
+        <div class="step-item" id="stepIndicator5"><div class="step-num">5</div>Qoodaa</div>
+        <div class="step-item" id="stepIndicator6"><div class="step-num">6</div>Qunnamaa</div>
       </div>
-    </div>
 
-  </div>
+      <!-- PAGE 1: SIMANNAA & BADHAASOTA -->
+      <div class="wizard-step active-step" id="stepPage1">
+        <div class="hero-banner">
+          <div class="hero-title">Baga Nagaan Dhuftan! 🎉</div>
+          <div class="hero-desc">
+            Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!
+          </div>
+        </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-
-  <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
-    
-    let TICKET_PRICE = 1000;
-    let ACCOUNTS_DATA = {
-      Telebirr: { number: "0909506573", name: "Lemma Asefa" },
-      CBE: { number: "1000342728743", name: "Lemma Asefa" },
-      BOA: { number: "212322628", name: "Lemma Asefa" },
-      Awash: { number: "013351316799600", name: "Lemma Asefa" }
-    };
-    let freeTickets = [];
-    let selectedTickets = [];
-    let turnstileToken = "";
-
-    function onTurnstileSuccess(token) { turnstileToken = token; }
-
-    function initCultureAndDate() {
-      const now = new Date();
-      const hour = now.getHours();
-      let greeting = "Akkam ooltan";
-      if (hour >= 5 && hour < 12) greeting = "Akkam bultan 🌅";
-      else if (hour >= 12 && hour < 18) greeting = "Akkam ooltan ☀️";
-      else greeting = "Galgala gaarii 🌙";
-      document.getElementById('greetingLbl').innerText = greeting;
-
-      // Ethiopian Date
-      document.getElementById('ethiopianDateLbl').innerText = "Onkololeessa 11, 2019";
-
-      // Social Share Links & QR
-      const currentUrl = encodeURIComponent(window.location.href);
-      const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
-      document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
-      document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
-      document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
-      document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${shareMsg}&url=${currentUrl}`;
-      
-      // QR Code amansiisaa
-      document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
-    }
-
-    function toggleTheme() {
-      const root = document.documentElement;
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        root.removeAttribute('data-theme');
-        document.getElementById('themeBtn').innerText = "🌙 Dark";
-        localStorage.setItem("carraa_theme", "light");
-      } else {
-        root.setAttribute('data-theme', 'dark');
-        document.getElementById('themeBtn').innerText = "☀️ Light";
-        localStorage.setItem("carraa_theme", "dark");
-      }
-    }
-    if (localStorage.getItem("carraa_theme") === "dark") {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('themeBtn').innerText = "☀️ Light";
-    }
-
-    const phoneInputField = document.querySelector("#phone");
-    const phoneInput = window.intlTelInput(phoneInputField, {
-      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-      initialCountry: "et",
-      separateDialCode: true,
-      preferredCountries: ["et"]
-    });
-
-    function renderTicketsDropdown(ticketsList) {
-      const sold = 1000 - ticketsList.length;
-      const pct = Math.round((sold / 1000) * 100);
-      document.getElementById('soldCountTxt').innerText = `${sold} / 1000`;
-      document.getElementById('percentTxt').innerText = `${pct}%`;
-      document.getElementById('progressBarFill').style.width = `${pct}%`;
-
-      const select = document.getElementById('ticketSelect');
-      select.innerHTML = '<option value="">-- Carraa Duwwaa Filadhu --</option>';
-      ticketsList.forEach(num => {
-        const opt = document.createElement('option');
-        opt.value = num;
-        opt.innerText = "Carraa #" + num;
-        select.appendChild(opt);
-      });
-    }
-
-    async function loadTickets() {
-      try {
-        const res = await fetch(WEB_APP_URL);
-        const data = await res.json();
-        if (data.ok && Array.isArray(data.free)) {
-          freeTickets = data.free;
-          TICKET_PRICE = data.price || 1000;
-          if (data.accounts) ACCOUNTS_DATA = data.accounts;
-          renderTicketsDropdown(freeTickets);
-        }
-      } catch(e) {
-        document.getElementById('statusMsg').innerText = "Carraawwan fiduun hin danda'amne.";
-      }
-      handleQtyChange();
-    }
-
-    function handleQtyChange() {
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      const total = qty * TICKET_PRICE;
-      document.getElementById('totalPrice').value = total.toLocaleString() + " ETB";
-      document.getElementById('paidAmount').value = total;
-      document.getElementById('selectPrompt').innerText = qty + " Filadhaa";
-      selectedTickets = [];
-      document.getElementById('selectedTicketsDisplay').innerText = "";
-
-      // VIP Badges
-      const vipArea = document.getElementById('vipBadgeArea');
-      if (qty >= 10) {
-        vipArea.innerHTML = `<span class="vip-badge-tag">👑 DIAMOND VIP BUYER (Carraa 10x)</span>`;
-      } else if (qty >= 5) {
-        vipArea.innerHTML = `<span class="vip-badge-tag">🥇 GOLD VIP BUYER (Carraa 5x)</span>`;
-      } else if (qty >= 3) {
-        vipArea.innerHTML = `<span class="vip-badge-tag">🥈 SILVER VIP BUYER</span>`;
-      } else {
-        vipArea.innerHTML = "";
-      }
-    }
-
-    function handlePaymentChange() {
-      const method = document.getElementById('paymentMethod').value;
-      const box = document.getElementById('accountDetails');
-      if (method && ACCOUNTS_DATA[method]) {
-        const acc = ACCOUNTS_DATA[method];
-        box.style.display = "block";
-        box.innerHTML = `📌 <b>Odeeffannoo Kaffaltii ${method}:</b><br>👤 <b>Maqaa:</b> ${acc.name}<br>💳 <b>Lakk. Account:</b> <span style="font-size: 16px; font-weight: bold; letter-spacing: 1px;">${acc.number}</span>`;
-      } else {
-        box.style.display = "none";
-        box.innerHTML = "";
-      }
-    }
-
-    function handleTicketDropdown() {
-      const select = document.getElementById('ticketSelect');
-      const val = parseInt(select.value);
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-
-      if (val && !selectedTickets.includes(val)) {
-        if (selectedTickets.length < qty) {
-          selectedTickets.push(val);
-        } else {
-          selectedTickets = [val];
-        }
-      }
-      document.getElementById('selectedTicketsDisplay').innerText = 
-        selectedTickets.length > 0 ? "Carraawwan Filataman: " + selectedTickets.map(t => "#" + t).join(", ") : "";
-    }
-
-    function toDataUrl(file){
-      return new Promise(function(res, rej){  
-        if(file.type === "application/pdf"){
-          var r = new FileReader();
-          r.onload = function(){ res(r.result); };
-          r.onerror = rej;
-          r.readAsDataURL(file);
-          return;
-        }  
-        var im = new Image();
-        im.onload = function(){
-          var s = Math.min(1, 1000 / Math.max(im.width, im.height));
-          var c = document.createElement("canvas");  
-          c.width = im.width * s;
-          c.height = im.height * s;
-          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
-          res(c.toDataURL("image/jpeg", 0.7));
-        };  
-        im.onerror = rej;
-        im.src = URL.createObjectURL(file);
-      });
-    }
-
-    async function submitOrder() {
-      const name = document.getElementById('name').value.trim();
-      if (!name) { alert("1. Maaloo maqaa guutuu galchaa!"); return; }
-      if (!phoneInput.isValidNumber()) { alert("2. Maaloo lakkoofsa bilbilaa sirrii galchaa!"); return; }
-      const email = document.getElementById('email').value.trim();
-      if (!email) { alert("3. Maaloo imeelii sirrii galchaa!"); return; }
-      const qty = parseInt(document.getElementById('qty').value) || 1;
-      if (selectedTickets.length !== qty) {
-        alert("5. Maaloo lakkoofsa carraa " + qty + " filadhaa!");
-        return;
-      }
-      const method = document.getElementById('paymentMethod').value;
-      if (!method) { alert("6. Maaloo mala kaffaltii filadhaa!"); return; }
-      const paidAmt = parseFloat(document.getElementById('paidAmount').value);
-      if (paidAmt !== qty * TICKET_PRICE) {
-        alert("7. Mallaqni galchitan gatii carraa filatameetiin wal hin simu!");
-        return;
-      }
-      const txn = document.getElementById('txnId').value.trim();
-      if (!txn) { alert("8. Maaloo Transaction ID galchaa!"); return; }
-      const fileInput = document.getElementById('screenshot').files[0];
-      if (!fileInput) { alert("9. Maaloo ragaa kaffaltii ol-galchaa!"); return; }
-
-      const submitBtn = document.getElementById('submitBtn');
-      const statusMsg = document.getElementById('statusMsg');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Galmeessaa jira...";
-      statusMsg.style.color = "var(--gold-primary)";
-      statusMsg.innerText = "Ragaan keessan sakatta'amaa jira, maaloo eegaa...";
-
-      try {
-        const imageData = await toDataUrl(fileInput);
-        const payload = {
-          name: name,
-          phone: phoneInput.getNumber(),
-          email: email,
-          qty: qty,
-          tickets: selectedTickets.map(Number),
-          method: method,
-          paidAmount: paidAmt,
-          txn: txn,
-          image: imageData,
-          turnstile: turnstileToken
-        };
-
-        const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await res.json();
-        
-        if (result.ok) {
-          // 🎉 Confetti Blast!
-          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-          
-          document.getElementById('appCard').innerHTML = `
-            <div style="text-align: center; padding: 25px 15px;">
-              <h2 style="color: var(--gold-primary); font-size: 26px; margin-top: 0;">Galatoomaa! 🎉</h2>
-              <p style="font-size: 16px;">Ajajni keessan milkaa'inaan galmaa'eera.</p>
-              <div style="background: var(--box-accent); border: 1.5px dashed var(--gold-primary); border-radius: 12px; padding: 18px; line-height: 1.7; text-align: left;">
-                <p style="margin: 0;"><b>Order ID:</b> <code>${result.id}</code></p>
-                <p style="margin: 5px 0;"><b>Lakk. Carraa Kee:</b> <span style="color:var(--gold-primary); font-weight:bold; font-size: 18px;">${selectedTickets.map(t => "#" + t).join(", ")}</span></p>
-                <p style="margin: 5px 0;"><b>Gatii Kaffalame:</b> ${result.total.toLocaleString()} ETB</p>
-              </div>
-              <p style="font-size: 13px; color: var(--text-muted); margin-top: 18px;">Ergaan mirkaneessaa Telegram fi Email irratti isiniif ergama.</p>
-              <a href="index.html" style="display:inline-block; margin-top:15px; color:var(--gold-primary); font-weight:bold; text-decoration: none;">← Gara Fuula Duraatti Deebi'i</a>
+        <div class="prize-grid">
+          <div class="prize-card">
+            <div class="prize-rank">🥇</div>
+            <div class="prize-info">
+              <h4>Badhaasa 1ffaa: Konkolaataa / Mallaqa Guddaa</h4>
+              <p>Badhaasa qaalii fi addaa isa ol'aanaa marsaa kanaa.</p>
             </div>
-          `;
-        } else {
-          statusMsg.style.color = "#ff4d4f";
-          statusMsg.innerText = result.error || "Dogoggorri uumameera.";
-          submitBtn.disabled = false;
-          submitBtn.innerText = "GALMEESSI";
-          if (result.refresh) loadTickets();
-        }
-      } catch(err) {
-        statusMsg.style.color = "#ff4d4f";
-        statusMsg.innerText = "Dogoggora Network. Maaloo irra deebi'aa!";
-        submitBtn.disabled = false;
-        submitBtn.innerText = "GALMEESSI";
-      }
-    }
+          </div>
+          <div class="prize-card">
+            <div class="prize-rank">🥈</div>
+            <div class="prize-info">
+              <h4>Badhaasa 2ffaa: Mootarsayikilii / Laappitooppii</h4>
+              <p>Meeshaa ammayyaa tajaajila addaa qabu.</p>
+            </div>
+          </div>
+          <div class="prize-card">
+            <div class="prize-rank">🥉</div>
+            <div class="prize-info">
+              <h4>Badhaasa 3ffaa: Smart Phone / Mallaqa Callaa</h4>
+              <p>Bilbila ammayyaa fi badhaasa jajjabeessaa.</p>
+            </div>
+          </div>
+        </div>
 
-    initCultureAndDate();
-    loadTickets();
-  </script>
-</body>
-</html>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
-}
+        <div class="progress-box">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; color:var(--gold-primary);">
+            <span>Carraa Gurgurame: <b id="soldCountTxt">0 / 1000</b></span>
+            <span id="percentTxt">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+          <div style="font-size:11.5px; color:var(--text-muted);">
+            🎯 <b>Akkuma 1000/1000 guuteen geengoon carraa kallattiin banama!</b>
+          </div>
+        </div>
+
+        <div class="nav-btn-group">
+          <button type="button" class="btn-step btn-next" onclick="goToStep(2)">ITTI FUFI (CARRAA BITADHU) →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 2: ODEEFFANNOO DHUUNFAA -->
+      <div class="wizard-step" id="stepPage2">
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">👤 2. Odeeffannoo Dhuunfaa Keessanii</h3>
+        
+        <label>Maqaa Guutuu:</label>
+        <input type="text" id="name" placeholder="Fkn: Lemmaa Asefa">
+
+        <label>Lakk. Bilbilaa (International):</label>
+        <input type="tel" id="phone">
+
+        <label>Email Address:</label>
+        <input type="email" id="email" placeholder="example@gmail.com">
+
+        <div class="nav-btn-group">
+          <button type="button" class="btn-step btn-prev" onclick="goToStep(1)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" onclick="validateStep2()">ITTI FUFI →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 3: FILANNOO CARRAA & GATII -->
+      <div class="wizard-step" id="stepPage3">
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">🎟️ 3. Filannoo Carraa & Gatii</h3>
+
+        <label>Baay'ina Carraa Bituu Feetu (Max 10):</label>
+        <input type="number" id="qty" min="1" max="10" value="1" onchange="handleQtyChange()">
+        <div id="vipBadgeArea" style="margin-top:6px;"></div>
+
+        <label>Gatii Waliigalaa (ETB):</label>
+        <input type="text" id="totalPrice" readonly value="1,000 ETB">
+
+        <label>Lakk. Carraa Filadhu (<span id="selectPrompt">1 Filadhaa</span>):</label>
+        <select id="ticketSelect" onchange="handleTicketDropdown()">
+          <option value="">-- Carraa Duwwaa Filadhu --</option>
+        </select>
+        <div id="selectedTicketsDisplay" style="margin-top:8px; font-size:13.5px; color:var(--gold-primary); font-weight:bold;"></div>
+
+        <div class="nav-btn-group">
+          <button type="button" class="btn-step btn-prev" onclick="goToStep(2)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" onclick="validateStep3()">ITTI FUFI (KAFFALTIITTI) →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 4: KAFFALTII & MIRKANEESSA -->
+      <div class="wizard-step" id="stepPage4">
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:12px;">💳 4. Mala Kaffaltii & Ragaa</h3>
+
+        <label>Mala Kaffaltii:</label>
+        <select id="paymentMethod" onchange="handlePaymentChange()">
+          <option value="">-- Mala Kaffaltii Filadhu --</option>
+          <option value="Telebirr">Telebirr</option>
+          <option value="CBE">CBE (Baankii Daddala)</option>
+          <option value="BOA">Bank of Abyssinia (BOA)</option>
+          <option value="Awash">Awash Bank</option>
+        </select>
+        <div id="accountDetails" class="account-card"></div>
+
+        <label>Mallaqa Kaffalame (ETB):</label>
+        <input type="number" id="paidAmount" placeholder="Fkn: 1000">
+
+        <label>Transaction ID (Lakk. Kaffaltii):</label>
+        <input type="text" id="txnId" placeholder="Fkn: TX12345678">
+
+        <label>Ragaa Kaffaltii (Screenshot):</label>
+        <input type="file" id="screenshot" accept="image/*,.pdf">
+
+        <div style="margin-top:16px; display:flex; justify-content:center;">
+          <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-callback="onTurnstileSuccess"></div>
+        </div>
+
+        <div class="nav-btn-group">
+          <button type="button" class="btn-step btn-prev" onclick="goToStep(3)">← DUUBATTI</button>
+          <button type="button" class="btn-step btn-next" id="submitBtn" onclick="submitFinalOrder()">GALMEESSI 🔥</button>
+        </div>
+        <div id="statusMsg" style="margin-top:14px; text-align:center; font-size:13.5px; font-weight:bold;"></div>
+      </div>
+
+      <!-- PAGE 5: QOODAA
