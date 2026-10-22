@@ -17,20 +17,27 @@
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
     .header h1 { margin: 0; color: #0F5132; font-size: 24px; }
     
-    .draw-control-card {
-      background: #fff; border: 2px solid #d4af37; border-radius: 12px; padding: 16px 20px;
-      margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
-    }
-    .draw-status-badge { padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; }
-    .draw-locked { background: #ffebee; color: #c62828; }
-    .draw-unlocked { background: #e8f5e9; color: #2e7d32; }
+    /* Control Cards Grid */
+    .controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .panel-card { background: #fff; border: 1.5px solid #d4af37; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .panel-card h3 { margin: 0 0 10px; color: #0F5132; font-size: 16px; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-    .stat-card { background: white; padding: 18px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; border-left: 5px solid #0F5132; }
+    /* Financial Breakdown Box */
+    .finance-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #eee; font-size: 13.5px; }
+    .finance-row.total-profit { border-top: 2px solid #0F5132; border-bottom: none; font-size: 15px; font-weight: 900; color: #0F5132; padding-top: 10px; }
+
+    /* Switch Toggles */
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; font-size: 13.5px; }
+    .switch-btn { padding: 6px 14px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer; font-size: 12px; }
+    .switch-on { background: #2e7d32; color: #fff; }
+    .switch-off { background: #e0e0e0; color: #666; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; border-left: 5px solid #0F5132; }
     .stat-card.pending { border-left-color: #ff9800; }
     .stat-card.approved { border-left-color: #4caf50; }
     .stat-card.rejected { border-left-color: #f44336; }
-    .stat-num { font-size: 24px; font-weight: bold; margin-top: 5px; }
+    .stat-num { font-size: 22px; font-weight: bold; margin-top: 4px; }
     
     .controls { display: flex; justify-content: space-between; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; }
     .controls input, .controls select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
@@ -38,8 +45,8 @@
     .btn { padding: 10px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
     
     .table-container { background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 900px; text-align: left; }
-    th, td { padding: 12px 16px; border-bottom: 1px solid #eee; font-size: 13.5px; }
+    table { width: 100%; border-collapse: collapse; min-width: 950px; text-align: left; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #eee; font-size: 13px; }
     th { background: #fafafa; color: #555; }
     
     .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
@@ -51,14 +58,8 @@
     .btn-rej { background: #c62828; color: white; }
 
     /* Modals */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 1000;
-    }
-    .modal-card {
-      background: #fff; width: 90%; max-width: 450px; padding: 25px; border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-card { background: #fff; width: 90%; max-width: 450px; padding: 25px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
     .modal-card h3 { margin-top: 0; color: #0F5132; }
     .modal-card label { display: block; margin-top: 12px; font-weight: 600; font-size: 13px; }
     .modal-card input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
@@ -66,7 +67,6 @@
 </head>
 <body>
 
-  <!-- Login Modal -->
   <div id="loginOverlay">
     <div class="login-box">
       <h3>Admin Dashboard</h3>
@@ -77,30 +77,55 @@
     </div>
   </div>
 
-  <!-- Main Dashboard -->
   <div class="container" id="mainDashboard" style="display: none;">
     <div class="header">
       <h1>Carraa Biiftuu - To'annoo Admin</h1>
       <div>
-        <button class="btn" style="background:#d4af37; color:#000;" onclick="openBroadcastModal()">📢 Ergaa Xumuraa Ergi</button>
-        <button class="btn" style="background:#2e7d32; color:white; margin-left:8px;" onclick="openCashModal()">💵 Galmee Qaamaa</button>
-        <button class="btn" style="background:#1976d2; color:white; margin-left:8px;" onclick="exportToCSV()">📥 Export CSV</button>
-        <button class="btn" style="background:#555; color:white; margin-left:8px;" onclick="fetchAdminData()">🔄 Refresh</button>
-        <button class="btn" style="background:#c62828; color:white; margin-left:8px;" onclick="logoutAdmin()">🚪 Ba'i</button>
+        <a href="scanner.html" class="btn" style="background:#d4af37; color:#000; text-decoration:none;">📷 Scan QR Ticket</a>
+        <button class="btn" style="background:#2e7d32; color:white; margin-left:6px;" onclick="openCashModal()">💵 Galmee Qaamaa</button>
+        <button class="btn" style="background:#d4af37; color:#000; margin-left:6px;" onclick="openBroadcastModal()">📢 Ergaa Xumuraa</button>
+        <button class="btn" style="background:#1976d2; color:white; margin-left:6px;" onclick="exportToCSV()">📥 CSV</button>
+        <button class="btn" style="background:#555; color:white; margin-left:6px;" onclick="fetchAdminData()">🔄</button>
+        <button class="btn" style="background:#c62828; color:white; margin-left:6px;" onclick="logoutAdmin()">🚪</button>
       </div>
     </div>
 
-    <!-- Live Draw Control Panel -->
-    <div class="draw-control-card">
-      <div>
-        <h3 style="margin:0 0 5px; color:#0F5132;">🎡 Too'annoo Live Draw (Geengoo Carraa)</h3>
-        <span style="font-size:13px; color:#666;">Haala Ammaa: </span>
-        <span id="drawStatusBadge" class="draw-status-badge draw-locked">Cufameera (Locked)</span>
+    <!-- Top Two Controls Grid: Live Draw & Finance / Feature Toggles -->
+    <div class="controls-grid">
+      
+      <!-- 1. Live Draw Card -->
+      <div class="panel-card">
+        <h3>🎡 Too'annoo Live Draw</h3>
+        <p style="font-size:13px; color:#666; margin-bottom:12px;">
+          Haala Ammaa: <b id="drawStatusBadge" style="color:#c62828;">Cufameera (Locked) 🔴</b>
+        </p>
+        <div style="display:flex; gap:10px;">
+          <button id="toggleDrawBtn" class="btn" style="background:#2e7d32; color:white; flex:1;" onclick="toggleLiveDraw()">BANI (Unlock)</button>
+          <a href="draw.html" target="_blank" class="btn" style="background:#d4af37; color:#000; text-decoration:none; text-align:center; flex:1;">Fuula Draw ↗</a>
+        </div>
       </div>
-      <div>
-        <button id="toggleDrawBtn" class="btn" style="background:#2e7d32; color:white;" onclick="toggleLiveDraw()">BANI (Unlock Draw)</button>
-        <a href="draw.html" target="_blank" class="btn" style="background:#d4af37; color:#000; text-decoration:none; display:inline-block; margin-left:8px;">Fuula Draw ↗</a>
+
+      <!-- 2. Finance Calculation & Feature Toggles Card -->
+      <div class="panel-card">
+        <h3>📊 Shallaggii Taaksii & Bu'aa Qulqulluu</h3>
+        <div class="finance-row"><span>Gurgurtaa Waliigalaa (Gross):</span> <b id="fGross">0 ETB</b></div>
+        <div class="finance-row"><span>Taaksii Mootummaa (<span id="fTaxPct">15</span>%):</span> <span style="color:#c62828;">- <b id="fTaxAmt">0</b> ETB</span></div>
+        <div class="finance-row"><span>Gumaacha Arjoomaa (<span id="fCharityPct">10</span>%):</span> <span style="color:#ff9800;">- <b id="fCharityAmt">0</b> ETB</span></div>
+        <div class="finance-row total-profit"><span>Bu'aa Qulqulluu (Net Profit):</span> <b id="fNetProfit">0 ETB</b></div>
+
+        <hr style="border:0.5px solid #eee; margin:12px 0 8px;">
+
+        <!-- Feature Toggles (ON / OFF) -->
+        <div class="toggle-row">
+          <span>🎰 Scratch & Win (Haxaa'uu):</span>
+          <button id="toggleScratchBtn" class="switch-btn switch-off" onclick="toggleFeature('scratch')">OFF</button>
+        </div>
+        <div class="toggle-row">
+          <span>🔗 Referral / Affiliate (Afeerraa):</span>
+          <button id="toggleRefBtn" class="switch-btn switch-off" onclick="toggleFeature('referral')">OFF</button>
+        </div>
       </div>
+
     </div>
 
     <!-- Stats Grid -->
@@ -110,7 +135,7 @@
       <div class="stat-card pending"><div>Pending</div><div class="stat-num" id="statPending" style="color:#ef6c00;">0</div></div>
       <div class="stat-card approved"><div>Approved</div><div class="stat-num" id="statApproved" style="color:#2e7d32;">0</div></div>
     </div>
-<a href="scanner.html" class="btn" style="background:#d4af37; color:#000; text-decoration:none; display:inline-block; margin-left:8px;">📷 Scan QR Ticket</a>
+
     <div class="controls">
       <input type="text" class="search-input" id="searchInput" placeholder="Maqaa, Bilbila, ykn Txn..." onkeyup="renderTable()">
       <select id="statusFilter" onchange="renderTable()">
@@ -125,25 +150,21 @@
       <table>
         <thead>
           <tr>
-            <th>Order ID</th><th>Guyyaa</th><th>Maqaa & Bilbila</th><th>Carraawwan</th><th>Mallaqa</th><th>Mala & TXN</th><th>Screenshot</th><th>Status</th><th>Action</th>
+            <th>Order ID</th><th>Guyyaa</th><th>Maqaa & Bilbila</th><th>Carraawwan</th><th>Mallaqa</th><th>Mala & TXN</th><th>Screenshot</th><th>Referral</th><th>Status</th><th>Action</th>
           </tr>
         </thead>
-        <tbody id="ordersTableBody"><tr><td colspan="9" style="text-align:center;">Daataa fe'aa jira...</td></tr></tbody>
+        <tbody id="ordersTableBody"><tr><td colspan="10" style="text-align:center;">Daataa fe'aa jira...</td></tr></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Modal 1: Offline Cash Booking -->
+  <!-- Modal 1: Cash Booking -->
   <div class="modal-overlay" id="cashModal">
     <div class="modal-card">
       <h3>💵 Galmee Carraa Qaamaa (Cash Booking)</h3>
-      <p style="font-size:12px; color:#666;">Namoota callaan kaffalanii qaamaan bitatan asitti galmeessaa:</p>
-      <label>Maqaa Maamilaa:</label>
-      <input type="text" id="cashName" placeholder="Fkn: Caalaa Tolasaa">
-      <label>Lakk. Bilbilaa:</label>
-      <input type="text" id="cashPhone" placeholder="09XXXXXXXX">
-      <label>Lakk. Carraa (Fkn: 5, 23):</label>
-      <input type="text" id="cashTickets" placeholder="Fkn: 5, 23">
+      <label>Maqaa Maamilaa:</label><input type="text" id="cashName" placeholder="Fkn: Caalaa Tolasaa">
+      <label>Lakk. Bilbilaa:</label><input type="text" id="cashPhone" placeholder="09XXXXXXXX">
+      <label>Lakk. Carraa (Fkn: 5, 23):</label><input type="text" id="cashTickets" placeholder="Fkn: 5, 23">
       <div style="margin-top:20px; display:flex; gap:10px;">
         <button class="btn" style="background:#ccc; flex:1;" onclick="closeCashModal()">Dhiisi</button>
         <button class="btn" id="cashSubmitBtn" style="background:#2e7d32; color:white; flex:2;" onclick="submitCashBooking()">GALMEESSI (CASH)</button>
@@ -151,22 +172,13 @@
     </div>
   </div>
 
-  <!-- Modal 2: Broadcast Results to All Customers -->
+  <!-- Modal 2: Broadcast Results -->
   <div class="modal-overlay" id="broadcastModal">
     <div class="modal-card">
       <h3>📢 Ergaa Xumura Carraa Hundaaf Ergi</h3>
-      <p style="font-size:12.5px; color:#666; line-height:1.5;">
-        Carraan erga ba'ee booda lakkoofsota mo'atan asitti galchuun maamiltoota hundaaf (mo'attoota fi warra hin mo'anneef) battalatti email fi gabaasa ergaa:
-      </p>
-      <label>🥇 Lakk. Carraa 1ffaa (Konkolaataa):</label>
-      <input type="number" id="bcW1st" placeholder="Fkn: 77">
-
-      <label>🥈 Lakk. Carraa 2ffaa (Mootarsayikilii):</label>
-      <input type="number" id="bcW2nd" placeholder="Fkn: 105">
-
-      <label>🥉 Lakk. Carraa 3ffaa (Smart Phone):</label>
-      <input type="number" id="bcW3rd" placeholder="Fkn: 18">
-
+      <label>🥇 Lakk. Carraa 1ffaa (Konkolaataa):</label><input type="number" id="bcW1st" placeholder="Fkn: 77">
+      <label>🥈 Lakk. Carraa 2ffaa (Mootarsayikilii):</label><input type="number" id="bcW2nd" placeholder="Fkn: 105">
+      <label>🥉 Lakk. Carraa 3ffaa (Smart Phone):</label><input type="number" id="bcW3rd" placeholder="Fkn: 18">
       <div style="margin-top:20px; display:flex; gap:10px;">
         <button class="btn" style="background:#ccc; flex:1;" onclick="closeBroadcastModal()">Dhiisi</button>
         <button class="btn" id="bcSubmitBtn" style="background:#d4af37; color:#000; font-weight:900; flex:2;" onclick="submitBroadcast()">HUNDAAF ERGI 📢</button>
@@ -178,7 +190,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
     let CURRENT_PIN = sessionStorage.getItem("carraa_admin_pin") || "";
     let ALL_ORDERS = [];
-    let CURRENT_DRAW_STATUS = "LOCKED";
+    let SETTINGS = { drawStatus: "LOCKED", scratchEnabled: false, referralEnabled: false, taxRate: 15, charityRate: 10 };
 
     if (CURRENT_PIN) {
       document.getElementById('loginOverlay').style.display = "none";
@@ -204,83 +216,6 @@
     function openBroadcastModal() { document.getElementById('broadcastModal').style.display = 'flex'; }
     function closeBroadcastModal() { document.getElementById('broadcastModal').style.display = 'none'; }
 
-    async function submitBroadcast() {
-      const w1 = document.getElementById('bcW1st').value.trim();
-      const w2 = document.getElementById('bcW2nd').value.trim();
-      const w3 = document.getElementById('bcW3rd').value.trim();
-
-      if (!w1 || !w2 || !w3) return alert("Maaloo lakkoofsa mo'attoota 1ffaa, 2ffaa, fi 3ffaa hunda galchaa!");
-      if (!confirm(`Dhuguma ergaa xumuraa maamiltoota hundaaf erguu feetuu?\n🥇 1ffaa: #${w1}\n🥈 2ffaa: #${w2}\n🥉 3ffaa: #${w3}`)) return;
-
-      const btn = document.getElementById('bcSubmitBtn');
-      btn.disabled = true;
-      btn.innerText = "Ergaa jira...";
-
-      try {
-        const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "adminBroadcastResults",
-            pin: CURRENT_PIN,
-            w1st: w1,
-            w2nd: w2,
-            w3rd: w3
-          })
-        });
-        const d = await res.json();
-        if (d.ok) {
-          alert(`Ergaan xumuraa milkaa'inaan maamiltoota ${d.sentCount} tiif ergameera! Telegram irrattis gabaasni dhufeera! ✅`);
-          closeBroadcastModal();
-        } else {
-          alert(d.error || "Dogoggorri uumameera.");
-        }
-      } catch(e) { alert("Network error."); }
-      btn.disabled = false;
-      btn.innerText = "HUNDAAF ERGI 📢";
-    }
-
-    async function submitCashBooking() {
-      const name = document.getElementById('cashName').value.trim();
-      const phone = document.getElementById('cashPhone').value.trim();
-      const ticketsRaw = document.getElementById('cashTickets').value.trim();
-
-      if (!ticketsRaw) return alert("Maaloo lakkoofsa carraa galchaa!");
-      const tickets = ticketsRaw.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0 && n <= 1000);
-      if (tickets.length === 0) return alert("Lakkoofsi carraa sirrii miti!");
-
-      const btn = document.getElementById('cashSubmitBtn');
-      btn.disabled = true;
-      btn.innerText = "Galmeessaa jira...";
-
-      try {
-        const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "adminManualCashBooking",
-            pin: CURRENT_PIN,
-            name: name,
-            phone: phone,
-            tickets: tickets
-          })
-        });
-        const d = await res.json();
-        if (d.ok) {
-          alert(`Carraan ${d.tickets.join(", ")} milkaa'inaan Approved (Cash) ta'ee galmaa'eera! ✅`);
-          closeCashModal();
-          document.getElementById('cashName').value = "";
-          document.getElementById('cashPhone').value = "";
-          document.getElementById('cashTickets').value = "";
-          fetchAdminData();
-        } else {
-          alert(d.error || "Dogoggorri uumameera.");
-        }
-      } catch(e) { alert("Network error."); }
-      btn.disabled = false;
-      btn.innerText = "GALMEESSI (CASH)";
-    }
-
     async function fetchAdminData(isFirstLogin = false) {
       try {
         const res = await fetch(`${WEB_APP_URL}?action=adminData&pin=${encodeURIComponent(CURRENT_PIN)}`);
@@ -291,13 +226,27 @@
           document.getElementById('mainDashboard').style.display = "block";
           ALL_ORDERS = data.orders;
 
-          document.getElementById('statRevenue').innerText = Number(data.stats.revenue).toLocaleString() + " ETB";
+          // Stats
+          const gross = Number(data.stats.revenue) || 0;
+          document.getElementById('statRevenue').innerText = gross.toLocaleString() + " ETB";
           document.getElementById('statTicketsSold').innerText = data.stats.ticketsSold + " / 1000";
           document.getElementById('statPending').innerText = data.stats.pending;
           document.getElementById('statApproved').innerText = data.stats.approved;
 
-          CURRENT_DRAW_STATUS = data.drawStatus || "LOCKED";
-          updateDrawBadge();
+          // Finance Calculations
+          if (data.settings) SETTINGS = data.settings;
+          const taxAmt = Math.round(gross * (SETTINGS.taxRate / 100));
+          const charityAmt = Math.round(gross * (SETTINGS.charityRate / 100));
+          const netProfit = gross - taxAmt - charityAmt;
+
+          document.getElementById('fGross').innerText = gross.toLocaleString() + " ETB";
+          document.getElementById('fTaxPct').innerText = SETTINGS.taxRate;
+          document.getElementById('fTaxAmt').innerText = taxAmt.toLocaleString();
+          document.getElementById('fCharityPct').innerText = SETTINGS.charityRate;
+          document.getElementById('fCharityAmt').innerText = charityAmt.toLocaleString();
+          document.getElementById('fNetProfit').innerText = netProfit.toLocaleString() + " ETB";
+
+          updateUIFromSettings();
           renderTable();
         } else {
           if (isFirstLogin) document.getElementById('loginErr').innerText = data.error || "PIN dogoggora!";
@@ -306,26 +255,53 @@
       } catch (e) { alert("Connection error."); }
     }
 
-    function updateDrawBadge() {
+    function updateUIFromSettings() {
+      // Draw status
       const badge = document.getElementById('drawStatusBadge');
-      const btn = document.getElementById('toggleDrawBtn');
-      if (CURRENT_DRAW_STATUS === "UNLOCKED") {
-        badge.className = "draw-status-badge draw-unlocked";
-        badge.innerText = "Banameera (Open to Public) 🟢";
-        btn.innerText = "CUFI (Lock Live Draw)";
-        btn.style.background = "#c62828";
+      const drawBtn = document.getElementById('toggleDrawBtn');
+      if (SETTINGS.drawStatus === "UNLOCKED") {
+        badge.innerText = "Banameera (Open) 🟢";
+        badge.style.color = "#2e7d32";
+        drawBtn.innerText = "CUFI (Lock)";
+        drawBtn.style.background = "#c62828";
       } else {
-        badge.className = "draw-status-badge draw-locked";
         badge.innerText = "Cufameera (Locked) 🔴";
-        btn.innerText = "BANI (Unlock Live Draw)";
-        btn.style.background = "#2e7d32";
+        badge.style.color = "#c62828";
+        drawBtn.innerText = "BANI (Unlock)";
+        drawBtn.style.background = "#2e7d32";
       }
+
+      // Feature Toggles
+      const scrBtn = document.getElementById('toggleScratchBtn');
+      scrBtn.className = "switch-btn " + (SETTINGS.scratchEnabled ? "switch-on" : "switch-off");
+      scrBtn.innerText = SETTINGS.scratchEnabled ? "ON 🟢" : "OFF ⚪";
+
+      const refBtn = document.getElementById('toggleRefBtn');
+      refBtn.className = "switch-btn " + (SETTINGS.referralEnabled ? "switch-on" : "switch-off");
+      refBtn.innerText = SETTINGS.referralEnabled ? "ON 🟢" : "OFF ⚪";
+    }
+
+    async function toggleFeature(feature) {
+      let payload = { action: "adminUpdateSettings", pin: CURRENT_PIN };
+      if (feature === 'scratch') payload.scratchEnabled = !SETTINGS.scratchEnabled;
+      if (feature === 'referral') payload.referralEnabled = !SETTINGS.referralEnabled;
+
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        if (d.ok) {
+          SETTINGS = d.settings;
+          updateUIFromSettings();
+        }
+      } catch(e) { alert("Error updating toggle."); }
     }
 
     async function toggleLiveDraw() {
-      const newStatus = CURRENT_DRAW_STATUS === "UNLOCKED" ? "LOCKED" : "UNLOCKED";
-      if (!confirm(`Dhuguma Live Draw gara '${newStatus}' tti jijjiiruu feetuu?`)) return;
-
+      const newStatus = SETTINGS.drawStatus === "UNLOCKED" ? "LOCKED" : "UNLOCKED";
       try {
         const res = await fetch(WEB_APP_URL, {
           method: "POST",
@@ -334,8 +310,8 @@
         });
         const d = await res.json();
         if (d.ok) {
-          CURRENT_DRAW_STATUS = d.status;
-          updateDrawBadge();
+          SETTINGS.drawStatus = d.status;
+          updateUIFromSettings();
         }
       } catch(e) { alert("Error."); }
     }
@@ -347,7 +323,7 @@
       tbody.innerHTML = "";
 
       const filtered = ALL_ORDERS.filter(o => (o.name.toLowerCase().includes(q) || o.phone.toLowerCase().includes(q) || o.txn.toLowerCase().includes(q)) && (filter === "ALL" || o.status === filter));
-      if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#888;">Ajajni hin argamne.</td></tr>`; return; }
+      if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#888;">Ajajni hin argamne.</td></tr>`; return; }
 
       filtered.forEach(o => {
         const tr = document.createElement('tr');
@@ -359,6 +335,7 @@
           <td><b>${o.total.toLocaleString()} ETB</b></td>
           <td><b>${o.method}</b><br><code>${o.txn}</code></td>
           <td>${o.screenshot !== "N/A" ? `<a href="${o.screenshot}" target="_blank" style="color:#1565c0; font-weight:bold; text-decoration:none;">Ilaali ↗</a>` : `<span style="color:#888;">Cash (N/A)</span>`}</td>
+          <td><code style="color:#d4af37;">${o.ref}</code></td>
           <td><span class="badge ${o.status}">${o.status}</span></td>
           <td>
             ${o.status === "Pending" ? `
@@ -372,7 +349,6 @@
     }
 
     async function updateOrderStatus(orderId, newStatus) {
-      if (!confirm(`Ajaja ${orderId} gara '${newStatus}' tti jijjiiruu feetuu?`)) return;
       try {
         const res = await fetch(WEB_APP_URL, {
           method: "POST",
@@ -381,13 +357,51 @@
         });
         const r = await res.json();
         if (r.ok) fetchAdminData();
-      } catch(e) { alert("Error."); }
+      } catch(e) {}
+    }
+
+    async function submitCashBooking() {
+      const name = document.getElementById('cashName').value.trim();
+      const phone = document.getElementById('cashPhone').value.trim();
+      const tickets = document.getElementById('cashTickets').value.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      if (tickets.length === 0) return alert("Carraa galchaa!");
+
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "adminManualCashBooking", pin: CURRENT_PIN, name: name, phone: phone, tickets: tickets })
+        });
+        const d = await res.json();
+        if (d.ok) {
+          alert(`Carraan ${d.tickets.join(", ")} galmaa'eera! ✅`);
+          closeCashModal();
+          fetchAdminData();
+        } else alert(d.error);
+      } catch(e) {}
+    }
+
+    async function submitBroadcast() {
+      const w1 = document.getElementById('bcW1st').value.trim(), w2 = document.getElementById('bcW2nd').value.trim(), w3 = document.getElementById('bcW3rd').value.trim();
+      if (!w1 || !w2 || !w3) return alert("Mo'attoota 1ffaa, 2ffaa, fi 3ffaa galchaa!");
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "adminBroadcastResults", pin: CURRENT_PIN, w1st: w1, w2nd: w2, w3rd: w3 })
+        });
+        const d = await res.json();
+        if (d.ok) {
+          alert(`Ergaan xumuraa maamiltoota ${d.sentCount} tiif ergameera! ✅`);
+          closeBroadcastModal();
+        }
+      } catch(e) {}
     }
 
     function exportToCSV() {
       if (ALL_ORDERS.length === 0) return alert("Daataan hin jiru.");
-      let csv = "ID,Guyyaa,Maqaa,Bilbila,Email,Baayina,Carraawwan,Mallaqa,Mala,TXN ID,Status\n";
-      ALL_ORDERS.forEach(o => { csv += `"${o.id}","${o.date}","${o.name}","${o.phone}","${o.email}",${o.qty},"${o.tickets}",${o.total},"${o.method}","${o.txn}","${o.status}"\n`; });
+      let csv = "ID,Guyyaa,Maqaa,Bilbila,Email,Baayina,Carraawwan,Mallaqa,Mala,TXN ID,Status,Referral\n";
+      ALL_ORDERS.forEach(o => { csv += `"${o.id}","${o.date}","${o.name}","${o.phone}","${o.email}",${o.qty},"${o.tickets}",${o.total},"${o.method}","${o.txn}","${o.status}","${o.ref}"\n`; });
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
