@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haala Ajajaa Sakatta'i - Carraa Biiftuu</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: radial-gradient(circle at top, #0a3d24 0%, #03140b 100%); padding: 20px 12px; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card { background: rgba(255, 255, 255, 0.95); width: 100%; max-width: 460px; padding: 26px 20px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1.5px solid #d4af37; }
+    h2 { color: #0a3d24; text-align: center; margin-top: 0; font-size: 22px; }
+    label { font-weight: 700; margin-top: 14px; display: block; color: #222; font-size: 13px; }
+    input, button { width: 100%; padding: 12px; margin-top: 6px; border-radius: 8px; border: 1px solid #ccc; font-size: 14.5px; }
+    button { background: linear-gradient(135deg, #ffd700, #d4af37, #0a3d24); color: white; border: none; font-weight: 800; margin-top: 18px; cursor: pointer; text-transform: uppercase; }
+    .result-box { margin-top: 20px; padding: 16px; border-radius: 10px; display: none; line-height: 1.7; font-size: 14px; }
+    .pending { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .approved { background: #d4edda; color: #155724; border: 1.5px solid #28a745; }
+    .rejected { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    a { display: block; text-align: center; margin-top: 16px; color: #0a3d24; text-decoration: none; font-size: 13.5px; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔍 Haala Ajajaa Sakatta'i</h2>
+    <p style="text-align: center; color: #666; font-size: 13px;">Lakk. bilbilaa fi Transaction ID galchuun ajaja keessan hordofaa.</p>
+    
+    <form onsubmit="event.preventDefault(); checkOrder();">
+      <label>Lakk. Bilbilaa (Fkn: 09... ykn +2519...):</label>
+      <input type="text" id="phone" required placeholder="09XXXXXXXX">
+
+      <label>Transaction ID (Lakk. Kaffaltii):</label>
+      <input type="text" id="txn" required placeholder="Fkn: TX12345678">
+
+      <button type="submit" id="searchBtn">SAKATTA'I</button>
+    </form>
+
+    <div id="resultBox" class="result-box"></div>
+    <a href="index.html">← Gara Fuula Duraatti Deebi'i</a>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
+
+    async function checkOrder() {
+      const phone = document.getElementById('phone').value.trim();
+      const txn = document.getElementById('txn').value.trim();
+      const btn = document.getElementById('searchBtn');
+      const box = document.getElementById('resultBox');
+
+      btn.disabled = true;
+      btn.innerText = "Barbaadaa jira...";
+      box.style.display = "none";
+
+      try {
+        const url = `${WEB_APP_URL}?action=checkOrder&phone=${encodeURIComponent(phone)}&txn=${encodeURIComponent(txn)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        box.style.display = "block";
+        if (data.ok) {
+          const o = data.order;
+          let statusClass = "pending";
+          let statusText = "Eeggachaa Jira (Pending) ⏳";
+
+          if (o.status === "Approved") {
+            statusClass = "approved";
+            statusText = "Mirkanaa'eera (Approved) ✅";
+          } else if (o.status === "Rejected") {
+            statusClass = "rejected";
+            statusText = "Kufaa Ta'eera (Rejected) ❌";
+          }
+
+          box.className = "result-box " + statusClass;
+          box.innerHTML = `
+            <h4 style="margin: 0 0 10px 0; color:#0a3d24;">Odeeffannoo Ajajaa</h4>
+            👤 <b>Maqaa:</b> ${o.name}<br>
+            🆔 <b>Order ID:</b> <code>${o.id}</code><br>
+            🎟 <b>Carraa Keessan:</b> <span style="font-size: 16px; font-weight: bold; color:#0a3d24;">${o.tickets}</span><br>
+            💰 <b>Gatii:</b> ${Number(o.total).toLocaleString()} ETB<br>
+            📅 <b>Guyyaa:</b> ${o.date}<br>
+            📌 <b>Haala Ajajaa:</b> <b>${statusText}</b>
+          `;
+        } else {
+          box.className = "result-box rejected";
+          box.innerText = data.error || "Ajajni hin argamne.";
+        }
+      } catch(e) {
+        box.style.display = "block";
+        box.className = "result-box rejected";
+        box.innerText = "Dogoggorri network uumameera.";
+      }
+      btn.disabled = false;
+      btn.innerText = "SAKATTA'I";
+    }
+  </script>
+</body>
+</html>
