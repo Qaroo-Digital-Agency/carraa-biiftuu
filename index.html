@@ -489,10 +489,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
-    
-    let TICKET_PRICE = 1000;
-    let ACCOUNTS_DATA = {
+   const WEB_APP_URL = APP_CONFIG.WEB_APP_URL;
+let TICKET_PRICE = APP_CONFIG.TICKET_PRICE;
+let ACCOUNTS_DATA = APP_CONFIG.ACCOUNTS;
       Telebirr: { number: "0909506573", name: "Lemma Asefa" },
       CBE: { number: "1000342728743", name: "Lemma Asefa" },
       BOA: { number: "212322628", name: "Lemma Asefa" },
