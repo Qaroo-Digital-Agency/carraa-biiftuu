@@ -18,16 +18,8 @@
     .header h1 { margin: 0; color: #0F5132; font-size: 24px; }
     
     .draw-control-card {
-      background: #fff;
-      border: 2px solid #d4af37;
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
+      background: #fff; border: 2px solid #d4af37; border-radius: 12px; padding: 16px 20px;
+      margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
     }
     .draw-status-badge { padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; }
     .draw-locked { background: #ffebee; color: #c62828; }
@@ -58,15 +50,14 @@
     .btn-app { background: #2e7d32; color: white; }
     .btn-rej { background: #c62828; color: white; }
 
-    /* Modal Offline Booking */
+    /* Modals */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      display: none; align-items: center; justify-content: center; z-index: 1000;
+      background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 1000;
     }
     .modal-card {
-      background: #fff; width: 90%; max-width: 450px;
-      padding: 25px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: #fff; width: 90%; max-width: 450px; padding: 25px; border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
     .modal-card h3 { margin-top: 0; color: #0F5132; }
     .modal-card label { display: block; margin-top: 12px; font-weight: 600; font-size: 13px; }
@@ -91,7 +82,8 @@
     <div class="header">
       <h1>Carraa Biiftuu - To'annoo Admin</h1>
       <div>
-        <button class="btn" style="background:#2e7d32; color:white;" onclick="openCashModal()">💵 Galmee Qaamaa (Cash)</button>
+        <button class="btn" style="background:#d4af37; color:#000;" onclick="openBroadcastModal()">📢 Ergaa Xumuraa Ergi</button>
+        <button class="btn" style="background:#2e7d32; color:white; margin-left:8px;" onclick="openCashModal()">💵 Galmee Qaamaa</button>
         <button class="btn" style="background:#1976d2; color:white; margin-left:8px;" onclick="exportToCSV()">📥 Export CSV</button>
         <button class="btn" style="background:#555; color:white; margin-left:8px;" onclick="fetchAdminData()">🔄 Refresh</button>
         <button class="btn" style="background:#c62828; color:white; margin-left:8px;" onclick="logoutAdmin()">🚪 Ba'i</button>
@@ -141,24 +133,43 @@
     </div>
   </div>
 
-  <!-- Modal: Offline Cash Booking -->
+  <!-- Modal 1: Offline Cash Booking -->
   <div class="modal-overlay" id="cashModal">
     <div class="modal-card">
       <h3>💵 Galmee Carraa Qaamaa (Cash Booking)</h3>
       <p style="font-size:12px; color:#666;">Namoota callaan kaffalanii qaamaan bitatan asitti galmeessaa:</p>
-
       <label>Maqaa Maamilaa:</label>
       <input type="text" id="cashName" placeholder="Fkn: Caalaa Tolasaa">
-
       <label>Lakk. Bilbilaa:</label>
       <input type="text" id="cashPhone" placeholder="09XXXXXXXX">
-
-      <label>Lakk. Carraa (Addaan baasuuf komaa fayyadamaa, fkn: 5, 23, 77):</label>
+      <label>Lakk. Carraa (Fkn: 5, 23):</label>
       <input type="text" id="cashTickets" placeholder="Fkn: 5, 23">
-
       <div style="margin-top:20px; display:flex; gap:10px;">
         <button class="btn" style="background:#ccc; flex:1;" onclick="closeCashModal()">Dhiisi</button>
-        <button class="btn" id="cashSubmitBtn" style="background:#2e7d32; color:white; flex:2;" onclick="submitCashBooking()">GALMEESSI (CASH) 🔥</button>
+        <button class="btn" id="cashSubmitBtn" style="background:#2e7d32; color:white; flex:2;" onclick="submitCashBooking()">GALMEESSI (CASH)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Broadcast Results to All Customers -->
+  <div class="modal-overlay" id="broadcastModal">
+    <div class="modal-card">
+      <h3>📢 Ergaa Xumura Carraa Hundaaf Ergi</h3>
+      <p style="font-size:12.5px; color:#666; line-height:1.5;">
+        Carraan erga ba'ee booda lakkoofsota mo'atan asitti galchuun maamiltoota hundaaf (mo'attoota fi warra hin mo'anneef) battalatti email fi gabaasa ergaa:
+      </p>
+      <label>🥇 Lakk. Carraa 1ffaa (Konkolaataa):</label>
+      <input type="number" id="bcW1st" placeholder="Fkn: 77">
+
+      <label>🥈 Lakk. Carraa 2ffaa (Mootarsayikilii):</label>
+      <input type="number" id="bcW2nd" placeholder="Fkn: 105">
+
+      <label>🥉 Lakk. Carraa 3ffaa (Smart Phone):</label>
+      <input type="number" id="bcW3rd" placeholder="Fkn: 18">
+
+      <div style="margin-top:20px; display:flex; gap:10px;">
+        <button class="btn" style="background:#ccc; flex:1;" onclick="closeBroadcastModal()">Dhiisi</button>
+        <button class="btn" id="bcSubmitBtn" style="background:#d4af37; color:#000; font-weight:900; flex:2;" onclick="submitBroadcast()">HUNDAAF ERGI 📢</button>
       </div>
     </div>
   </div>
@@ -190,6 +201,44 @@
 
     function openCashModal() { document.getElementById('cashModal').style.display = 'flex'; }
     function closeCashModal() { document.getElementById('cashModal').style.display = 'none'; }
+    function openBroadcastModal() { document.getElementById('broadcastModal').style.display = 'flex'; }
+    function closeBroadcastModal() { document.getElementById('broadcastModal').style.display = 'none'; }
+
+    async function submitBroadcast() {
+      const w1 = document.getElementById('bcW1st').value.trim();
+      const w2 = document.getElementById('bcW2nd').value.trim();
+      const w3 = document.getElementById('bcW3rd').value.trim();
+
+      if (!w1 || !w2 || !w3) return alert("Maaloo lakkoofsa mo'attoota 1ffaa, 2ffaa, fi 3ffaa hunda galchaa!");
+      if (!confirm(`Dhuguma ergaa xumuraa maamiltoota hundaaf erguu feetuu?\n🥇 1ffaa: #${w1}\n🥈 2ffaa: #${w2}\n🥉 3ffaa: #${w3}`)) return;
+
+      const btn = document.getElementById('bcSubmitBtn');
+      btn.disabled = true;
+      btn.innerText = "Ergaa jira...";
+
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "adminBroadcastResults",
+            pin: CURRENT_PIN,
+            w1st: w1,
+            w2nd: w2,
+            w3rd: w3
+          })
+        });
+        const d = await res.json();
+        if (d.ok) {
+          alert(`Ergaan xumuraa milkaa'inaan maamiltoota ${d.sentCount} tiif ergameera! Telegram irrattis gabaasni dhufeera! ✅`);
+          closeBroadcastModal();
+        } else {
+          alert(d.error || "Dogoggorri uumameera.");
+        }
+      } catch(e) { alert("Network error."); }
+      btn.disabled = false;
+      btn.innerText = "HUNDAAF ERGI 📢";
+    }
 
     async function submitCashBooking() {
       const name = document.getElementById('cashName').value.trim();
@@ -229,7 +278,7 @@
         }
       } catch(e) { alert("Network error."); }
       btn.disabled = false;
-      btn.innerText = "GALMEESSI (CASH) 🔥";
+      btn.innerText = "GALMEESSI (CASH)";
     }
 
     async function fetchAdminData(isFirstLogin = false) {
