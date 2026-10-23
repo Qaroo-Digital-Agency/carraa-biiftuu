@@ -140,6 +140,7 @@
 
     .account-card { background: var(--box-accent); border: 1.5px dashed var(--gold-primary); padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 10px; display: none; line-height: 1.6; }
 
+    /* USSD BOX */
     .ussd-card {
       display: none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--gold-primary);
       border-radius: 12px; padding: 14px; margin-top: 12px; text-align: center;
@@ -315,6 +316,7 @@
         </select>
         <div id="accountDetails" class="account-card"></div>
 
+        <!-- 1-CLICK USSD (OFFICIAL PROTOCOL) -->
         <div id="ussdDialBox" class="ussd-card">
           <p><b>⚡ Kaffaltii Salphaa (1-Click USSD Dialing):</b><br>Koodiin kaffaltii bilbila keessan irratti qophaa'a; Call gochuun PIN keessan qofa galchaa!</p>
           <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
@@ -448,6 +450,49 @@
     </div>
   </div>
 
+  <!-- Video Modal (With Fallback Link) -->
+  <div id="videoModalOverlay">
+    <div style="width:100%; max-width:500px; background:#000; border-radius:12px; overflow:hidden; position:relative;">
+      <button style="position:absolute; top:10px; right:12px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; font-weight:bold; cursor:pointer; z-index:10;" onclick="closeVideoModal()">✕</button>
+      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+        <iframe id="videoIframe" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+      <div style="padding:12px; text-align:center; background:#0d2417;">
+        <a id="videoDirectLink" href="https://youtu.be/dQw4w9WgXcQ" target="_blank" style="color:#ffd700; font-size:13px; font-weight:bold; text-decoration:none;">
+          ▶ Yoo asirratti banuu dide as tuqaa YouTube irratti banaa ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visual Matrix Modal -->
+  <div id="matrixModalOverlay">
+    <div class="matrix-card">
+      <div class="matrix-header">
+        <h3 id="matrixTitle">🗺️ Gabatee Carraa 1 - 1000</h3>
+        <button class="matrix-close-btn" onclick="closeMatrixModal()">✕</button>
+      </div>
+
+      <div class="matrix-legend">
+        <div class="legend-item"><div class="legend-dot dot-free"></div> <span id="legFree">Duwwaa</span></div>
+        <div class="legend-item"><div class="legend-dot dot-selected"></div> <span id="legSelected">Filatame</span></div>
+        <div class="legend-item"><div class="legend-dot dot-sold"></div> <span id="legSold">Qabameera</span></div>
+      </div>
+
+      <div class="matrix-tabs" id="matrixTabsContainer">
+        <button class="tab-btn active" onclick="renderMatrixTab(1, 200)">1 - 200</button>
+        <button class="tab-btn" onclick="renderMatrixTab(201, 400)">201 - 400</button>
+        <button class="tab-btn" onclick="renderMatrixTab(401, 600)">401 - 600</button>
+        <button class="tab-btn" onclick="renderMatrixTab(601, 800)">601 - 800</button>
+        <button class="tab-btn" onclick="renderMatrixTab(801, 1000)">801 - 1000</button>
+      </div>
+
+      <div class="matrix-grid" id="matrixGridBox"></div>
+
+      <button class="btn-step btn-next" style="margin-top:10px; padding:10px;" id="btnConfirmMatrix" onclick="closeMatrixModal()">FILANNOO MIRKANEESSI ✓</button>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
@@ -468,18 +513,14 @@
     let currentUssdCode = "";
     let CONFIG_SETTINGS = { scratchEnabled: false, referralEnabled: false };
 
-    // ==============================================
-    // TELEGRAM MINI APP (TMA) INTEGRATION ENGINE
-    // ==============================================
+    // TMA Integration
     const isTelegramWebApp = typeof window.Telegram !== "undefined" && window.Telegram.WebApp && window.Telegram.WebApp.initData !== "";
     const tgApp = isTelegramWebApp ? window.Telegram.WebApp : null;
 
     if (tgApp) {
       tgApp.ready();
-      tgApp.expand(); // Full-screen inside Telegram!
+      tgApp.expand();
       try { tgApp.enableClosingConfirmation(); } catch(e) {}
-
-      // Auto-prefill Name from Telegram user account!
       const tgUser = tgApp.initDataUnsafe && tgApp.initDataUnsafe.user;
       if (tgUser) {
         window.addEventListener('DOMContentLoaded', () => {
@@ -503,6 +544,7 @@
 
     function onTurnstileSuccess(token) { turnstileToken = token; }
 
+    // Draft State Auto-save & Restore (5 Minutes Limit)
     function saveDraftState() {
       const draft = {
         step: currentStep, name: document.getElementById('name').value, phone: phoneInput.getNumber(),
@@ -538,6 +580,129 @@
 
     window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveDraftState(); });
     window.addEventListener('beforeunload', saveDraftState);
+
+    // Multilingual Dictionary
+    const I18N = {
+      om: {
+        greetingDay: "Akkam ooltan ☀️", greetingMorning: "Akkam bultan 🌅", greetingNight: "Galgala gaarii 🌙",
+        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Sirna Qulqulluu fi Amansiisaa Carraa Bituu",
+        st1: "Simannaa", st2: "Eenyummaa", st3: "Carraa", st4: "Kaffaltii", st5: "Qoodaa", st6: "Qunnamaa",
+        heroTitle: "Baga Nagaan Dhuftan! 🎉", heroDesc: "Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!",
+        videoCaption: "🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa",
+        prize1T: "Badhaasa 1ffaa: Konkolaataa", prize1D: "Badhaasa qaalii isa ol'aanaa.",
+        prize2T: "Badhaasa 2ffaa: Mootarsayikilii", prize2D: "Meeshaa ammayyaa tajaajila addaa.",
+        prize3T: "Badhaasa 3ffaa: Smart Phone", prize3D: "Bilbila ammayyaa fi badhaasa jajjabeessaa.",
+        soldLbl: "Carraa Gurgurame:", drawNote: "🎯 <b>Akkuma 1000/1000 guuteen geengoon carraa kallattiin banama!</b>",
+        btnNext1: "ITTI FUFI (CARRAA BITADHU) →",
+        p2Header: "👤 2. Odeeffannoo Dhuunfaa Keessanii", lblName: "Maqaa Guutuu:", lblPhone: "Lakk. Bilbilaa (International):", lblEmail: "Email Address:", btnBack: "← DUUBATTI", btnNext: "ITTI FUFI →",
+        p3Header: "🎟️ 3. Filannoo Carraa & Gatii", lblQty: "Baay'ina Carraa Bituu Feetu (Max 10):", lblTotal: "Gatii Waliigalaa (ETB):", lblPick: "Lakk. Carraa Filadhu:",
+        btnMatrix: "🗺️ Gabatee Carraa 1-1000 Guutuu Ilaali (Visual Seat Matrix)",
+        p4Header: "💳 4. Mala Kaffaltii & Ragaa", lblMethod: "Mala Kaffaltii:", lblPaid: "Mallaqa Kaffalame (ETB):", lblTxn: "Transaction ID (Lakk. Kaffaltii):", lblProof: "Ragaa Kaffaltii (Screenshot):", btnSubmit: "GALMEESSI 🔥",
+        p5Header: "📲 5. Hiriyoota Keessaniif Qoodaa", p5Desc: "Hiriyoota fi firoota keessaniif qooduun carraa isaaniis akka yaalan affeeraa!",
+        p6Header: "📞 6. Karaalee Nu Qunnamtan", linkCheck: "🔍 Haala Ajaja Kee Sakatta'i →", btnHome: "GARA JALQABAATTI 🏠",
+        succHeader: "GALATOOMAA! 🎉", succDesc: "Carraa keenya waan fayyadamtaniif galatoomaa! Ajajni keessan milkaa'inaan galmaa'eera.",
+        blessing: "🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!",
+        matrixTitle: "🗺️ Gabatee Carraa 1 - 1000", legFree: "Duwwaa", legSelected: "Filatame", legSold: "Qabameera", btnConfMatrix: "FILANNOO MIRKANEESSI ✓"
+      },
+      am: {
+        greetingDay: "እንደምን ዋላችሁ ☀️", greetingMorning: "እንደምን አደራችሁ 🌅", greetingNight: "መልካም ምሽት 🌙",
+        brandTitle: "ካራ ቢፍቱ 🌟", brandSlogan: "ታማኝ እና ግልጽ የዕድል ትኬት መቁረጫ ስርዓት",
+        st1: "መግቢያ", st2: "ማንነት", st3: "ትኬት", st4: "ክፍያ", st5: "ያጋሩ", st6: "ያግኙን",
+        heroTitle: "እንኳን ደህና መጣችሁ! 🎉", heroDesc: "ካራ ቢፍቱ በሙሉ ታማኝነትና ግልጽነት የተዘጋጀ ነው። ትኬትዎን በመምረጥ ታላላቅ ሽልማቶችን ያሸንፉ!",
+        videoCaption: "🎬 የማረጋገጫ ቪዲዮ ይመልከቱ",
+        prize1T: "1ኛ ሽልማት: መኪና", prize1D: "የዚህ ዙር ታላቁ እና ዋናው ሽልማት።",
+        prize2T: "2ኛ ሽልማት: ሞተርሳይክል", prize2D: "ዘመናዊ እና ውድ አገልግሎት ሰጪ መሳሪያ።",
+        prize3T: "3ኛ ሽልማት: ስማርት ስልክ", prize3D: "ዘመናዊ ስልክ እና አበረታች ሽልማት።",
+        soldLbl: "የተሸጠው ትኬት:", drawNote: "🎯 <b>ልክ 1000/1000 እንደተሞላ የቀጥታ እጣ ማውጫው ይከፈታል!</b>",
+        btnNext1: "ይቀጥሉ (ትኬት ይቁረጡ) →",
+        p2Header: "👤 2. የግል መረጃዎን ያስገቡ", lblName: "ሙሉ ስም:", lblPhone: "ስልክ ቁጥር (International):", lblEmail: "ኢሜይል አድራሻ:", btnBack: "← ተመለስ", btnNext: "ይቀጥሉ →",
+        p3Header: "🎟️ 3. የትኬት ምርጫ እና ዋጋ", lblQty: "የሚገዙት የትኬት ብዛት (እስከ 10):", lblTotal: "ጠቅላላ ዋጋ (ETB):", lblPick: "የትኬት ቁጥር ይምረጡ:",
+        btnMatrix: "🗺️ ሙሉውን 1-1000 ትኬት በሰንጠረዥ ይመልከቱ",
+        p4Header: "💳 4. የክፍያ መንገድ እና ማረጋገጫ", lblMethod: "የክፍያ መንገድ:", lblPaid: "የተከፈለው ገንዘብ (ETB):", lblTxn: "የትራንዛክሽን መለያ ቁጥር (Txn ID):", lblProof: "የክፍያ ማረጋገጫ ስክሪንሾት:", btnSubmit: "ይመዝገቡ 🔥",
+        p5Header: "📲 5. ለወዳጅ ዘመድ ያጋሩ", p5Desc: "ይህን መልዕክት ለጓደኞችዎ በማጋራት እድላቸውን እንዲሞክሩ ይጋብዙ!",
+        p6Header: "📞 6. የመገናኛ መንገዶች", linkCheck: "🔍 የትኬትዎን ሁኔታ ይከታተሉ →", btnHome: "ወደ መጀመሪያው ገጽ 🏠",
+        succHeader: "እናመሰግናለን! 🎉", succDesc: "የእኛን እድል ስለተጠቀሙ እናመሰግናለን! ትዕዛዝዎ በተሳካ ሁኔታ ተመዝግቧል።",
+        blessing: "🌟 መልካም እድል እንዲገጥምዎት እንመኛለን!",
+        matrixTitle: "🗺️ የትኬት ሰንጠረዥ 1 - 1000", legFree: "ክፍት", legSelected: "የተመረጠ", legSold: "የተያዘ", btnConfMatrix: "ምርጫን ያረጋግጡ ✓"
+      },
+      en: {
+        greetingDay: "Good day ☀️", greetingMorning: "Good morning 🌅", greetingNight: "Good evening 🌙",
+        brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Trusted & Transparent Digital Lottery Platform",
+        st1: "Welcome", st2: "Identity", st3: "Tickets", st4: "Payment", st5: "Share", st6: "Contact",
+        heroTitle: "Welcome! 🎉", heroDesc: "Carraa Biiftuu is prepared with 100% transparency. Choose your lucky tickets and win big prizes!",
+        videoCaption: "🎬 Watch Official Video Proof",
+        prize1T: "1st Prize: Brand New Car", prize1D: "The grand master prize of this season.",
+        prize2T: "2nd Prize: Motorcycle", prize2D: "Modern and premium productivity gadget.",
+        prize3T: "3rd Prize: Smart Phone", prize3D: "Latest smartphone and encouraging cash prize.",
+        soldLbl: "Tickets Sold:", drawNote: "🎯 <b>The live draw unlocks immediately when 1,000/1,000 is reached!</b>",
+        btnNext1: "CONTINUE (BUY TICKET) →",
+        p2Header: "👤 2. Personal Information", lblName: "Full Name:", lblPhone: "Phone Number (International):", lblEmail: "Email Address:", btnBack: "← BACK", btnNext: "CONTINUE →",
+        p3Header: "🎟️ 3. Ticket Selection & Pricing", lblQty: "Quantity of Tickets (Max 10):", lblTotal: "Total Price (ETB):", lblPick: "Select Ticket Number:",
+        btnMatrix: "🗺️ View Full 1-1000 Seat Matrix",
+        p4Header: "💳 4. Payment & Proof", lblMethod: "Payment Method:", lblPaid: "Paid Amount (ETB):", lblTxn: "Transaction ID:", lblProof: "Payment Screenshot:", btnSubmit: "SUBMIT ORDER 🔥",
+        p5Header: "📲 5. Share with Friends", p5Desc: "Share this link with your friends and family so they can try their luck!",
+        p6Header: "📞 6. Contact & Support", linkCheck: "🔍 Check My Order Status →", btnHome: "BACK TO HOME 🏠",
+        succHeader: "THANK YOU! 🎉", succDesc: "Thank you for choosing Carraa Biiftuu! Your order has been successfully recorded.",
+        blessing: "🌟 Best of luck to you in the upcoming draw!",
+        matrixTitle: "🗺️ Interactive Ticket Matrix 1 - 1000", legFree: "Available", legSelected: "Selected", legSold: "Sold Out", btnConfMatrix: "CONFIRM SELECTION ✓"
+      }
+    };
+
+    function switchLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("carraa_lang", lang);
+      document.getElementById('langSwitcher').value = lang;
+      const t = I18N[lang] || I18N.om;
+
+      document.getElementById('brandTitle').innerText = t.brandTitle;
+      document.getElementById('brandSlogan').innerText = t.brandSlogan;
+      document.getElementById('stLbl1').innerText = t.st1;
+      document.getElementById('stLbl2').innerText = t.st2;
+      document.getElementById('stLbl3').innerText = t.st3;
+      document.getElementById('stLbl4').innerText = t.st4;
+      document.getElementById('stLbl5').innerText = t.st5;
+      document.getElementById('stLbl6').innerText = t.st6;
+      document.getElementById('heroTitle').innerText = t.heroTitle;
+      document.getElementById('heroDesc').innerText = t.heroDesc;
+      document.getElementById('videoCaptionTxt').innerText = t.videoCaption;
+      document.getElementById('prize1Title').innerText = t.prize1T; document.getElementById('prize1Desc').innerText = t.prize1D;
+      document.getElementById('prize2Title').innerText = t.prize2T; document.getElementById('prize2Desc').innerText = t.prize2D;
+      document.getElementById('prize3Title').innerText = t.prize3T; document.getElementById('prize3Desc').innerText = t.prize3D;
+      document.getElementById('soldLabel').innerText = t.soldLbl;
+      document.getElementById('drawLiveNote').innerHTML = t.drawNote;
+      document.getElementById('btnNext1').innerText = t.btnNext1;
+      document.getElementById('p2Header').innerText = t.p2Header;
+      document.getElementById('lblFullName').innerText = t.lblName;
+      document.getElementById('lblPhone').innerText = t.lblPhone;
+      document.getElementById('lblEmail').innerText = t.lblEmail;
+      document.getElementById('btnBack2').innerText = t.btnBack; document.getElementById('btnNext2').innerText = t.btnNext;
+      document.getElementById('p3Header').innerText = t.p3Header;
+      document.getElementById('lblQty').innerText = t.lblQty;
+      document.getElementById('lblTotalPrice').innerText = t.lblTotal;
+      document.getElementById('btnOpenMatrix').innerText = t.btnMatrix;
+      document.getElementById('btnBack3').innerText = t.btnBack; document.getElementById('btnNext3').innerText = t.btnNext;
+      document.getElementById('p4Header').innerText = t.p4Header;
+      document.getElementById('lblPaymentMethod').innerText = t.lblMethod;
+      document.getElementById('lblPaidAmount').innerText = t.lblPaid;
+      document.getElementById('lblTxnId').innerText = t.lblTxn;
+      document.getElementById('lblScreenshot').innerText = t.lblProof;
+      document.getElementById('btnBack4').innerText = t.btnBack; document.getElementById('submitBtn').innerText = t.btnSubmit;
+      document.getElementById('p5Header').innerText = t.p5Header; document.getElementById('p5Desc').innerText = t.p5Desc;
+      document.getElementById('btnBack5').innerText = t.btnBack; document.getElementById('btnNext5').innerText = t.btnNext;
+      document.getElementById('p6Header').innerText = t.p6Header; document.getElementById('linkCheckStatus').innerText = t.linkCheck;
+      document.getElementById('btnBack6').innerText = t.btnBack; document.getElementById('btnNext6').innerText = t.btnHome;
+      document.getElementById('succHeader').innerText = t.succHeader; document.getElementById('succDesc').innerText = t.succDesc;
+      document.getElementById('blessingText').innerText = t.blessing; document.getElementById('btnReturnHome').innerText = t.btnHome;
+      document.getElementById('matrixTitle').innerText = t.matrixTitle;
+      document.getElementById('legFree').innerText = t.legFree; document.getElementById('legSelected').innerText = t.legSelected; document.getElementById('legSold').innerText = t.legSold;
+      document.getElementById('btnConfirmMatrix').innerText = t.btnConfMatrix;
+
+      const h = new Date().getHours();
+      let g = t.greetingDay;
+      if (h >= 5 && h < 12) g = t.greetingMorning;
+      else if (h >= 18 || h < 5) g = t.greetingNight;
+      document.getElementById('greetingLbl').innerText = g;
+    }
 
     function goToStep(step) {
       triggerHaptic('step');
@@ -660,6 +825,9 @@
       saveDraftState();
     }
 
+    // ==============================================
+    // OFFICIAL USSD PROTOCOL (100% FIXED)
+    // ==============================================
     function updateUssdDetails() {
       const method = document.getElementById('paymentMethod').value;
       const qty = parseInt(document.getElementById('qty').value) || 1;
@@ -667,15 +835,11 @@
       const ussdBox = document.getElementById('ussdDialBox');
       const callBtn = document.getElementById('ussdCallBtn');
 
-      let ticketReason = "Carraa";
-      if (selectedTickets && selectedTickets.length > 0) {
-        ticketReason = String(selectedTickets[Math.floor(Math.random() * selectedTickets.length)]);
-      }
-
       if (method === "Telebirr") {
         ussdBox.style.display = "block";
-        currentUssdCode = `*127*2*1*1*0909506573*1*${total}*${ticketReason}*1#`;
-        callBtn.href = `tel:*127*2*1*1*0909506573*1*${total}*${ticketReason}*1%23`;
+        // Ethio Telecom Standard P2P: *127*2*RECEIVER_PHONE*AMOUNT#
+        currentUssdCode = `*127*2*0909506573*${total}#`;
+        callBtn.href = `tel:*127*2*0909506573*${total}%23`;
       } else if (method === "CBE") {
         ussdBox.style.display = "block";
         currentUssdCode = "*889#";
@@ -753,6 +917,7 @@
       }
     }
 
+    // Video Lightbox Modal with Auto Fallback
     function openVideoModal() {
       document.getElementById('videoModalOverlay').style.display = 'flex';
       document.getElementById('videoIframe').src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
@@ -821,6 +986,7 @@
           for (let i = 1; i <= 6; i++) { const p = document.getElementById('stepPage' + i); if (p) p.style.display = 'none'; }
           document.getElementById('stepSuccess').classList.add('active-step');
 
+          // Ticket Details
           document.getElementById('resOrderId').innerText = result.id;
           document.getElementById('tktName').innerText = custName;
           document.getElementById('tktPhone').innerText = custPhone;
@@ -855,6 +1021,7 @@
       }
     }
 
+    // Scratch Card
     function initScratchCard() {
       const canvas = document.getElementById('scratchCanvas');
       const ctx = canvas.getContext('2d');
@@ -889,25 +1056,71 @@
       navigator.clipboard.writeText(refInput.value).then(() => alert("Liinkiin afeerraa kooppii ta'eera!"));
     }
 
+    // ==============================================
+    // 100% RELIABLE TICKET IMAGE DOWNLOAD & SHARE
+    // ==============================================
     function downloadTicketImage() {
       const ticketEl = document.getElementById('digitalTicketCard');
       const btn = document.getElementById('btnDownloadTicket');
+      const orderId = document.getElementById('resOrderId').innerText || "Ticket";
+      
       btn.disabled = true;
       btn.innerText = "Tikkeetii qopheessaa jira...";
-      html2canvas(ticketEl, { scale: 2.5, useCORS: true, backgroundColor: "#06180f" }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `Tikkeetii_${document.getElementById('resOrderId').innerText}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        btn.disabled = false;
-        btn.innerText = "✅ TIKKEETIIN BU'EERA!";
+
+      html2canvas(ticketEl, { 
+        scale: 2.5, 
+        useCORS: true, 
+        backgroundColor: "#06180f" 
+      }).then(canvas => {
+        canvas.toBlob(async blob => {
+          if (!blob) {
+            btn.disabled = false;
+            btn.innerText = "📥 TIKKEETII BUUFADHU";
+            return;
+          }
+          const fileName = `Tikkeetii_CarraaBiiftuu_${orderId}.png`;
+          const file = new File([blob], fileName, { type: 'image/png' });
+
+          // 1. Mobile Web Share (Telegram, Gallery, WhatsApp)
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                files: [file],
+                title: 'Tikkeetii Carraa Biiftuu',
+                text: 'Ragaan tikkeetii koo Carraa Biiftuu kanaan dura qophaa\'e!'
+              });
+              btn.disabled = false;
+              btn.innerText = "✅ TIKKEETIIN QOODAMEERA!";
+              return;
+            } catch(e) {}
+          }
+
+          // 2. Direct Browser Download
+          const link = document.createElement('a');
+          link.download = fileName;
+          link.href = URL.createObjectURL(blob);
+          link.click();
+          URL.revokeObjectURL(link.href);
+
+          btn.disabled = false;
+          btn.innerText = "✅ TIKKEETIIN BU'EERA!";
+        }, 'image/png');
       }).catch(err => {
-        alert("Screenshot godhadhaa!");
+        alert("Tikkeetii buusuun hin danda'amne. Screenshot godhadhaa!");
         btn.disabled = false;
         btn.innerText = "📥 TIKKEETII BUUFADHU";
       });
     }
 
+    // Social Links
+    const currentUrl = encodeURIComponent(window.location.href);
+    const shareMsg = encodeURIComponent("Carraa Biiftuu irratti carraa keessan bitadhaa badhaafamaa! 🌟");
+    document.getElementById('shareTg').href = `https://t.me/share/url?url=${currentUrl}&text=${shareMsg}`;
+    document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareMsg}%20${currentUrl}`;
+    document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+    document.getElementById('qrImg').src = `https://quickchart.io/qr?text=${currentUrl}&size=130&dark=0a3d24`;
+
+    switchLanguage(currentLang);
     loadTickets();
   </script>
 </body>
