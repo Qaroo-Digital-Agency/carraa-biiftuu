@@ -8,7 +8,8 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0a3d24">
   
-  <!-- Telegram WebApp SDK -->
+  <!-- Config & Libraries -->
+  <script src="config.js"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -43,52 +44,22 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.25s, color 0.25s; }
-    
-    html, body {
-      width: 100%; min-height: 100vh; overflow-x: hidden;
-      background: var(--bg-gradient);
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      color: var(--text-main);
-    }
-
+    html, body { width: 100%; min-height: 100vh; overflow-x: hidden; background: var(--bg-gradient); font-family: 'Segoe UI', -apple-system, sans-serif; color: var(--text-main); }
     .app-wrapper { width: 100%; max-width: 520px; margin: 0 auto; padding: 14px 10px 40px; }
-    .main-card {
-      background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      width: 100%; border-radius: 20px; padding: 22px 16px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45); border: 1.5px solid var(--card-border);
-      position: relative;
-    }
+    .main-card { background: var(--card-bg); backdrop-filter: blur(20px); width: 100%; border-radius: 20px; padding: 22px 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.45); border: 1.5px solid var(--card-border); position: relative; }
 
-    .top-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.25);
-    }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.25); }
     .top-left-controls { display: flex; align-items: center; gap: 8px; }
-    .lang-select {
-      background: var(--box-accent); border: 1px solid var(--card-border); color: var(--gold-primary);
-      padding: 4px 8px; border-radius: 12px; font-size: 11.5px; font-weight: bold; cursor: pointer;
-    }
-    .theme-btn {
-      background: transparent; border: 1px solid var(--card-border); color: var(--text-main);
-      padding: 4px 10px; border-radius: 16px; cursor: pointer; font-size: 12px; font-weight: 600;
-    }
+    .lang-select { background: var(--box-accent); border: 1px solid var(--card-border); color: var(--gold-primary); padding: 4px 8px; border-radius: 12px; font-size: 11.5px; font-weight: bold; cursor: pointer; }
+    .theme-btn { background: transparent; border: 1px solid var(--card-border); color: var(--text-main); padding: 4px 10px; border-radius: 16px; cursor: pointer; font-size: 12px; font-weight: 600; }
 
     .brand-area { text-align: center; margin-bottom: 16px; }
-    .brand-pill {
-      display: inline-block; background: linear-gradient(135deg, #ffd700, #d4af37, #aa771c);
-      color: #0b1c13; font-weight: 900; font-size: 18px; padding: 8px 20px;
-      border-radius: 30px; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
-      letter-spacing: 1px; text-transform: uppercase;
-    }
+    .brand-pill { display: inline-block; background: linear-gradient(135deg, #ffd700, #d4af37, #aa771c); color: #0b1c13; font-weight: 900; font-size: 18px; padding: 8px 20px; border-radius: 30px; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4); letter-spacing: 1px; text-transform: uppercase; }
     .brand-slogan { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
 
     .stepper-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
     .step-item { display: flex; flex-direction: column; align-items: center; flex: 1; font-size: 10px; font-weight: 700; color: var(--text-muted); }
-    .step-num {
-      width: 26px; height: 26px; border-radius: 50%; background: var(--box-accent);
-      border: 2px solid var(--card-border); display: flex; align-items: center; justify-content: center;
-      margin-bottom: 4px; font-weight: 900; color: var(--text-main);
-    }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--box-accent); border: 2px solid var(--card-border); display: flex; align-items: center; justify-content: center; margin-bottom: 4px; font-weight: 900; color: var(--text-main); }
     .step-item.active .step-num { background: var(--gold-primary); color: #000; border-color: #ffd700; }
     .step-item.completed .step-num { background: var(--emerald-dark); color: #fff; border-color: var(--gold-primary); }
 
@@ -100,19 +71,17 @@
     .hero-title { font-size: 17px; font-weight: 800; color: var(--gold-primary); margin-bottom: 6px; }
     .hero-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
 
-    .video-showcase-card {
-      background: #000; border: 1.5px solid var(--gold-primary); border-radius: 12px;
-      overflow: hidden; margin-bottom: 16px; position: relative; text-align: center;
-    }
-    .video-thumbnail-wrap {
-      position: relative; width: 100%; height: 150px;
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80') center/cover;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
-    }
-    .play-circle {
-      width: 48px; height: 48px; border-radius: 50%; background: rgba(212, 175, 55, 0.95);
-      display: flex; align-items: center; justify-content: center; font-size: 18px; color: #000;
-    }
+    /* Media Hub */
+    .media-hub-card { background: var(--box-accent); border: 1.5px solid var(--card-border); border-radius: 14px; padding: 12px; margin-bottom: 16px; }
+    .media-tabs-bar { display: flex; gap: 6px; margin-bottom: 10px; border-bottom: 1px dashed var(--card-border); padding-bottom: 8px; }
+    .m-tab-btn { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid var(--card-border); background: transparent; color: var(--text-main); font-size: 11.5px; font-weight: 700; cursor: pointer; }
+    .m-tab-btn.active { background: var(--gold-primary); color: #000; }
+    .media-panel { display: none; }
+    .media-panel.active { display: block; }
+    .media-scroll-box { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; max-height: 190px; overflow-y: auto; padding: 2px; }
+    .media-thumb-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--card-border); height: 85px; cursor: pointer; background: #000; }
+    .media-thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+    .play-badge-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(212, 175, 55, 0.95); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; }
 
     .prize-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
     .prize-card { background: var(--box-accent); border: 1.5px solid var(--card-border); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; }
@@ -123,33 +92,19 @@
     .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #d4af37, #2ed573); border-radius: 8px; transition: width 1s ease; }
 
     label { font-weight: 700; margin-top: 12px; display: block; font-size: 13px; }
-    input, select {
-      width: 100%; padding: 12px 14px; margin-top: 6px; border-radius: 8px;
-      border: 1px solid var(--input-border); font-size: 15px; background: var(--input-bg); color: var(--text-main);
-    }
+    input, select { width: 100%; padding: 12px 14px; margin-top: 6px; border-radius: 8px; border: 1px solid var(--input-border); font-size: 15px; background: var(--input-bg); color: var(--text-main); }
     input:focus, select:focus { outline: none; border-color: var(--gold-primary); box-shadow: 0 0 6px rgba(212, 175, 55, 0.4); }
     .iti { width: 100%; margin-top: 6px; }
     input[readonly] { background: var(--box-accent); font-weight: 800; color: var(--gold-primary); }
 
-    .btn-open-matrix {
-      width: 100%; background: var(--box-accent); border: 1.5px dashed var(--gold-primary);
-      color: var(--gold-primary); font-weight: 800; padding: 11px; border-radius: 10px;
-      margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-
+    .btn-open-matrix { width: 100%; background: var(--box-accent); border: 1.5px dashed var(--gold-primary); color: var(--gold-primary); font-weight: 800; padding: 11px; border-radius: 10px; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .account-card { background: var(--box-accent); border: 1.5px dashed var(--gold-primary); padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 10px; display: none; line-height: 1.6; }
 
-    .ussd-card {
-      display: none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--gold-primary);
-      border-radius: 12px; padding: 14px; margin-top: 12px; text-align: center;
-    }
+    .ussd-card { display: none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--gold-primary); border-radius: 12px; padding: 14px; margin-top: 12px; text-align: center; }
     .ussd-card p { font-size: 12px; margin-bottom: 10px; color: var(--text-main); line-height: 1.4; }
 
     .nav-btn-group { display: flex; gap: 10px; margin-top: 20px; }
-    .btn-step {
-      flex: 1; padding: 13px 16px; border-radius: 10px; font-size: 14.5px; font-weight: 800;
-      border: none; cursor: pointer; text-transform: uppercase;
-    }
+    .btn-step { flex: 1; padding: 13px 16px; border-radius: 10px; font-size: 14.5px; font-weight: 800; border: none; cursor: pointer; text-transform: uppercase; }
     .btn-next { background: linear-gradient(135deg, #ffd700, #d4af37, #0a3d24); color: #fff; }
     .btn-prev { background: var(--box-accent); border: 1px solid var(--card-border); color: var(--text-main); }
 
@@ -162,12 +117,8 @@
     .contact-card { background: var(--box-accent); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; line-height: 1.8; font-size: 13px; margin-top: 10px; }
     .contact-card a { color: var(--gold-primary); font-weight: bold; text-decoration: none; }
 
-    /* E-TICKET CARD */
-    .e-ticket-card {
-      background: linear-gradient(135deg, #092317 0%, #03140c 100%); border: 2px solid #d4af37;
-      border-radius: 16px; padding: 18px 16px; color: #fff; text-align: left; position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); margin: 15px 0;
-    }
+    /* Digital E-Ticket */
+    .e-ticket-card { background: linear-gradient(135deg, #092317 0%, #03140c 100%); border: 2px solid #d4af37; border-radius: 16px; padding: 18px 16px; color: #fff; text-align: left; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); margin: 15px 0; }
     .ticket-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed rgba(212, 175, 55, 0.4); padding-bottom: 10px; margin-bottom: 12px; }
     .ticket-brand { font-size: 15px; font-weight: 900; color: #ffd700; }
     .ticket-badge { background: #d4af37; color: #000; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
@@ -177,23 +128,11 @@
     .ticket-highlight-num { font-size: 24px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); margin-top: 2px; }
     .ticket-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1.5px dashed rgba(212, 175, 55, 0.4); padding-top: 10px; margin-top: 10px; }
 
-    .btn-download-ticket {
-      width: 100%; background: linear-gradient(135deg, #ffd700, #d4af37); color: #000;
-      border: none; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 900;
-      cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); margin-top: 10px;
-    }
+    .btn-download-ticket { width: 100%; background: linear-gradient(135deg, #ffd700, #d4af37); color: #000; border: none; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); margin-top: 10px; }
 
-    /* Modal Overlay (Fixed Popups) */
-    #videoModalOverlay, #matrixModalOverlay {
-      position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
-      background: rgba(0,0,0,0.88) !important; display: none; align-items: center; justify-content: center; z-index: 99999 !important;
-      padding: 15px;
-    }
-    .matrix-card {
-      background: var(--card-bg); border: 2px solid var(--gold-primary);
-      width: 100%; max-width: 480px; max-height: 85vh; border-radius: 18px;
-      display: flex; flex-direction: column; padding: 18px 14px;
-    }
+    /* Modals (Fixed Viewports) */
+    #videoModalOverlay, #matrixModalOverlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.9) !important; display: none; align-items: center; justify-content: center; z-index: 999999 !important; padding: 15px; }
+    .matrix-card { background: var(--card-bg); border: 2px solid var(--gold-primary); width: 100%; max-width: 480px; max-height: 85vh; border-radius: 18px; display: flex; flex-direction: column; padding: 18px 14px; }
     .matrix-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .matrix-close-btn { background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer; }
 
@@ -213,6 +152,12 @@
     .cell-free { background: rgba(46, 213, 115, 0.15); border: 1.5px solid #2ed573; color: #2ed573; }
     .cell-selected { background: #ffd700 !important; color: #000 !important; border: 1.5px solid #d4af37 !important; }
     .cell-sold { background: rgba(231, 76, 60, 0.12); border: 1px solid #e74c3c; color: #e74c3c; text-decoration: line-through; opacity: 0.55; cursor: not-allowed; }
+
+    /* Scratch Card */
+    .scratch-wrapper { position: relative; width: 280px; height: 130px; margin: 16px auto; border: 2px solid #d4af37; border-radius: 12px; overflow: hidden; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+    .scratch-prize-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0d2417; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffd700; text-align: center; padding: 10px; }
+    #scratchCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; }
+    .referral-box { background: var(--box-accent); border: 1.5px dashed var(--gold-primary); border-radius: 12px; padding: 14px; margin-top: 14px; text-align: center; }
   </style>
 </head>
 <body>
@@ -249,17 +194,35 @@
         <div class="step-item" id="stepIndicator6"><div class="step-num">6</div><span id="stLbl6">Qunnamaa</span></div>
       </div>
 
-      <!-- PAGE 1: SIMANNAA & BADHAASOTA -->
+      <!-- PAGE 1: SIMANNAA & MEDIA HUB -->
       <div class="wizard-step active-step" id="stepPage1">
         <div class="hero-banner">
           <div class="hero-title" id="heroTitle">Baga Nagaan Dhuftan! 🎉</div>
           <div class="hero-desc" id="heroDesc">Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!</div>
         </div>
 
-        <div class="video-showcase-card">
-          <div class="video-thumbnail-wrap" onclick="openVideoModal()">
-            <div class="play-circle">▶</div>
-            <div class="video-caption" id="videoCaptionTxt" style="color:#ffd700; font-weight:bold; margin-top:8px;">🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa</div>
+        <!-- MEDIA HUB: VIIDIYOOLELE 10 & SUURAALEE 20 -->
+        <div class="media-hub-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="font-size:13px; color:var(--gold-primary);" id="mediaHubHeading">🎬 Ragaa Carraawwan Darbanii</h4>
+            <span style="font-size:10px; color:var(--text-muted);">Ijaan Ilaalaa</span>
+          </div>
+
+          <div class="media-tabs-bar">
+            <button type="button" class="m-tab-btn active" id="tabBtnVideos" onclick="switchMediaTab('videos')">🎥 Viidiyoolee (<span id="vCount">0</span>)</button>
+            <button type="button" class="m-tab-btn" id="tabBtnImages" onclick="switchMediaTab('images')">🖼️ Suuraalee (<span id="iCount">0</span>)</button>
+          </div>
+
+          <div class="media-panel active" id="panelVideos">
+            <div class="media-scroll-box" id="videoGridList">
+              <div style="grid-column: 1/-1; text-align:center; font-size:12px; color:#888; padding:15px;">Viidiyoon qophaa'aa jira...</div>
+            </div>
+          </div>
+
+          <div class="media-panel" id="panelImages">
+            <div class="media-scroll-box" id="imageGridList">
+              <div style="grid-column: 1/-1; text-align:center; font-size:12px; color:#888; padding:15px;">Suuraan qophaa'aa jira...</div>
+            </div>
           </div>
         </div>
 
@@ -330,7 +293,7 @@
         </select>
         <div id="accountDetails" class="account-card"></div>
 
-        <!-- 1-CLICK USSD PAYMENT (OFFICIAL STANDARD) -->
+        <!-- 1-CLICK USSD PAYMENT (*127*2*PHONE*AMOUNT#) -->
         <div id="ussdDialBox" class="ussd-card">
           <p><b>⚡ Kaffaltii Salphaa (1-Click USSD Dialing):</b><br>Koodiin kaffaltii bilbila keessan irratti qophaa'a; Call gochuun PIN keessan qofa galchaa!</p>
           <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
@@ -395,6 +358,19 @@
           <h2 style="color: var(--gold-primary); font-size: 24px; margin-bottom: 6px;" id="succHeader">GALATOOMAA! 🎉</h2>
           <p style="font-size: 14px; color: var(--text-main); margin-bottom: 14px;" id="succDesc">Ajajni keessan milkaa'inaan galmaa'eera.</p>
 
+          <!-- SCRATCH CARD -->
+          <div id="scratchContainerArea" style="display:none;">
+            <p style="font-size:13px; font-weight:bold; color:var(--gold-primary); margin-bottom:6px;">🎁 Qubaan Haxaa'ii Badhaasa Battalaa Ilaali!</p>
+            <div class="scratch-wrapper">
+              <div class="scratch-prize-layer">
+                <div style="font-size:24px;">🎉</div>
+                <b style="font-size:14px; color:#ffd700;">BAGA GAMMADDAN!</b>
+                <span style="font-size:11.5px; color:#fff;">Gammachuu Dabalataa Argattaniittu!</span>
+              </div>
+              <canvas id="scratchCanvas" width="280" height="130"></canvas>
+            </div>
+          </div>
+
           <!-- DIGITAL E-TICKET -->
           <div class="e-ticket-card" id="digitalTicketCard">
             <div class="ticket-top">
@@ -432,6 +408,15 @@
             📥 TIKKEETII BILBILATTI BUUFADHU (SAVE)
           </button>
 
+          <!-- REFERRAL -->
+          <div class="referral-box" id="referralBoxArea" style="display:none;">
+            <p style="font-size:12.5px; font-weight:bold; color:var(--gold-primary);">🔗 Liinkii Afeerraa Kee (Hiriyootaaf Qoodi):</p>
+            <div class="referral-input-group" style="display:flex; gap:6px; margin-top:8px;">
+              <input type="text" id="refLinkInput" readonly style="margin-top:0; font-size:12.5px; font-weight:bold;">
+              <button type="button" class="btn-step btn-next" style="padding:6px 12px; font-size:12px;" onclick="copyRefLink()">Kooppii</button>
+            </div>
+          </div>
+
           <p style="color: var(--gold-primary); font-weight: bold; margin-top: 15px; font-size: 13.5px;" id="blessingText">
             🌟 Carraan Biiftuudha; yoo baate namaaf ifti! Carraa Gaarii Isiniif Hawwina!
           </p>
@@ -442,16 +427,16 @@
     </div>
   </div>
 
-  <!-- Video Modal -->
+  <!-- Video Modal (PiP & Fullscreen Capable) -->
   <div id="videoModalOverlay">
     <div style="width:100%; max-width:500px; background:#000; border-radius:12px; overflow:hidden; position:relative;">
       <button style="position:absolute; top:10px; right:12px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; font-weight:bold; cursor:pointer; z-index:10;" onclick="closeVideoModal()">✕</button>
       <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
-        <iframe id="videoIframe" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <iframe id="videoIframe" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       </div>
-      <div style="padding:12px; text-align:center; background:#0d2417;">
-        <a id="videoDirectLink" href="https://youtu.be/dQw4w9WgXcQ" target="_blank" style="color:#ffd700; font-size:13px; font-weight:bold; text-decoration:none;">
-          ▶ Yoo asirratti banuu dide as tuqaa YouTube irratti banaa ↗
+      <div style="padding:10px; text-align:center; background:#0d2417;">
+        <a id="videoDirectLink" href="#" target="_blank" style="color:#ffd700; font-size:12.5px; font-weight:bold; text-decoration:none;">
+          ▶ YouTube / Appii Bilbilaan Bani ↗
         </a>
       </div>
     </div>
@@ -488,21 +473,29 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec";
-    
-    let TICKET_PRICE = 1000;
-    let ACCOUNTS_DATA = {
-      Telebirr: { number: "0909506573", name: "Lemma Asefa" },
-      CBE: { number: "1000342728743", name: "Lemma Asefa" },
-      BOA: { number: "212322628", name: "Lemma Asefa" },
-      Awash: { number: "013351316799600", name: "Lemma Asefa" }
+    const CONFIG = (typeof APP_CONFIG !== 'undefined') ? APP_CONFIG : {
+      TICKET_PRICE: 1000,
+      ACCOUNTS: {
+        Telebirr: { number: "0909506573", name: "Lemma Asefa" },
+        CBE: { number: "1000342728743", name: "Lemma Asefa" },
+        BOA: { number: "212322628", name: "Lemma Asefa" },
+        Awash: { number: "013351316799600", name: "Lemma Asefa" }
+      },
+      TELEBIRR_USSD_NUMBER: "0909506573",
+      WEB_APP_URL: "https://script.google.com/macros/s/AKfycbxrJMFYrybfQVMW8cWTN7r9uY8NtAKxsRg0BMYZPjwYGd0syqijTVvrG8xHB643oDz6/exec"
     };
+
+    let TICKET_PRICE = CONFIG.TICKET_PRICE || 1000;
+    let ACCOUNTS_DATA = CONFIG.ACCOUNTS;
+    const WEB_APP_URL = CONFIG.WEB_APP_URL;
+
     let freeTickets = [];
     let selectedTickets = [];
     let turnstileToken = "";
     let currentStep = 1;
     let currentLang = localStorage.getItem("carraa_lang") || "om";
     let currentUssdCode = "";
+    let CONFIG_SETTINGS = { scratchEnabled: false, referralEnabled: false };
 
     // TMA Integration
     const isTelegramWebApp = typeof window.Telegram !== "undefined" && window.Telegram.WebApp && window.Telegram.WebApp.initData !== "";
@@ -530,8 +523,12 @@
       }
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeRefCode = urlParams.get('ref') || "";
+
     function onTurnstileSuccess(token) { turnstileToken = token; }
 
+    // 30-Minute Background Persistence
     function saveDraftState() {
       const draft = {
         step: currentStep, name: document.getElementById('name').value, phone: phoneInput.getNumber(),
@@ -568,13 +565,13 @@
     window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveDraftState(); });
     window.addEventListener('beforeunload', saveDraftState);
 
+    // Multilingual Dictionary
     const I18N = {
       om: {
         greetingDay: "Akkam ooltan ☀️", greetingMorning: "Akkam bultan 🌅", greetingNight: "Galgala gaarii 🌙",
         brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Sirna Qulqulluu fi Amansiisaa Carraa Bituu",
         st1: "Simannaa", st2: "Eenyummaa", st3: "Carraa", st4: "Kaffaltii", st5: "Qoodaa", st6: "Qunnamaa",
         heroTitle: "Baga Nagaan Dhuftan! 🎉", heroDesc: "Carraan Biiftuu amanamummaa fi qulqullinaan kan qophaa'eedha. Carraa keessan filattanii badhaasota gurguddoo armaan gadii mo'adhaa!",
-        videoCaption: "🎬 Viidiyoo Ragaa fi Qulqullinaa Ilaalaa",
         prize1T: "Badhaasa 1ffaa: Konkolaataa", prize1D: "Badhaasa qaalii isa ol'aanaa.",
         prize2T: "Badhaasa 2ffaa: Mootarsayikilii", prize2D: "Meeshaa ammayyaa tajaajila addaa.",
         prize3T: "Badhaasa 3ffaa: Smart Phone", prize3D: "Bilbila ammayyaa fi badhaasa jajjabeessaa.",
@@ -595,7 +592,6 @@
         brandTitle: "ካራ ቢፍቱ 🌟", brandSlogan: "ታማኝ እና ግልጽ የዕድል ትኬት መቁረጫ ስርዓት",
         st1: "መግቢያ", st2: "ማንነት", st3: "ትኬት", st4: "ክፍያ", st5: "ያጋሩ", st6: "ያግኙን",
         heroTitle: "እንኳን ደህና መጣችሁ! 🎉", heroDesc: "ካራ ቢፍቱ በሙሉ ታማኝነትና ግልጽነት የተዘጋጀ ነው። ትኬትዎን በመምረጥ ታላላቅ ሽልማቶችን ያሸንፉ!",
-        videoCaption: "🎬 የማረጋገጫ ቪዲዮ ይመልከቱ",
         prize1T: "1ኛ ሽልማት: መኪና", prize1D: "የዚህ ዙር ታላቁ እና ዋናው ሽልማት።",
         prize2T: "2ኛ ሽልማት: ሞተርሳይክል", prize2D: "ዘመናዊ እና ውድ አገልግሎት ሰጪ መሳሪያ።",
         prize3T: "3ኛ ሽልማት: ስማርት ስልክ", prize3D: "ዘመናዊ ስልክ እና አበረታች ሽልማት።",
@@ -616,7 +612,6 @@
         brandTitle: "Carraa Biiftuu 🌟", brandSlogan: "Trusted & Transparent Digital Lottery Platform",
         st1: "Welcome", st2: "Identity", st3: "Tickets", st4: "Payment", st5: "Share", st6: "Contact",
         heroTitle: "Welcome! 🎉", heroDesc: "Carraa Biiftuu is prepared with 100% transparency. Choose your lucky tickets and win big prizes!",
-        videoCaption: "🎬 Watch Official Video Proof",
         prize1T: "1st Prize: Brand New Car", prize1D: "The grand master prize of this season.",
         prize2T: "2nd Prize: Motorcycle", prize2D: "Modern and premium productivity gadget.",
         prize3T: "3rd Prize: Smart Phone", prize3D: "Latest smartphone and encouraging cash prize.",
@@ -650,7 +645,6 @@
       document.getElementById('stLbl6').innerText = t.st6;
       document.getElementById('heroTitle').innerText = t.heroTitle;
       document.getElementById('heroDesc').innerText = t.heroDesc;
-      document.getElementById('videoCaptionTxt').innerText = t.videoCaption;
       document.getElementById('prize1Title').innerText = t.prize1T; document.getElementById('prize1Desc').innerText = t.prize1D;
       document.getElementById('prize2Title').innerText = t.prize2T; document.getElementById('prize2Desc').innerText = t.prize2D;
       document.getElementById('prize3Title').innerText = t.prize3T; document.getElementById('prize3Desc').innerText = t.prize3D;
@@ -778,7 +772,10 @@
           freeTickets = data.free;
           TICKET_PRICE = data.price || 1000;
           if (data.accounts) ACCOUNTS_DATA = data.accounts;
+          CONFIG_SETTINGS.scratchEnabled = data.scratchEnabled;
+          CONFIG_SETTINGS.referralEnabled = data.referralEnabled;
           renderTicketsDropdown(freeTickets);
+          if (data.media) renderMediaGallery(data.media);
         }
       } catch(e) {}
       handleQtyChange();
@@ -821,7 +818,7 @@
 
       if (method === "Telebirr") {
         ussdBox.style.display = "block";
-        // Ethio Telecom Standard P2P Transfer: *127*2*RECEIVER_PHONE*AMOUNT#
+        // Ethio Telecom Rapid P2P USSD Format
         currentUssdCode = `*127*2*0909506573*${total}#`;
         callBtn.href = `tel:*127*2*0909506573*${total}%23`;
       } else if (method === "CBE") {
@@ -865,6 +862,68 @@
       saveDraftState();
     }
 
+    // ==============================================
+    // MEDIA HUB (10 VIDEOS & 20 IMAGES)
+    // ==============================================
+    function switchMediaTab(tab) {
+      document.getElementById('tabBtnVideos').classList.toggle('active', tab === 'videos');
+      document.getElementById('tabBtnImages').classList.toggle('active', tab === 'images');
+      document.getElementById('panelVideos').classList.toggle('active', tab === 'videos');
+      document.getElementById('panelImages').classList.toggle('active', tab === 'images');
+    }
+
+    function renderMediaGallery(media) {
+      if (!media) return;
+      const vList = document.getElementById('videoGridList');
+      const iList = document.getElementById('imageGridList');
+      document.getElementById('vCount').innerText = (media.videos || []).length;
+      document.getElementById('iCount').innerText = (media.images || []).length;
+
+      if (media.videos && media.videos.length > 0) {
+        vList.innerHTML = "";
+        media.videos.forEach((url, idx) => {
+          let ytId = "";
+          if (url.includes("v=")) ytId = url.split("v=")[1].split("&")[0];
+          else if (url.includes("youtu.be/")) ytId = url.split("youtu.be/")[1].split("?")[0];
+          const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : `https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300`;
+
+          const div = document.createElement('div');
+          div.className = 'media-thumb-item';
+          div.innerHTML = `<img src="${thumb}" alt="Video ${idx+1}"><div class="play-badge-icon">▶</div>`;
+          div.onclick = () => openCustomVideo(url);
+          vList.appendChild(div);
+        });
+      }
+
+      if (media.images && media.images.length > 0) {
+        iList.innerHTML = "";
+        media.images.forEach((imgUrl, idx) => {
+          const div = document.createElement('div');
+          div.className = 'media-thumb-item';
+          div.innerHTML = `<img src="${imgUrl}" alt="Proof Image ${idx+1}">`;
+          div.onclick = () => window.open(imgUrl, '_blank');
+          iList.appendChild(div);
+        });
+      }
+    }
+
+    function openCustomVideo(url) {
+      let embedUrl = url;
+      if (url.includes("watch?v=")) embedUrl = url.replace("watch?v=", "embed/") + "?autoplay=1";
+      else if (url.includes("youtu.be/")) embedUrl = url.replace("youtu.be/", "www.youtube.com/embed/") + "?autoplay=1";
+      document.getElementById('videoIframe').src = embedUrl;
+      document.getElementById('videoDirectLink').href = url;
+      document.getElementById('videoModalOverlay').style.display = 'flex';
+    }
+
+    function closeVideoModal() {
+      document.getElementById('videoModalOverlay').style.display = 'none';
+      document.getElementById('videoIframe').src = "";
+    }
+
+    // ==============================================
+    // SEAT MATRIX MODAL
+    // ==============================================
     function openMatrixModal() { document.getElementById('matrixModalOverlay').style.display = 'flex'; renderMatrixTab(1, 200); }
     function closeMatrixModal() { document.getElementById('matrixModalOverlay').style.display = 'none'; }
 
@@ -901,15 +960,7 @@
       }
     }
 
-    function openVideoModal() {
-      document.getElementById('videoModalOverlay').style.display = 'flex';
-      document.getElementById('videoIframe').src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
-    }
-    function closeVideoModal() {
-      document.getElementById('videoModalOverlay').style.display = 'none';
-      document.getElementById('videoIframe').src = "";
-    }
-
+    // 2G/3G/4G/5G Fast Image Compression (~150KB)
     function toDataUrl(file){
       return new Promise(function(res, rej){  
         if(file.type === "application/pdf"){
@@ -917,10 +968,10 @@
         }  
         var im = new Image();
         im.onload = function(){
-          var s = Math.min(1, 1000 / Math.max(im.width, im.height));
+          var s = Math.min(1, 950 / Math.max(im.width, im.height));
           var c = document.createElement("canvas"); c.width = im.width * s; c.height = im.height * s;
           c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
-          res(c.toDataURL("image/jpeg", 0.7));
+          res(c.toDataURL("image/jpeg", 0.65));
         };  
         im.onerror = rej; im.src = URL.createObjectURL(file);
       });
@@ -942,7 +993,7 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "GALMEESSAA JIRA (OCR)...";
       statusMsg.style.color = "var(--gold-primary)";
-      statusMsg.innerText = "Ragaan keessan (OCR & Security) sakatta'amaa jira, maaloo eegaa...";
+      statusMsg.innerText = "Ragaan keessan (OCR Transaction ID & Mallaqni) sakatta'amaa jira...";
 
       const custName = document.getElementById('name').value.trim();
       const custPhone = phoneInput.getNumber();
@@ -953,7 +1004,7 @@
         const payload = {
           name: custName, phone: custPhone, email: custEmail, qty: qty,
           tickets: selectedTickets.map(Number), method: method, paidAmount: paidAmt,
-          txn: txn, image: imageData, turnstile: turnstileToken
+          txn: txn, image: imageData, turnstile: turnstileToken, refCode: activeRefCode
         };
 
         const res = await fetch(WEB_APP_URL, {
@@ -979,8 +1030,17 @@
           document.getElementById('tktMethod').innerText = method;
           document.getElementById('tktTxn').innerText = txn;
           
-          // Fast QR By Order ID
+          // Fast QR by Order ID for Instant Scanner
           document.getElementById('tktQrImg').src = `https://quickchart.io/qr?text=ORDER:${encodeURIComponent(result.id)}&size=90&dark=0a3d24`;
+
+          if (CONFIG_SETTINGS.scratchEnabled) {
+            document.getElementById('scratchContainerArea').style.display = 'block';
+            initScratchCard();
+          }
+          if (CONFIG_SETTINGS.referralEnabled) {
+            document.getElementById('referralBoxArea').style.display = 'block';
+            document.getElementById('refLinkInput').value = `${window.location.origin}/?ref=${result.id}`;
+          }
 
         } else {
           statusMsg.style.color = "#ff4d4f";
@@ -997,7 +1057,42 @@
       }
     }
 
-    // Download E-Ticket with Web Share API and Blob Fallback
+    // Scratch Card
+    function initScratchCard() {
+      const canvas = document.getElementById('scratchCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#C0C0C0';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🪙 Qubaan Haxaa\'aa (Scratch Here)', canvas.width / 2, canvas.height / 2 + 5);
+
+      let isDrawing = false;
+      function scratch(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 16, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      canvas.addEventListener('mousedown', () => isDrawing = true);
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+      canvas.addEventListener('mousemove', scratch);
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('touchend', () => isDrawing = false);
+      canvas.addEventListener('touchmove', scratch);
+    }
+
+    function copyRefLink() {
+      const refInput = document.getElementById('refLinkInput');
+      navigator.clipboard.writeText(refInput.value).then(() => alert("Liinkiin afeerraa kooppii ta'eera!"));
+    }
+
+    // 100% Reliable E-Ticket Download (Web Share + Blob Fallback)
     function downloadTicketImage() {
       const ticketEl = document.getElementById('digitalTicketCard');
       const btn = document.getElementById('btnDownloadTicket');
